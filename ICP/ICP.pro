@@ -10,6 +10,8 @@ CONFIG += c++11
 
 SOURCES += \
     composition.cpp \
+    aggregation.cpp \
+    association.cpp \
     environment.cpp \
     generalization.cpp \
     main.cpp \
@@ -22,6 +24,8 @@ SOURCES += \
 
 HEADERS += \
     composition.h \
+    aggregation.h \
+    association.h \
     environment.h \
     generalization.h \
     mainwindow.h \
