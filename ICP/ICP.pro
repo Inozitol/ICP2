@@ -10,10 +10,18 @@ CONFIG += c++11
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    metaclass.cpp \
+    metaclassattribute.cpp \
+    metaclassmethod.cpp \
+    metaclassobject.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    metaclass.h \
+    metaclassattribute.h \
+    metaclassmethod.h \
+    metaclassobject.h
 
 FORMS += \
     mainwindow.ui
