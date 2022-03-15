@@ -9,19 +9,25 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    environment.cpp \
+    generalization.cpp \
     main.cpp \
     mainwindow.cpp \
     metaclass.cpp \
     metaclassattribute.cpp \
     metaclassmethod.cpp \
-    metaclassobject.cpp
+    metaclassobject.cpp \
+    relation.cpp
 
 HEADERS += \
+    environment.h \
+    generalization.h \
     mainwindow.h \
     metaclass.h \
     metaclassattribute.h \
     metaclassmethod.h \
-    metaclassobject.h
+    metaclassobject.h \
+    relation.h
 
 FORMS += \
     mainwindow.ui
