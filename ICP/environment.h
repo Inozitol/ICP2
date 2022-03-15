@@ -9,7 +9,7 @@
 class Environment
 {
 public:
-    Environment* GetEnvironment();
+    static Environment* GetEnvironment();
     ~Environment();
 
     void InsertClass(MetaClass*);

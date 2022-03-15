@@ -17,8 +17,7 @@ public:
 
     void AddParameter(Parameter);
     void RemoveParameter(Parameter);
-    void AddReturnType(DataType);
-    void RemoveReturnType();
+    void ChangeReturnType(DataType);
 
 protected:
     DataType _return_type;

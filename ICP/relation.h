@@ -7,8 +7,7 @@
 class Relation
 {
 public:
-    Relation();
-    void CreateRelation(MetaClass*, MetaClass*);
+    Relation(MetaClass*, MetaClass*);
 
 protected:
     std::pair<MetaClass*, MetaClass*> _relation;

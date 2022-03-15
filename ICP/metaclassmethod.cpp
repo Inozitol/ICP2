@@ -11,10 +11,7 @@ void MetaClassMethod::RemoveParameter(Parameter param){
     _parameters.erase(param);
 }
 
-void MetaClassMethod::AddReturnType(DataType type){
+void MetaClassMethod::ChangeReturnType(DataType type){
     _return_type = type;
 }
 
-void MetaClassMethod::RemoveReturnType(){
-    _return_type = "";
-}
