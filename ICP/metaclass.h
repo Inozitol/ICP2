@@ -9,15 +9,19 @@
 
 class MetaClass{
 public:
-    MetaClass(std::string);
+    using Name = std::string;
+
+    MetaClass(Name);
 
     void AddMethod(MetaClassMethod);
     void RemoveMethod(MetaClassObject::Name);
     void AddAttribute(MetaClassAttribute);
     void RemoveAttribute(MetaClassObject::Name);
 
+    Name GetName();
+
 protected:
-    std::string _name;
+    Name _name;
     std::map<MetaClassObject::Name, MetaClassMethod> _methods;
     std::map<MetaClassObject::Name, MetaClassAttribute> _attributes;
 };

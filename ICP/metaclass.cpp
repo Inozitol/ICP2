@@ -17,3 +17,7 @@ void MetaClass::AddAttribute(MetaClassAttribute attribute){
 void MetaClass::RemoveAttribute(MetaClassObject::Name name){
     _attributes.erase(name);
 }
+
+MetaClass::Name MetaClass::GetName(){
+    return _name;
+}
