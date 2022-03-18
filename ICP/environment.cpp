@@ -1,31 +1,31 @@
-#include <utility>
+﻿#include <utility>
+
+#include <fstream>
 
 #include "environment.h"
+#include "metaclassmethod.h"
 
 Environment* Environment::_environment = nullptr;
 
 Environment::Environment(){}
 
 Environment* Environment::GetEnvironment(){
-    if(_environment==nullptr) _environment = new Environment();
+    if(_environment==nullptr)
+        _environment = new Environment();
 
     return _environment;
 }
 
-Environment::~Environment(){
-    if(_environment!=nullptr) delete(_environment);
-}
-
-void Environment::InsertClass(MetaClass* metaclass){
-    _classes.insert(std::pair<MetaClass::Name, MetaClass*>(metaclass->GetName(),metaclass));
+void Environment::InsertClass(std::shared_ptr<MetaClass> metaclass){
+    _classes.insert(std::make_pair(metaclass->GetName(),metaclass));
 }
 
 void Environment::EraseClass(MetaClass::Name name){
     _classes.erase(name);
 }
 
-int Environment::InsertRelation(Relation* relation){
-    _relations.insert(std::pair<int, Relation*>(_relations.rbegin()->first,relation));
+int Environment::InsertRelation(std::shared_ptr<Relation> relation){
+    _relations.insert(std::make_pair(_relations.rbegin()->first,relation));
     return _relations.rbegin()->first;
 }
 
@@ -33,3 +33,33 @@ void Environment::EraseRelation(int relation_reference){
     _relations.erase(relation_reference);
 }
 
+void Environment::ExportEnvironment(std::string file_name){
+    std::ofstream file;
+    file.open(file_name, std::ios::out | std::ios::trunc);
+
+    file << "@startuml\n";
+
+    for(const auto& [class_name,metaclass] : _classes){
+        file << "class " << class_name << " {\n";
+        for(const auto& [attribute_name, attribute] : metaclass->GetAttributes()){
+            file << '\t' << attribute->GetPermission() << attribute->GetDataType() << ' ' << attribute_name << '\n';
+        }
+        file << "\t---\n";
+        for(const auto& [method_name, method] : metaclass->GetMethods()){
+            file << '\t' << method->GetPermission() << method_name << "(";
+
+            std::set<MetaClassMethod::DataType>::iterator it;
+            auto method_parameters = method->GetParameters();
+            for(it = method_parameters.cbegin(); it != method_parameters.cend(); ++it){
+                file << *it;
+                if(it != std::prev(method_parameters.cend()))
+                    file << ", ";
+            }
+            file << ")\n";
+        }
+        file << "}\n";
+    }
+    file << "@enduml";
+
+    file.close();
+}

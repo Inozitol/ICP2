@@ -1,12 +1,10 @@
-#ifndef COMPOSITION_H
-#define COMPOSITION_H
+#pragma once
 
 #include "relation.h"
+#include "metaclass.h"
 
 class Composition : public Relation
 {
 public:
-    Composition();
+    Composition(std::shared_ptr<MetaClass>, std::shared_ptr<MetaClass>);
 };
-
-#endif // COMPOSITION_H

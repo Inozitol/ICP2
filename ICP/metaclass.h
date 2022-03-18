@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "metaclassmethod.h"
 #include "metaclassattribute.h"
@@ -10,18 +11,23 @@
 class MetaClass{
 public:
     using Name = std::string;
+    using MethodMap = std::map<MetaClassObject::Name, std::shared_ptr<MetaClassMethod>>;
+    using AttributeMap = std::map<MetaClassObject::Name, std::shared_ptr<MetaClassAttribute>>;
 
     MetaClass(Name);
 
-    void AddMethod(MetaClassMethod);
+    void AddMethod(std::shared_ptr<MetaClassMethod>);
     void RemoveMethod(MetaClassObject::Name);
-    void AddAttribute(MetaClassAttribute);
+    void AddAttribute(std::shared_ptr<MetaClassAttribute>);
     void RemoveAttribute(MetaClassObject::Name);
+
+    MethodMap GetMethods();
+    AttributeMap GetAttributes();
 
     Name GetName();
 
 protected:
     Name _name;
-    std::map<MetaClassObject::Name, MetaClassMethod> _methods;
-    std::map<MetaClassObject::Name, MetaClassAttribute> _attributes;
+    MethodMap _methods;
+    AttributeMap _attributes;
 };

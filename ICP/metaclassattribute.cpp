@@ -1,9 +1,8 @@
 #include "metaclassattribute.h"
 
-MetaClassAttribute::MetaClassAttribute(MetaClassObject::Name name, Permission perm) : MetaClassObject(name){
-    _perm = perm;
-}
+MetaClassAttribute::MetaClassAttribute(MetaClassObject::Name name, Permission perm, DataType type)
+    : MetaClassObject(name, perm), _type(type){}
 
-void MetaClassAttribute::ChangePerms(Permission perm){
-    _perm = perm;
+MetaClassObject::DataType MetaClassAttribute::GetDataType(){
+    return _type;
 }

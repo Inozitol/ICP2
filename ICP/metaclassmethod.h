@@ -10,16 +10,18 @@
 class MetaClassMethod : public MetaClassObject
 {
 public:
-    using Parameter = std::string;
-    using DataType = std::string;
 
-    MetaClassMethod(Name);
+    MetaClassMethod(Name, Permission);
 
-    void AddParameter(Parameter);
-    void RemoveParameter(Parameter);
+    void AddParameter(DataType);
+    void RemoveParameter(DataType);
     void ChangeReturnType(DataType);
+
+    DataType GetReturnType();
+
+    std::set<DataType> GetParameters();
 
 protected:
     DataType _return_type;
-    std::set<Parameter> _parameters;
+    std::set<DataType> _parameters;
 };

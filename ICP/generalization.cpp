@@ -1,6 +1,7 @@
 #include "generalization.h"
 
-Generalization::Generalization()
+Generalization::Generalization(std::shared_ptr<MetaClass> class1, std::shared_ptr<MetaClass> class2)
+    : Relation(class1, class2)
 {
 
 }

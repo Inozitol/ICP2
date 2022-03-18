@@ -1,17 +1,19 @@
+#include <memory>
+
 #include "metaclass.h"
 
-MetaClass::MetaClass(std::string name) : _name(name){}
+MetaClass::MetaClass(Name name) : _name(name){}
 
-void MetaClass::AddMethod(MetaClassMethod method){
-    _methods.insert(std::pair<MetaClassObject::Name,MetaClassMethod>(method.GetName(),method));
+void MetaClass::AddMethod(std::shared_ptr<MetaClassMethod> method){
+    _methods.insert(std::make_pair(method->GetName(),method));
 }
 
 void MetaClass::RemoveMethod(MetaClassObject::Name name){
     _methods.erase(name);
 }
 
-void MetaClass::AddAttribute(MetaClassAttribute attribute){
-    _attributes.insert(std::pair<MetaClassObject::Name,MetaClassAttribute>(attribute.GetName(),attribute));
+void MetaClass::AddAttribute(std::shared_ptr<MetaClassAttribute> attribute){
+    _attributes.insert(std::make_pair(attribute->GetName(),attribute));
 }
 
 void MetaClass::RemoveAttribute(MetaClassObject::Name name){
@@ -20,4 +22,12 @@ void MetaClass::RemoveAttribute(MetaClassObject::Name name){
 
 MetaClass::Name MetaClass::GetName(){
     return _name;
+}
+
+MetaClass::MethodMap MetaClass::GetMethods(){
+    return _methods;
+}
+
+MetaClass::AttributeMap MetaClass::GetAttributes(){
+    return _attributes;
 }

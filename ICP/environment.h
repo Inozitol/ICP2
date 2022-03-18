@@ -1,7 +1,8 @@
-#pragma once
+﻿#pragma once
 
 #include <vector>
 #include <map>
+#include <memory>
 
 #include "relation.h"
 #include "metaclass.h"
@@ -10,16 +11,17 @@ class Environment
 {
 public:
     static Environment* GetEnvironment();
-    ~Environment();
 
-    void InsertClass(MetaClass*);
+    void InsertClass(std::shared_ptr<MetaClass>);
     void EraseClass(MetaClass::Name);
-    int InsertRelation(Relation*);
+    int InsertRelation(std::shared_ptr<Relation>);
     void EraseRelation(int);
 
+    void ExportEnvironment(std::string);
+
 protected:
-    std::map<MetaClass::Name, MetaClass*> _classes;
-    std::map<int, Relation*> _relations;
+    std::map<MetaClass::Name, std::shared_ptr<MetaClass>> _classes;
+    std::map<int, std::shared_ptr<Relation>> _relations;
 
 private:
     Environment();

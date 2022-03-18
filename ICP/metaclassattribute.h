@@ -5,11 +5,9 @@
 class MetaClassAttribute : public MetaClassObject
 {
 public:
-    using Permission = unsigned char;
 
-    MetaClassAttribute(MetaClassObject::Name, Permission);
-
-    void ChangePerms(Permission);
+    MetaClassAttribute(MetaClassObject::Name, Permission, DataType);
+    DataType GetDataType();
 protected:
-    Permission _perm;
+    DataType _type;
 };
