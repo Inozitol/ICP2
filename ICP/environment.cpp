@@ -42,11 +42,11 @@ void Environment::ExportEnvironment(std::string file_name){
     for(const auto& [class_name,metaclass] : _classes){
         file << "class " << class_name << " {\n";
         for(const auto& [attribute_name, attribute] : metaclass->GetAttributes()){
-            file << '\t' << attribute->GetPermission() << attribute->GetDataType() << ' ' << attribute_name << '\n';
+            file << '\t' << attribute->GetPermission() << ' ' << attribute->GetDataType() << ' ' << attribute_name << '\n';
         }
         file << "\t---\n";
         for(const auto& [method_name, method] : metaclass->GetMethods()){
-            file << '\t' << method->GetPermission() << method_name << "(";
+            file << '\t' << method->GetPermission() << ' ' << method->GetReturnType() << ' ' << method_name << "(";
 
             std::set<MetaClassMethod::DataType>::iterator it;
             auto method_parameters = method->GetParameters();
