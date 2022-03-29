@@ -5,6 +5,9 @@
 #include "environment.h"
 #include "metaclassmethod.h"
 
+#include <iostream>
+#include <QDebug>
+
 Environment* Environment::_environment = nullptr;
 
 Environment::Environment(){}
@@ -60,6 +63,28 @@ void Environment::ExportEnvironment(std::string file_name){
         file << "}\n";
     }
     file << "@enduml";
+
+    file.close();
+}
+
+void Environment::ImportEnvironment(std::string file_name){
+    std::ifstream file;
+    file.open(file_name, std::ios::in);
+
+    std::string buffer;
+    std::string delimiter = " ";
+    std::vector<std::string> words{};
+    size_t pos = 0;
+    std::string className;
+
+    getline(file, buffer);
+    if(buffer.compare("@startuml")){
+        qDebug() << "hi" << "\n"; //TODO ERROR HERE
+    }
+
+    getline(file, buffer);
+
+
 
     file.close();
 }

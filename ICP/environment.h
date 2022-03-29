@@ -18,6 +18,7 @@ public:
     void EraseRelation(int);
 
     void ExportEnvironment(std::string);
+    void ImportEnvironment(std::string);
 
 protected:
     std::map<MetaClass::Name, std::shared_ptr<MetaClass>> _classes;

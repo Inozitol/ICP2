@@ -19,6 +19,7 @@ MainWindow::MainWindow(QWidget *parent)
     metaclass->AddMethod(metamethod);
     environment->InsertClass(metaclass);
     environment->ExportEnvironment("./testfile");
+    environment->ImportEnvironment("./testfile");
 }
 
 MainWindow::~MainWindow()
