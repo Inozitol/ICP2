@@ -18,8 +18,8 @@ MainWindow::MainWindow(QWidget *parent)
     metamethod->ChangeReturnType("Confirmation");
     metaclass->AddMethod(metamethod);
     environment->InsertClass(metaclass);
-    environment->ExportEnvironment("./testfile");
     environment->ImportEnvironment("./testfile");
+    environment->ExportEnvironment("./outputTest");
 }
 
 MainWindow::~MainWindow()
