@@ -20,7 +20,13 @@ SOURCES += \
     metaclassattribute.cpp \
     metaclassmethod.cpp \
     metaclassobject.cpp \
-    relation.cpp
+    relation.cpp \
+    sequenceactivation.cpp \
+    sequencedeactivation.cpp \
+    sequencediagram.cpp \
+    sequenceevent.cpp \
+    sequencelifeline.cpp \
+    sequencemessage.cpp
 
 HEADERS += \
     composition.h \
@@ -33,7 +39,13 @@ HEADERS += \
     metaclassattribute.h \
     metaclassmethod.h \
     metaclassobject.h \
-    relation.h
+    relation.h \
+    sequenceactivation.h \
+    sequencedeactivation.h \
+    sequencediagram.h \
+    sequenceevent.h \
+    sequencelifeline.h \
+    sequencemessage.h
 
 FORMS += \
     mainwindow.ui

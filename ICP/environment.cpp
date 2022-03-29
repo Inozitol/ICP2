@@ -51,16 +51,16 @@ void Environment::ExportEnvironment(std::string file_name){
         }
         file << "\t---\n";
         for(const auto& [method_name, method] : metaclass->GetMethods()){
-            file << '\t' << method->GetPermission() << ' ' << method->GetReturnType() << ' ' << method_name << "(";
+            file << '\t' << method->GetPermission() << ' ' << method->GetReturnType() << ' ' << method_name << " ( ";
 
             std::set<MetaClassMethod::DataType>::iterator it;
             auto method_parameters = method->GetParameters();
             for(it = method_parameters.cbegin(); it != method_parameters.cend(); ++it){
                 file << *it;
                 if(it != std::prev(method_parameters.cend()))
-                    file << ", ";
+                    file << " ";
             }
-            file << ")\n";
+            file << " )\n";
         }
         file << "}\n";
     }
