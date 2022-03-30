@@ -10,6 +10,7 @@ public:
     using Permission = unsigned char;
 
     MetaClassObject(Name, Permission);
+
     void ChangePerms(Permission);
 
     Permission GetPermission();

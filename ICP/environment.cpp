@@ -1,9 +1,13 @@
-﻿#include <utility>
+#include <utility>
 
 #include <fstream>
 
 #include "environment.h"
 #include "metaclassmethod.h"
+#include "sequenceactivation.h"
+#include "sequencedeactivation.h"
+#include "sequencemessage.h"
+#include "sequenceevent.h"
 
 #include <iostream>
 #include <algorithm>
@@ -38,6 +42,14 @@ void Environment::EraseRelation(int relation_reference){
     _relations.erase(relation_reference);
 }
 
+void Environment::InsertSequence(std::shared_ptr<SequenceDiagram> sequence){
+    _sequence = sequence;
+}
+
+void Environment::EraseSequence(){
+    _sequence.reset();
+}
+
 void Environment::ExportEnvironment(std::string file_name){
     std::ofstream file;
     file.open(file_name, std::ios::out | std::ios::trunc);
@@ -64,6 +76,25 @@ void Environment::ExportEnvironment(std::string file_name){
         }
         file << "}\n";
     }
+    if(_sequence != nullptr){
+        for(const auto& lifeline : _sequence->GetLifelines()){
+        file << "actor " << lifeline->GetName() << '\n';
+        }
+        for(const auto& event : _sequence->GetTimeline()){
+            switch(event->GetType()){
+                case SequenceEvent::Activation:
+                file << "activate " << std::static_pointer_cast<SequenceActivation>(event)->GetLifeline()->GetName() << '\n';
+                break;
+                case SequenceEvent::Deactivation:
+                file << "deactivate " << std::static_pointer_cast<SequenceDeactivation>(event)->GetLifeline()->GetName() << '\n';
+                break;
+                case SequenceEvent::Message:
+                file << std::static_pointer_cast<SequenceMessage>(event)->GetOrigin()->GetName() << " -> " << std::static_pointer_cast<SequenceMessage>(event)->GetOrigin()->GetName() << " : " << std::static_pointer_cast<SequenceMessage>(event)->GetMessage() << '\n';
+                break;
+            }
+        }
+    }
+    file << '\n';
     file << "@enduml";
 
     file.close();

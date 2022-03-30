@@ -5,30 +5,33 @@
 
 #include "sequencelifeline.h"
 #include "sequenceevent.h"
+#include "sequenceactivation.h"
+#include "sequencedeactivation.h"
+#include "sequencemessage.h"
+#include "metaclass.h"
 
 class SequenceDiagram
 {
 public:
     using LifelineVector = std::vector<std::shared_ptr<SequenceLifeline>>;
-    using EventVector = std::vector<std::shared_ptr<SequenceEvent>>;
-    using Timeline = std::vector<EventVector>;
+    using Timeline = std::vector<std::shared_ptr<SequenceEvent>>;
 
     SequenceDiagram();
 
-    void TimelinePush();
-    void TimelinePush(EventVector);
-    void TimelinePop();
+    void InsertLifeline(SequenceLifeline::Name, std::shared_ptr<MetaClass>);
+    void EraseLifeline(int);
+    LifelineVector GetLifelines();
 
     void EventPush(std::shared_ptr<SequenceEvent>);
     void EventPop();
 
-    EventVector GetTimelineTop();
     std::shared_ptr<SequenceEvent> GetEventTop();
-
-    EventVector GetTimelineIndex(int);
     std::shared_ptr<SequenceEvent> GetEventIndex(int);
 
+    Timeline GetTimeline();
+
 private:
+
     LifelineVector _lifelines;
     Timeline _timeline;
 };

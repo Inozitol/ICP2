@@ -2,46 +2,37 @@
 
 #include "sequencediagram.h"
 
-SequenceDiagram::SequenceDiagram()
-{
+SequenceDiagram::SequenceDiagram(){}
 
+void SequenceDiagram::InsertLifeline(SequenceLifeline::Name name, std::shared_ptr<MetaClass> metaclass){
+    _lifelines.push_back(std::make_shared<SequenceLifeline>(name, metaclass));
 }
 
-void SequenceDiagram::TimelinePush(){
-    EventVector empty_vector;
-    _timeline.push_back(empty_vector);
+void SequenceDiagram::EraseLifeline(int index){
+    _lifelines.erase(_lifelines.begin() + index);
 }
 
-void SequenceDiagram::TimelinePush(EventVector event_vector){
-    _timeline.push_back(event_vector);
+SequenceDiagram::LifelineVector SequenceDiagram::GetLifelines(){
+    return _lifelines;
 }
 
-void SequenceDiagram::TimelinePop(){
-    _timeline.pop_back();
+SequenceDiagram::Timeline SequenceDiagram::GetTimeline(){
+    return _timeline;
 }
 
 void SequenceDiagram::EventPush(std::shared_ptr<SequenceEvent> event){
-    _timeline.back().push_back(event);
+    _timeline.push_back(event);
 }
 
 void SequenceDiagram::EventPop(){
-    _timeline.back().pop_back();
-}
-
-SequenceDiagram::EventVector SequenceDiagram::GetTimelineTop(){
-    return _timeline.back();
+    _timeline.pop_back();
 }
 
 std::shared_ptr<SequenceEvent> SequenceDiagram::GetEventTop(){
-    return _timeline.back().back();
-}
-
-// Will return out_of_range exception if out of range!
-SequenceDiagram::EventVector SequenceDiagram::GetTimelineIndex(int index){
-    return _timeline.at(index);
+    return _timeline.back();
 }
 
 // Will return out_of_range exception if out of range!
 std::shared_ptr<SequenceEvent> SequenceDiagram::GetEventIndex(int index){
-    return _timeline.back().at(index);
+    return _timeline.at(index);
 }
