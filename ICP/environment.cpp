@@ -101,6 +101,9 @@ void Environment::ExportEnvironment(std::string file_name){
 }
 
 void Environment::ImportEnvironment(std::string file_name){
+    _relations.clear();
+    _classes.clear();
+
     std::ifstream file;
     file.open(file_name, std::ios::in);
     std::string buffer((std::istreambuf_iterator<char>(file)),
