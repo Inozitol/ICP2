@@ -78,7 +78,7 @@ void Environment::ExportEnvironment(std::string file_name){
     }
     if(_sequence != nullptr){
         for(const auto& lifeline : _sequence->GetLifelines()){
-        file << "actor " << lifeline->GetName() << '\n';
+        file << "actor " << lifeline->GetName() << " " << lifeline->GetClass()->GetName() << '\n';
         }
         for(const auto& event : _sequence->GetTimeline()){
             switch(event->GetType()){
@@ -89,12 +89,11 @@ void Environment::ExportEnvironment(std::string file_name){
                 file << "deactivate " << std::static_pointer_cast<SequenceDeactivation>(event)->GetLifeline()->GetName() << '\n';
                 break;
                 case SequenceEvent::Message:
-                file << std::static_pointer_cast<SequenceMessage>(event)->GetOrigin()->GetName() << " -> " << std::static_pointer_cast<SequenceMessage>(event)->GetOrigin()->GetName() << " : " << std::static_pointer_cast<SequenceMessage>(event)->GetMessage() << '\n';
+                file << std::static_pointer_cast<SequenceMessage>(event)->GetOrigin()->GetName() << " -> " << std::static_pointer_cast<SequenceMessage>(event)->GetDestination()->GetName() << " : " << std::static_pointer_cast<SequenceMessage>(event)->GetMessage() << '\n';
                 break;
             }
         }
     }
-    file << '\n';
     file << "@enduml";
 
     file.close();

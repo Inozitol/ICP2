@@ -8,6 +8,9 @@
 #include "metaclass.h"
 #include "sequencediagram.h"
 
+///
+/// \brief Singleton class holding all of back-end datastructures
+///
 class Environment
 {
 public:

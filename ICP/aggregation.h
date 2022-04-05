@@ -3,6 +3,9 @@
 #include "relation.h"
 #include "metaclass.h"
 
+///
+/// \brief Aggregation relation between two Classes
+///
 class Aggregation : public Relation
 {
 public:
