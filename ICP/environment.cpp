@@ -140,3 +140,7 @@ void Environment::ImportEnvironment(std::string file_name){
 
     file.close();
 }
+
+std::shared_ptr<MetaClass> Environment::GetClass(MetaClass::Name name){
+    return _classes.at(name);
+}

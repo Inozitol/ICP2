@@ -26,6 +26,8 @@ public:
     void ExportEnvironment(std::string);
     void ImportEnvironment(std::string);
 
+    std::shared_ptr<MetaClass> GetClass(MetaClass::Name);
+
 protected:
     std::map<MetaClass::Name, std::shared_ptr<MetaClass>> _classes;
     std::map<int, std::shared_ptr<Relation>> _relations;
