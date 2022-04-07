@@ -1,6 +1,12 @@
 #pragma once
 
+#include <memory>
+
 #include <QMainWindow>
+#include <QAction>
+#include <QFileDialog>
+
+#include "environment.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -15,5 +21,12 @@ public:
     ~MainWindow();
 
 private:
+    void InitMenuBar();
+
     Ui::MainWindow *ui;
+    Environment* _environment;
+    QString _currentFile;
+
+private slots:
+    void FileOpen();
 };
