@@ -22,11 +22,15 @@ public:
 
 private:
     void InitMenuBar();
+    void RefreshClassList();
 
     Ui::MainWindow *ui;
     Environment* _environment;
     QString _currentFile;
 
 private slots:
-    void FileOpen();
+    void EnvironNew();
+    void EnvironOpen();
+    void EnvironSave();
+    void EnvironSaveAs();
 };

@@ -7,6 +7,7 @@
 #include "relation.h"
 #include "metaclass.h"
 #include "sequencediagram.h"
+#include "classdiagram.h"
 
 ///
 /// \brief Singleton class holding all of back-end datastructures
@@ -16,24 +17,21 @@ class Environment
 public:
     static Environment* GetEnvironment();
 
-    void InsertClass(std::shared_ptr<MetaClass>);
-    void EraseClass(MetaClass::Name);
-    int InsertRelation(std::shared_ptr<Relation>);
-    void EraseRelation(int);
+    void InsertClass(std::shared_ptr<ClassDiagram>);
+    void EraseClass();
+    std::shared_ptr<ClassDiagram> GetClass();
+
     void InsertSequence(std::shared_ptr<SequenceDiagram>);
     void EraseSequence();
+    std::shared_ptr<SequenceDiagram> GetSequence();
 
     void ExportEnvironment(std::string);
     void ImportEnvironment(std::string);
 
-    std::shared_ptr<MetaClass> GetClass(MetaClass::Name);
-
-protected:
-    std::map<MetaClass::Name, std::shared_ptr<MetaClass>> _classes;
-    std::map<int, std::shared_ptr<Relation>> _relations;
-    std::shared_ptr<SequenceDiagram> _sequence;
-
 private:
+    std::shared_ptr<ClassDiagram> _class_diag;
+    std::shared_ptr<SequenceDiagram> _sequence_diag;
+
     Environment();
     static Environment* _environment;
 };

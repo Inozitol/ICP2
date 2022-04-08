@@ -16,7 +16,9 @@
 
 Environment* Environment::_environment = nullptr;
 
-Environment::Environment(){}
+Environment::Environment()
+    : _class_diag(std::make_shared<ClassDiagram>()),
+      _sequence_diag(std::make_shared<SequenceDiagram>()){}
 
 Environment* Environment::GetEnvironment(){
     if(_environment==nullptr)
@@ -25,29 +27,20 @@ Environment* Environment::GetEnvironment(){
     return _environment;
 }
 
-void Environment::InsertClass(std::shared_ptr<MetaClass> metaclass){
-    _classes.insert(std::make_pair(metaclass->GetName(),metaclass));
-}
-
-void Environment::EraseClass(MetaClass::Name name){
-    _classes.erase(name);
-}
-
-int Environment::InsertRelation(std::shared_ptr<Relation> relation){
-    _relations.insert(std::make_pair(_relations.rbegin()->first,relation));
-    return _relations.rbegin()->first;
-}
-
-void Environment::EraseRelation(int relation_reference){
-    _relations.erase(relation_reference);
-}
-
 void Environment::InsertSequence(std::shared_ptr<SequenceDiagram> sequence){
-    _sequence = sequence;
+    _sequence_diag = sequence;
 }
 
 void Environment::EraseSequence(){
-    _sequence.reset();
+    _sequence_diag.reset();
+}
+
+std::shared_ptr<ClassDiagram> Environment::GetClass(){
+    return _class_diag;
+}
+
+std::shared_ptr<SequenceDiagram> Environment::GetSequence(){
+    return _sequence_diag;
 }
 
 void Environment::ExportEnvironment(std::string file_name){
@@ -56,7 +49,7 @@ void Environment::ExportEnvironment(std::string file_name){
 
     file << "@startuml\n";
 
-    for(const auto& [class_name,metaclass] : _classes){
+    for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
         file << "class " << class_name << " {\n";
         for(const auto& [attribute_name, attribute] : metaclass->GetAttributes()){
             file << '\t' << attribute->GetPermission() << ' ' << attribute->GetDataType() << ' ' << attribute_name << '\n';
@@ -76,20 +69,23 @@ void Environment::ExportEnvironment(std::string file_name){
         }
         file << "}\n";
     }
-    if(_sequence != nullptr){
-        for(const auto& lifeline : _sequence->GetLifelines()){
+    if(_sequence_diag != nullptr){
+        for(const auto& lifeline : _sequence_diag->GetLifelines()){
         file << "actor " << lifeline->GetName() << " " << lifeline->GetClass()->GetName() << '\n';
         }
-        for(const auto& event : _sequence->GetTimeline()){
+        for(const auto& event : _sequence_diag->GetTimeline()){
             switch(event->GetType()){
                 case SequenceEvent::Activation:
-                file << "activate " << std::static_pointer_cast<SequenceActivation>(event)->GetLifeline()->GetName() << '\n';
+                    file << "activate " << std::static_pointer_cast<SequenceActivation>(event)->GetLifeline()->GetName() << '\n';
                 break;
+
                 case SequenceEvent::Deactivation:
-                file << "deactivate " << std::static_pointer_cast<SequenceDeactivation>(event)->GetLifeline()->GetName() << '\n';
+                    file << "deactivate " << std::static_pointer_cast<SequenceDeactivation>(event)->GetLifeline()->GetName() << '\n';
                 break;
+
                 case SequenceEvent::Message:
-                file << std::static_pointer_cast<SequenceMessage>(event)->GetOrigin()->GetName() << " -> " << std::static_pointer_cast<SequenceMessage>(event)->GetDestination()->GetName() << " : " << std::static_pointer_cast<SequenceMessage>(event)->GetMessage() << '\n';
+                    auto MessageEvent = std::static_pointer_cast<SequenceMessage>(event);
+                    file << MessageEvent->GetOrigin()->GetName() << " -> " << MessageEvent->GetDestination()->GetName() << " : " << MessageEvent->GetMessage() << '\n';
                 break;
             }
         }
@@ -100,8 +96,7 @@ void Environment::ExportEnvironment(std::string file_name){
 }
 
 void Environment::ImportEnvironment(std::string file_name){
-    _relations.clear();
-    _classes.clear();
+    _class_diag->Clear();
 
     std::ifstream file;
     file.open(file_name, std::ios::in);
@@ -134,13 +129,9 @@ void Environment::ImportEnvironment(std::string file_name){
                 metaclass->AddMethod(metamethod);
                 i++;
             }
-            InsertClass(metaclass);
+            _class_diag->InsertClass(metaclass);
         }
     }
 
     file.close();
-}
-
-std::shared_ptr<MetaClass> Environment::GetClass(MetaClass::Name name){
-    return _classes.at(name);
 }

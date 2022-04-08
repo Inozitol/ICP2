@@ -30,6 +30,8 @@ public:
 
     Timeline GetTimeline();
 
+    void Clear();
+
 private:
 
     LifelineVector _lifelines;

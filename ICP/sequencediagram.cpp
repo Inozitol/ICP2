@@ -36,3 +36,8 @@ std::shared_ptr<SequenceEvent> SequenceDiagram::GetEventTop(){
 std::shared_ptr<SequenceEvent> SequenceDiagram::GetEventIndex(int index){
     return _timeline.at(index);
 }
+
+void SequenceDiagram::Clear(){
+    _lifelines.clear();
+    _timeline.clear();
+}
