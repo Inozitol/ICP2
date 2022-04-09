@@ -134,9 +134,9 @@ void Environment::ImportEnvironment(std::string file_name){
         } else if(!words[i].compare("actor")){
             for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
                 if(!words[i+2].compare(class_name.data())){
-                    qDebug() << "class found";
+                    _sequence_diag->InsertLifeline(words[i+1], metaclass);
                 } else {
-                    qDebug() << "sadge class not found, probably messed up inputfile";
+                    //hmmmm
                 }
             }
         }
