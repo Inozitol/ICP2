@@ -109,6 +109,7 @@ void Environment::ImportEnvironment(std::string file_name){
     std::istream_iterator<std::string> begin(ss);
     std::istream_iterator<std::string> end;
     std::vector<std::string> words(begin, end);
+
     for (unsigned int i = 0; i < words.size(); i++){
         if(!words[i].compare("class")){
             std::shared_ptr<MetaClass> metaclass = std::make_shared<MetaClass>(words[++i]);
@@ -130,6 +131,14 @@ void Environment::ImportEnvironment(std::string file_name){
                 i++;
             }
             _class_diag->InsertClass(metaclass);
+        } else if(!words[i].compare("actor")){
+            for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
+                if(!words[i+2].compare(class_name.data())){
+                    qDebug() << "class found";
+                } else {
+                    qDebug() << "sadge class not found, probably messed up inputfile";
+                }
+            }
         }
     }
 
