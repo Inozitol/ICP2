@@ -12,18 +12,23 @@ MainWindow::MainWindow(QWidget *parent)
     _environment = Environment::GetEnvironment();
     _currentFile = "";
     InitMenuBar();
+    InitGraphicView();
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
+MainWindow::~MainWindow(){
+    delete(ui);
 }
 
 void MainWindow::InitMenuBar(){
-    connect(ui->actionNew, &QAction::triggered, this, &MainWindow::EnvironNew);
-    connect(ui->actionOpen, &QAction::triggered, this, &MainWindow::EnvironOpen);
-    connect(ui->actionSave, &QAction::triggered, this, &MainWindow::EnvironSave);
-    connect(ui->actionSaveAs, &QAction::triggered, this, &MainWindow::EnvironSaveAs);
+    connect(ui->actionNew, 		&QAction::triggered, 	this, 	&MainWindow::EnvironNew);
+    connect(ui->actionOpen, 	&QAction::triggered, 	this, 	&MainWindow::EnvironOpen);
+    connect(ui->actionSave, 	&QAction::triggered, 	this, 	&MainWindow::EnvironSave);
+    connect(ui->actionSaveAs, 	&QAction::triggered, 	this, 	&MainWindow::EnvironSaveAs);
+}
+
+void MainWindow::InitGraphicView(){
+    _classScene = new ClassDiagramScene(this);
+    ui->classView->setScene(_classScene);
 }
 
 void MainWindow::RefreshClassList(){

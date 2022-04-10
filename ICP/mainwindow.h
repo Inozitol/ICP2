@@ -7,6 +7,7 @@
 #include <QFileDialog>
 
 #include "environment.h"
+#include "classdiagramscene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -22,11 +23,13 @@ public:
 
 private:
     void InitMenuBar();
+    void InitGraphicView();
     void RefreshClassList();
 
-    Ui::MainWindow *ui;
+    Ui::MainWindow* ui;
     Environment* _environment;
     QString _currentFile;
+    ClassDiagramScene* _classScene;
 
 private slots:
     void EnvironNew();

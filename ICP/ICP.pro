@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     classdiagram.cpp \
+    classdiagramscene.cpp \
     composition.cpp \
     aggregation.cpp \
     association.cpp \
@@ -21,6 +22,7 @@ SOURCES += \
     metaclassattribute.cpp \
     metaclassmethod.cpp \
     metaclassobject.cpp \
+    newclassform.cpp \
     relation.cpp \
     sequenceactivation.cpp \
     sequencedeactivation.cpp \
@@ -31,6 +33,7 @@ SOURCES += \
 
 HEADERS += \
     classdiagram.h \
+    classdiagramscene.h \
     composition.h \
     aggregation.h \
     association.h \
@@ -41,6 +44,7 @@ HEADERS += \
     metaclassattribute.h \
     metaclassmethod.h \
     metaclassobject.h \
+    newclassform.h \
     relation.h \
     sequenceactivation.h \
     sequencedeactivation.h \
@@ -50,9 +54,13 @@ HEADERS += \
     sequencemessage.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    newclassform.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    icons.qrc
