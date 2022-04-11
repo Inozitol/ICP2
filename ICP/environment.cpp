@@ -85,7 +85,7 @@ void Environment::ExportEnvironment(std::string file_name){
 
                 case SequenceEvent::Message:
                     auto MessageEvent = std::static_pointer_cast<SequenceMessage>(event);
-                    file << MessageEvent->GetOrigin()->GetName() << " -> " << MessageEvent->GetDestination()->GetName() << " : " << MessageEvent->GetMessage() << '\n';
+                    file << "message " << MessageEvent->GetOrigin()->GetName() << " -> " << MessageEvent->GetDestination()->GetName() << " : " << MessageEvent->GetMessage() << '\n';
                 break;
             }
         }
