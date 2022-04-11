@@ -3,11 +3,11 @@
 #include <fstream>
 
 #include "environment.h"
-#include "metaclassmethod.h"
-#include "sequenceactivation.h"
-#include "sequencedeactivation.h"
-#include "sequencemessage.h"
-#include "sequenceevent.h"
+#include "ClassDiagram/metaclassmethod.h"
+#include "SequenceDiagram/sequenceactivation.h"
+#include "SequenceDiagram/sequencedeactivation.h"
+#include "SequenceDiagram/sequencemessage.h"
+#include "SequenceDiagram/sequenceevent.h"
 
 #include <iostream>
 #include <algorithm>

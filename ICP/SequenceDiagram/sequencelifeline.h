@@ -3,7 +3,7 @@
 #include <string>
 #include <memory>
 
-#include "metaclass.h"
+#include "../ClassDiagram/metaclass.h"
 
 class SequenceLifeline
 {

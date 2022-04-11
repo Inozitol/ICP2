@@ -4,10 +4,10 @@
 #include <map>
 #include <memory>
 
-#include "relation.h"
-#include "metaclass.h"
-#include "sequencediagram.h"
-#include "classdiagram.h"
+#include "ClassDiagram/classdiagram.h"
+#include "SequenceDiagram/sequencediagram.h"
+#include "ClassDiagram/relation.h"
+#include "ClassDiagram/metaclass.h"
 
 ///
 /// \brief Singleton class holding all of back-end datastructures

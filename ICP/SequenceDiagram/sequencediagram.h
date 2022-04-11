@@ -8,7 +8,7 @@
 #include "sequenceactivation.h"
 #include "sequencedeactivation.h"
 #include "sequencemessage.h"
-#include "metaclass.h"
+#include "../ClassDiagram/metaclass.h"
 
 class SequenceDiagram
 {

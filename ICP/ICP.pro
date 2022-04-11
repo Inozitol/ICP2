@@ -1,3 +1,13 @@
+TOPDIR = $$PWD
+
+INCLUDEPATH += . \
+               $$TOPDIR
+
+INCLUDEPATH += \
+        $$TOPDIR/ClassDiagram \
+        $$TOPDIR/SequenceDiagram
+
+
 QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -8,50 +18,21 @@ CONFIG += c++11
 # In order to do so, uncomment the following line.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
+include(ClassDiagram/include.pri)
+include(SequenceDiagram/include.pri)
+
 SOURCES += \
-    classdiagram.cpp \
     classdiagramscene.cpp \
-    composition.cpp \
-    aggregation.cpp \
-    association.cpp \
     environment.cpp \
-    generalization.cpp \
     main.cpp \
     mainwindow.cpp \
-    metaclass.cpp \
-    metaclassattribute.cpp \
-    metaclassmethod.cpp \
-    metaclassobject.cpp \
     newclassform.cpp \
-    relation.cpp \
-    sequenceactivation.cpp \
-    sequencedeactivation.cpp \
-    sequencediagram.cpp \
-    sequenceevent.cpp \
-    sequencelifeline.cpp \
-    sequencemessage.cpp
 
 HEADERS += \
-    classdiagram.h \
     classdiagramscene.h \
-    composition.h \
-    aggregation.h \
-    association.h \
     environment.h \
-    generalization.h \
     mainwindow.h \
-    metaclass.h \
-    metaclassattribute.h \
-    metaclassmethod.h \
-    metaclassobject.h \
     newclassform.h \
-    relation.h \
-    sequenceactivation.h \
-    sequencedeactivation.h \
-    sequencediagram.h \
-    sequenceevent.h \
-    sequencelifeline.h \
-    sequencemessage.h
 
 FORMS += \
     mainwindow.ui \

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "metaclass.h"
-#include "metaclassattribute.h"
-#include "metaclassmethod.h"
+#include "ClassDiagram/metaclass.h"
+#include "ClassDiagram/metaclassattribute.h"
+#include "ClassDiagram/metaclassmethod.h"
 
 #include <memory>
 #include <string>
