@@ -23,6 +23,7 @@ include(SequenceDiagram/include.pri)
 
 SOURCES += \
     classdiagramscene.cpp \
+    classgraphicsobject.cpp \
     environment.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -30,6 +31,7 @@ SOURCES += \
 
 HEADERS += \
     classdiagramscene.h \
+    classgraphicsobject.h \
     environment.h \
     mainwindow.h \
     newclassform.h \

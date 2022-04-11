@@ -31,8 +31,20 @@ std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
         q_name =  ui->attrTable->item(index.row(), A_NAME);
 
         perm = 	q_perm->currentData().toInt();
-        dtype = q_dtype->text().toStdString();
-        name = 	q_name->text().toStdString();
+
+        if(q_dtype == nullptr){
+            dtype = "";
+        }else{
+            dtype = q_dtype->text().toStdString();
+        }
+
+        if(q_name == nullptr){
+            name = "";
+        }else{
+            name = 	q_name->text().toStdString();
+        }
+
+        qDebug() << "Attr: " << name.data() << " " << dtype.data();
 
         _class->AddAttribute(std::make_shared<MetaClassAttribute>(name, perm, dtype));
     }
@@ -45,8 +57,17 @@ std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
         q_params = 	ui->methTable->item(index.row(), M_PARAMS);
 
         perm = 	q_perm->currentData().toInt();
-        dtype = q_dtype->text().toStdString();
-        name = 	q_name->text().toStdString();
+        if(q_dtype == nullptr){
+            dtype = "";
+        }else{
+            dtype = q_dtype->text().toStdString();
+        }
+
+        if(q_name == nullptr){
+            name = "";
+        }else{
+            name = 	q_name->text().toStdString();
+        }
 
         auto method = std::make_shared<MetaClassMethod>(name, perm, dtype);
 

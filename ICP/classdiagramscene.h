@@ -11,6 +11,7 @@
 
 #include "environment.h"
 #include "newclassform.h"
+#include "classgraphicsobject.h"
 
 class ClassDiagramScene : public QGraphicsScene{
     Q_OBJECT
@@ -24,6 +25,7 @@ public:
 private:
 
     void InitActions();
+    void PlaceClass(std::shared_ptr<MetaClass>);
 
     QAction* _newClass;
     QWidget* _parent;

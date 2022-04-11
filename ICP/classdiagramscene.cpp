@@ -49,7 +49,13 @@ void ClassDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
 void ClassDiagramScene::NewClass(){
     ClassEditDialog diagram(_parent);
     if(diagram.exec()){
+        auto metaclass = diagram.GetClassPtr();
         _environment->GetClass()->InsertClass(diagram.GetClassPtr());
+        PlaceClass(metaclass);
         emit ClassChange();
     }
+}
+
+void ClassDiagramScene::PlaceClass(std::shared_ptr<MetaClass> metaclass){
+    addItem(new ClassGraphicsObject(metaclass));
 }
