@@ -1,7 +1,7 @@
 #include "classdiagramscene.h"
 
 ClassDiagramScene::ClassDiagramScene(QWidget* parent)
-    : QGraphicsScene(parent), _parent(parent), _environ(Environment::GetEnvironment()){
+    : QGraphicsScene(parent), _parent(parent), _environment(Environment::GetEnvironment()){
     setSceneRect(sceneX, sceneY, sceneW, sceneH);
     setBackgroundBrush({B_CLR});
     InitActions();
@@ -49,7 +49,7 @@ void ClassDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
 void ClassDiagramScene::NewClass(){
     ClassEditDialog diagram(_parent);
     if(diagram.exec()){
-        _environ->GetClass()->InsertClass(diagram.GetClassPtr());
+        _environment->GetClass()->InsertClass(diagram.GetClassPtr());
         emit ClassChange();
     }
 }

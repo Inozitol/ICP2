@@ -3,14 +3,13 @@
 #define B_CLR "#606060"
 #define F_CLR "#C0C0C0"
 
-#include "environment.h"
-
 #include <QGraphicsScene>
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPointF>
 
+#include "environment.h"
 #include "newclassform.h"
 
 class ClassDiagramScene : public QGraphicsScene{
@@ -36,7 +35,7 @@ private:
         sceneH = 2000
     };
 
-    Environment* _environ;
+    Environment* _environment;
 
 private slots:
     void NewClass();
