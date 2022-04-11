@@ -12,6 +12,7 @@ class MetaClassMethod : public MetaClassObject
 public:
 
     MetaClassMethod(Name, Permission);
+    MetaClassMethod(Name, Permission, DataType);
 
     void AddParameter(DataType);
     void RemoveParameter(DataType);

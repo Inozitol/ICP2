@@ -1,5 +1,13 @@
 #pragma once
 
+#include "metaclass.h"
+#include "metaclassattribute.h"
+#include "metaclassmethod.h"
+
+#include <memory>
+#include <string>
+#include <sstream>
+
 #include <QDialog>
 #include <QComboBox>
 #include <QLineEdit>
@@ -18,18 +26,26 @@ class ClassEditDialog : public QDialog
 public:
     ClassEditDialog(QWidget* parent = nullptr);
     ~ClassEditDialog();
+    std::shared_ptr<MetaClass> GetClassPtr();
 
 private:
     void InitButtons();
 
     Ui::NewClassForm* ui;
-    QStringList _perms_list= {
-        "+ Public",
-        "- Private",
-        "# Protected",
-        "~ Package"
+
+    enum AttrCol{
+        A_PERM = 0,
+        A_DATA_TYPE,
+        A_NAME
     };
 
+    enum MethCol{
+        M_PERM = 0,
+        M_RETURN_TYPE,
+        M_NAME,
+        M_PARAMS
+    };
+    std::shared_ptr<MetaClass> _class;
 
 private slots:
 

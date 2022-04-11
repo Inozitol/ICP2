@@ -3,6 +3,8 @@
 #define B_CLR "#606060"
 #define F_CLR "#C0C0C0"
 
+#include "environment.h"
+
 #include <QGraphicsScene>
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
@@ -34,6 +36,11 @@ private:
         sceneH = 2000
     };
 
+    Environment* _environ;
+
 private slots:
     void NewClass();
+
+signals:
+    void ClassChange();
 };

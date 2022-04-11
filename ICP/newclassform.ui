@@ -23,7 +23,7 @@
        </property>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QLineEdit" name="lineEdit">
+         <widget class="QLineEdit" name="className">
           <property name="layoutDirection">
            <enum>Qt::LeftToRight</enum>
           </property>
@@ -263,8 +263,11 @@
      </layout>
     </widget>
    </item>
-   <item>
+   <item alignment="Qt::AlignLeft">
     <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="layoutDirection">
+      <enum>Qt::RightToLeft</enum>
+     </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>

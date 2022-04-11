@@ -24,7 +24,6 @@ public:
 private:
     void InitMenuBar();
     void InitGraphicView();
-    void RefreshClassList();
 
     Ui::MainWindow* ui;
     Environment* _environment;
@@ -36,4 +35,6 @@ private slots:
     void EnvironOpen();
     void EnvironSave();
     void EnvironSaveAs();
+
+    void RefreshClassList();
 };

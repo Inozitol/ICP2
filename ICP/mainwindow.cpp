@@ -29,6 +29,8 @@ void MainWindow::InitMenuBar(){
 void MainWindow::InitGraphicView(){
     _classScene = new ClassDiagramScene(this);
     ui->classView->setScene(_classScene);
+
+    connect(_classScene, &ClassDiagramScene::ClassChange, this, &MainWindow::RefreshClassList);
 }
 
 void MainWindow::RefreshClassList(){
