@@ -140,16 +140,17 @@ void Environment::ImportEnvironment(std::string file_name){
             }
         } else if(!words[i].compare("activate")){
             for(auto lifeline : _sequence_diag->GetLifelines()){
-                //what if multiple
                 if(!words[i+1].compare(lifeline->GetName())){
                     _sequence_diag->EventPush(std::make_shared<SequenceActivation>(lifeline));
                 }
+                break;
             }
         } else if(!words[i].compare("deactivate")){
             for(auto lifeline : _sequence_diag->GetLifelines()){
                 if(!words[i+1].compare(lifeline->GetName())){
                     _sequence_diag->EventPush(std::make_shared<SequenceDeactivation>(lifeline));
                 }
+                break;
             }
         } else if(!words[i].compare("message")){
             for(auto sender : _sequence_diag->GetLifelines()){
