@@ -1,4 +1,4 @@
-#include <utility>
+                                                                                                                                                                                                                                        #include <utility>
 
 #include <fstream>
 
@@ -135,8 +135,32 @@ void Environment::ImportEnvironment(std::string file_name){
             for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
                 if(!words[i+2].compare(class_name.data())){
                     _sequence_diag->InsertLifeline(words[i+1], metaclass);
-                } else {
-                    //hmmmm
+                }
+                //if class not found...
+            }
+        } else if(!words[i].compare("activate")){
+            for(auto lifeline : _sequence_diag->GetLifelines()){
+                //what if multiple
+                if(!words[i+1].compare(lifeline->GetName())){
+                    _sequence_diag->EventPush(std::make_shared<SequenceActivation>(lifeline));
+                }
+            }
+        } else if(!words[i].compare("deactivate")){
+            for(auto lifeline : _sequence_diag->GetLifelines()){
+                if(!words[i+1].compare(lifeline->GetName())){
+                    _sequence_diag->EventPush(std::make_shared<SequenceDeactivation>(lifeline));
+                }
+            }
+        } else if(!words[i].compare("message")){
+            for(auto sender : _sequence_diag->GetLifelines()){
+                if(!words[i+1].compare(sender->GetName())){
+                    for(auto receiver : _sequence_diag->GetLifelines()){
+                        if(!words[i+3].compare(receiver->GetName())){
+                            _sequence_diag->EventPush(std::make_shared<SequenceMessage>(sender, receiver, words[i+5].data()));
+                            break;
+                        }
+                    }
+                    break;
                 }
             }
         }
