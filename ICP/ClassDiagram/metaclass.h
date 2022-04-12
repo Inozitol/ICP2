@@ -24,6 +24,9 @@ public:
     MethodMap GetMethods();
     AttributeMap GetAttributes();
 
+    int MethodCount();
+    int AttributesCount();
+
     Name GetName();
 
 protected:

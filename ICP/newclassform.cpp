@@ -24,11 +24,11 @@ std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
     MetaClassObject::DataType dtype;
     MetaClass::Name name;
 
-    QModelIndexList sel_indexes = ui->attrTable->selectionModel()->selectedIndexes();
-    for(auto index : sel_indexes){
-        q_perm =  static_cast<QComboBox*>(ui->attrTable->cellWidget(index.row(), A_PERM));
-        q_dtype = ui->attrTable->item(index.row(), A_DATA_TYPE);
-        q_name =  ui->attrTable->item(index.row(), A_NAME);
+    int rowCount = ui->attrTable->rowCount();
+    for(int row=0; row < rowCount; row++){
+        q_perm =  static_cast<QComboBox*>(ui->attrTable->cellWidget(row, A_PERM));
+        q_dtype = ui->attrTable->item(row, A_DATA_TYPE);
+        q_name =  ui->attrTable->item(row, A_NAME);
 
         perm = 	q_perm->currentData().toInt();
 
@@ -49,12 +49,12 @@ std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
         _class->AddAttribute(std::make_shared<MetaClassAttribute>(name, perm, dtype));
     }
 
-    sel_indexes = ui->methTable->selectionModel()->selectedIndexes();
-    for(auto index : sel_indexes){
-        q_perm =  	static_cast<QComboBox*>(ui->methTable->cellWidget(index.row(), M_PERM));
-        q_dtype = 	ui->attrTable->item(index.row(), M_RETURN_TYPE);
-        q_name =  	ui->attrTable->item(index.row(), M_NAME);
-        q_params = 	ui->methTable->item(index.row(), M_PARAMS);
+    rowCount = ui->methTable->rowCount();
+    for(int row=0; row < rowCount; row++){
+        q_perm =  	static_cast<QComboBox*>(ui->methTable->cellWidget(row, M_PERM));
+        q_dtype = 	ui->attrTable->item(row, M_RETURN_TYPE);
+        q_name =  	ui->attrTable->item(row, M_NAME);
+        q_params = 	ui->methTable->item(row, M_PARAMS);
 
         perm = 	q_perm->currentData().toInt();
         if(q_dtype == nullptr){

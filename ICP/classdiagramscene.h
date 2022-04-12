@@ -22,10 +22,11 @@ public:
     void drawBackground(QPainter*, const QRectF&) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 
+    void PlaceClass(std::shared_ptr<MetaClass>);
+
 private:
 
     void InitActions();
-    void PlaceClass(std::shared_ptr<MetaClass>);
 
     QAction* _newClass;
     QWidget* _parent;

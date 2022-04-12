@@ -60,6 +60,9 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="dragMode">
+            <enum>QGraphicsView::RubberBandDrag</enum>
+           </property>
           </widget>
          </widget>
         </item>

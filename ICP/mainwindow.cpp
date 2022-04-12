@@ -11,8 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     _environment = Environment::GetEnvironment();
     _currentFile = "";
-    InitMenuBar();
     InitGraphicView();
+    InitMenuBar();
 }
 
 MainWindow::~MainWindow(){
@@ -24,6 +24,8 @@ void MainWindow::InitMenuBar(){
     connect(ui->actionOpen, 	&QAction::triggered, 	this, 	&MainWindow::EnvironOpen);
     connect(ui->actionSave, 	&QAction::triggered, 	this, 	&MainWindow::EnvironSave);
     connect(ui->actionSaveAs, 	&QAction::triggered, 	this, 	&MainWindow::EnvironSaveAs);
+
+    connect(ui->actionNew, 		&QAction::triggered, 	_classScene, 	&QGraphicsScene::clear);
 }
 
 void MainWindow::InitGraphicView(){
@@ -44,6 +46,9 @@ void MainWindow::EnvironOpen(){
     _currentFile = QFileDialog::getOpenFileName(this, tr("Open UML file"));
     _environment->ImportEnvironment(_currentFile.toStdString());
     RefreshClassList();
+    for(auto [name,metaclass] : _environment->GetClass()->GetClasses()){
+        _classScene->PlaceClass(metaclass);
+    }
 }
 
 void MainWindow::EnvironSave(){

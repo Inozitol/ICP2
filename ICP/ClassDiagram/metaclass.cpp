@@ -31,3 +31,11 @@ MetaClass::MethodMap MetaClass::GetMethods(){
 MetaClass::AttributeMap MetaClass::GetAttributes(){
     return _attributes;
 }
+
+int MetaClass::MethodCount(){
+    return _methods.size();
+}
+
+int MetaClass::AttributesCount(){
+    return _attributes.size();
+}
