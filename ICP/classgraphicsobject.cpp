@@ -114,5 +114,6 @@ void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsIte
 
         yPos = _titleHeight+_attrHeight+divider*index+round(fm.height()/2.0);
         painter->drawText(xPos, yPos, str);
+        index++;
     }
 }

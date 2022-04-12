@@ -52,8 +52,8 @@ std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
     rowCount = ui->methTable->rowCount();
     for(int row=0; row < rowCount; row++){
         q_perm =  	static_cast<QComboBox*>(ui->methTable->cellWidget(row, M_PERM));
-        q_dtype = 	ui->attrTable->item(row, M_RETURN_TYPE);
-        q_name =  	ui->attrTable->item(row, M_NAME);
+        q_dtype = 	ui->methTable->item(row, M_RETURN_TYPE);
+        q_name =  	ui->methTable->item(row, M_NAME);
         q_params = 	ui->methTable->item(row, M_PARAMS);
 
         perm = 	q_perm->currentData().toInt();
@@ -71,11 +71,15 @@ std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
 
         auto method = std::make_shared<MetaClassMethod>(name, perm, dtype);
 
-        std::stringstream ss(q_params->text().toStdString());
-        MetaClassObject::DataType param;
-        while(std::getline(ss, param, ',')){
-            method->AddParameter(param);
+        if(q_params != nullptr){
+            std::stringstream ss(q_params->text().toStdString());
+            MetaClassObject::DataType param;
+            while(std::getline(ss, param, ',')){
+                method->AddParameter(param);
+            }
         }
+
+        _class->AddMethod(method);
     }
 
     return _class;

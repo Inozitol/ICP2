@@ -25,6 +25,7 @@ SOURCES += \
     classdiagramscene.cpp \
     classgraphicsobject.cpp \
     environment.cpp \
+    eventdialog.cpp \
     main.cpp \
     mainwindow.cpp \
     newclassform.cpp \
@@ -33,10 +34,12 @@ HEADERS += \
     classdiagramscene.h \
     classgraphicsobject.h \
     environment.h \
+    eventdialog.h \
     mainwindow.h \
     newclassform.h \
 
 FORMS += \
+    eventdialog.ui \
     mainwindow.ui \
     newclassform.ui
 
