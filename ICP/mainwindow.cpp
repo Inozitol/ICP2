@@ -9,6 +9,10 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    int largeWidth = QGuiApplication::primaryScreen()->virtualSize().width();
+    ui->classSplitter->setSizes(QList<int>{largeWidth/7,6*(largeWidth/7)});
+    ui->sequenceSplitter->setSizes(QList<int>{largeWidth/7,6*(largeWidth/7)});
+    setWindowState(Qt::WindowMaximized);
     _environment = Environment::GetEnvironment();
     _currentFile = "";
     InitGraphicView();

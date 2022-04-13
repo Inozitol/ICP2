@@ -1,13 +1,15 @@
 #pragma once
 
-#define B_CLR "#606060"
-#define F_CLR "#C0C0C0"
+#define B_CLR "#FFF"
+#define F_CLR "#000"
 
 #include <QGraphicsScene>
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QPointF>
+#include <QGuiApplication>
+#include <QScreen>
 
 #include "environment.h"
 #include "newclassform.h"
@@ -42,6 +44,7 @@ private:
 
 private slots:
     void NewClass();
+    void DeleteClass(ClassGraphicsObject*);
 
 signals:
     void ClassChange();

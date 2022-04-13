@@ -1,15 +1,18 @@
 ﻿#include "classgraphicsobject.h"
 
 ClassGraphicsObject::ClassGraphicsObject(std::shared_ptr<MetaClass> metaclass)
-    :_font(FONT), _class(metaclass)
+    :_font(FONT), _class(metaclass), _width(DEF_WIDTH)
 {
     CalcHeight();
+    InitStrings();
+    InitActions();
     setFlag(QGraphicsItem::ItemIsSelectable);
     setFlag(QGraphicsItem::ItemIsMovable);
 }
 
 void ClassGraphicsObject::InitActions(){
     _deleteClass = new QAction(tr("Delete class"));
+    connect(_deleteClass, &QAction::triggered, this, &ClassGraphicsObject::killSelfSlot);
 }
 
 void ClassGraphicsObject::CalcHeight(){
@@ -27,39 +30,100 @@ void ClassGraphicsObject::CalcHeight(){
     qDebug() << "Height: " << _totalHeight;
 }
 
-[[nodiscard]] QRectF ClassGraphicsObject::boundingRect() const{
-    return {0, 0, double(DEF_WIDTH), double(_totalHeight)};
+void ClassGraphicsObject::InitStrings(){
+    auto fm = QFontMetrics(_font);
+
+    _titleStr = QString(QString::fromStdString(_class->GetName()));
+    if(willOverflow(_titleStr)){
+        _width = fm.horizontalAdvance(_titleStr);
+    }
+
+    for(auto [name, attr]: _class->GetAttributes()){
+        QString str;
+        str.append(QChar(attr->GetPermission()));
+        str.append(' ');
+        str.append(attr->GetDataType().data());
+        str.append(' ');
+        str.append(name.data());
+
+        _attrStr.push_back(str);
+        if(willOverflow(str)){
+            _width = fm.horizontalAdvance(str);
+        }
+    }
+
+    for(auto [name, meth]: _class->GetMethods()){
+
+        QString str;
+        str.append(QChar(meth->GetPermission()));
+        str.append(' ');
+        str.append(meth->GetReturnType().data());
+        str.append(' ');
+        str.append(name.data());
+        str.append('(');
+
+
+        auto params = meth->GetParameters();
+        std::set<MetaClassMethod::DataType>::iterator it;
+        for(it = params.begin(); it != params.end(); it++){
+            str.append((*it).data());
+            if(it != std::prev(params.cend())){
+                str.append(',');
+            }
+        }
+        str.append(')');
+
+        _methStr.push_back(str);
+        if(willOverflow(str)){
+            _width = fm.horizontalAdvance(str);
+        }
+    }
+
 }
 
-// TODO working context menu for items
+[[nodiscard]] QRectF ClassGraphicsObject::boundingRect() const{
+    return {0, 0, double(_width), double(_totalHeight)};
+}
+
 void ClassGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     QMenu menu;
     menu.addAction(_deleteClass);
     menu.exec(event->screenPos());
     event->accept();
+}
 
+bool ClassGraphicsObject::willOverflow(QString str){
+    auto fm = QFontMetrics(_font);
+
+    return fm.horizontalAdvance(str) > _width;
 }
 
 void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*){
-    painter->setPen({Qt::black, 1});
+    if(isSelected()){
+        painter->setPen({Qt::red, 1});
+    }else{
+        painter->setPen({Qt::black, 1});
+    }
     painter->setFont(_font);
     QFontMetrics fm = painter->fontMetrics();
 
     QPainterPath classbox;
     classbox.setFillRule(Qt::WindingFill);
     painter->setBrush({WHOLEBOX_CLR});
-    classbox.addRect(0, 0,  DEF_WIDTH, _totalHeight);
+    classbox.addRect(0, 0,  _width, _totalHeight);
     painter->drawPath(classbox);
 
     QPainterPath titlebox;
     titlebox.setFillRule(Qt::WindingFill);
     painter->setBrush({TITLEBOX_CLR});
-    titlebox.addRect(0, 0, DEF_WIDTH, _titleHeight+2);
+    titlebox.addRect(0, 0, _width, _titleHeight+2);
     painter->drawPath(titlebox);
+
+    painter->setPen({Qt::black, 1});
 
     QString str = QString::fromStdString(_class->GetName());
 
-    int xPos = (DEF_WIDTH - fm.horizontalAdvance(str)) / 2;
+    int xPos = (_width - fm.horizontalAdvance(str)) / 2;
     int yPos = (_titleHeight/2)+round(fm.height()/2.0);
 
     painter->drawText(xPos, yPos, str);
@@ -86,7 +150,7 @@ void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsIte
     }
 
     yPos = _titleHeight+_attrHeight;
-    painter->drawLine(0, yPos, DEF_WIDTH, yPos);
+    painter->drawLine(0, yPos, _width, yPos);
 
     int meth_cnt = _class->MethodCount();
     divider = _methHeight/ (meth_cnt+1);
@@ -102,6 +166,7 @@ void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsIte
         str.append(' ');
         str.append(name.data());
         str.append('(');
+
         auto params = meth->GetParameters();
         std::set<MetaClassMethod::DataType>::iterator it;
         for(it = params.begin(); it != params.end(); it++){
@@ -116,4 +181,12 @@ void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsIte
         painter->drawText(xPos, yPos, str);
         index++;
     }
+}
+
+void ClassGraphicsObject::killSelfSlot(){
+    emit killSelf(this);
+}
+
+MetaClass::Name ClassGraphicsObject::GetClassName(){
+    return _class->GetName();
 }

@@ -2,7 +2,6 @@
 
 ClassDiagramScene::ClassDiagramScene(QWidget* parent)
     : QGraphicsScene(parent), _parent(parent), _environment(Environment::GetEnvironment()){
-    setSceneRect(sceneX, sceneY, sceneW, sceneH);
     setBackgroundBrush({B_CLR});
     InitActions();
 }
@@ -40,6 +39,12 @@ void ClassDiagramScene::drawBackground(QPainter* painter, const QRectF& rect){
 }
 
 void ClassDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
+    auto item = static_cast<ClassGraphicsObject*>(itemAt(event->scenePos().toPoint(),QTransform()));
+    if(item){
+        item->contextMenuEvent(event);
+        return;
+    }
+
     QMenu menu;
     menu.addAction(_newClass);
     menu.exec(event->screenPos());
@@ -57,5 +62,13 @@ void ClassDiagramScene::NewClass(){
 }
 
 void ClassDiagramScene::PlaceClass(std::shared_ptr<MetaClass> metaclass){
-    addItem(new ClassGraphicsObject(metaclass));
+    auto newclass = new ClassGraphicsObject(metaclass);
+    connect(newclass, &ClassGraphicsObject::killSelf, this, &ClassDiagramScene::DeleteClass);
+    addItem(newclass);
+}
+
+void ClassDiagramScene::DeleteClass(ClassGraphicsObject* classitem){
+    removeItem(classitem);
+    _environment->GetClass()->EraseClass(classitem->GetClassName());
+    emit ClassChange();
 }

@@ -11,6 +11,7 @@
 #include <QAction>
 #include <QMenu>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QStyleOptionGraphicsItem>
 
 #include "ClassDiagram/metaclass.h"
 
@@ -22,13 +23,16 @@ public:
     [[nodiscard]] QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    MetaClass::Name GetClassName();
 
     const int DEF_WIDTH = 200;
     const int V_MARGIN = 2;
     const int H_MARGIN = 2;
 private:
     void CalcHeight();
+    void InitStrings();
     void InitActions();
+    bool willOverflow(QString);
 
     QFont _font;
     std::shared_ptr<MetaClass> _class;
@@ -36,6 +40,16 @@ private:
     int _titleHeight;
     int _attrHeight;
     int _methHeight;
+    int _width;
+    QString _titleStr;
+    std::vector<QString> _attrStr;
+    std::vector<QString> _methStr;
 
     QAction* _deleteClass;
+
+private slots:
+    void killSelfSlot();
+
+signals:
+    void killSelf(ClassGraphicsObject*);
 };
