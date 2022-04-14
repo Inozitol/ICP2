@@ -8,6 +8,7 @@
 #include "SequenceDiagram/sequencedeactivation.h"
 #include "SequenceDiagram/sequencemessage.h"
 #include "SequenceDiagram/sequenceevent.h"
+#include "Relation.h"
 
 #include <iostream>
 #include <algorithm>
@@ -110,6 +111,13 @@ void Environment::ImportEnvironment(std::string file_name){
     std::istream_iterator<std::string> end;
     std::vector<std::string> words(begin, end);
 
+    enum StringValue { Value1, Value2, Value3, Value4 };
+    static std::map<std::string, StringValue> valuesMap;
+    valuesMap["--"] = Value1;
+    valuesMap[".<>"] = Value2;
+    valuesMap["-<>"] = Value3;
+    valuesMap["-->"] = Value4;
+
     for (unsigned int i = 0; i < words.size(); i++){
         if(!words[i].compare("class")){
             std::shared_ptr<MetaClass> metaclass = std::make_shared<MetaClass>(words[++i]);
@@ -158,6 +166,37 @@ void Environment::ImportEnvironment(std::string file_name){
                     for(auto receiver : _sequence_diag->GetLifelines()){
                         if(!words[i+3].compare(receiver->GetName())){
                             _sequence_diag->EventPush(std::make_shared<SequenceMessage>(sender, receiver, words[i+5].data()));
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        } else if(!words[i].compare("relation")){
+            for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
+                if(!words[i+1].compare(class_name)){
+                    for(const auto& [class_name2,metaclass2] : _class_diag->GetClasses()){
+                        if(!words[i+3].compare(class_name2)){
+                            auto type = Relation::Assoc;
+                            switch(valuesMap[words[i+2].data()]){
+                                case Value1:
+                                    type = Relation::Assoc;
+                                    break;
+                                case Value2:
+                                    type = Relation::Aggre;
+                                    break;
+                                case Value3:
+                                    type = Relation::Compo;
+                                    break;
+                                case Value4:
+                                    type = Relation::Gener;
+                                    break;
+                                default:
+                                    qDebug() << "unknown relation";
+                                    break;
+                            }
+                            std::shared_ptr<Relation> rel = std::make_shared<Relation>(type, metaclass, metaclass2);
+                            //_class_diag->InsertRelation(rel);
                             break;
                         }
                     }
