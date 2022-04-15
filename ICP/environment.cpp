@@ -196,7 +196,7 @@ void Environment::ImportEnvironment(std::string file_name){
                                     break;
                             }
                             std::shared_ptr<Relation> rel = std::make_shared<Relation>(type, metaclass, metaclass2);
-                            //_class_diag->InsertRelation(rel);
+                            _class_diag->InsertRelation(rel);
                             break;
                         }
                     }

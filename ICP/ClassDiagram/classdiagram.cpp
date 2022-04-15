@@ -24,7 +24,11 @@ std::shared_ptr<MetaClass> ClassDiagram::GetClass(MetaClass::Name name){
 }
 
 int ClassDiagram::InsertRelation(std::shared_ptr<Relation> relation){
-    _relations.insert(std::make_pair(_relations.rbegin()->first,relation));
+    if(_relations.empty()){
+        _relations[0] = relation;
+    } else {
+        _relations.insert(std::make_pair(_relations.rbegin()->first,relation));
+    }
     return _relations.rbegin()->first;
 }
 
