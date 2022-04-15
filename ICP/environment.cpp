@@ -177,7 +177,7 @@ void Environment::ImportEnvironment(std::string file_name){
                 if(!words[i+1].compare(class_name)){
                     for(const auto& [class_name2,metaclass2] : _class_diag->GetClasses()){
                         if(!words[i+3].compare(class_name2)){
-                            auto type = Relation::Assoc;
+                            Relation::Type type;
                             switch(valuesMap[words[i+2].data()]){
                                 case Value1:
                                     type = Relation::Assoc;
