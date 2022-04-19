@@ -1,0 +1,22 @@
+@startuml
+class Person {
+	- string name
+    - string surname
+    - date birthdate
+    ---
+    + string GetName ( )
+    + string GetWholeName ( )
+    + date GetBirthday ( )
+    + date GetAge ( )
+}
+class School {
+    - vector<Person> people
+    ---
+    + Person GetPersonByName ( string )
+}
+actor Alice Person
+actor Amanda Person
+message Alice -> Amanda : GetName()
+activate Amanda
+deactivate Amanda
+@enduml
