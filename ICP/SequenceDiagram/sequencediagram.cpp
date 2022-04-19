@@ -8,8 +8,16 @@ void SequenceDiagram::InsertLifeline(SequenceLifeline::Name name, std::shared_pt
     _lifelines.push_back(std::make_shared<SequenceLifeline>(name, metaclass));
 }
 
+void SequenceDiagram::InsertLifeline(std::shared_ptr<SequenceLifeline> lifeline){
+    _lifelines.push_back(lifeline);
+}
+
 void SequenceDiagram::EraseLifeline(int index){
     _lifelines.erase(_lifelines.begin() + index);
+}
+
+std::shared_ptr<SequenceLifeline> SequenceDiagram::GetLifeline(int index){
+    return _lifelines.at(index);
 }
 
 SequenceDiagram::LifelineVector SequenceDiagram::GetLifelines(){

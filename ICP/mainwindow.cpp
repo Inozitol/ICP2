@@ -29,19 +29,23 @@ void MainWindow::InitMenuBar(){
     connect(ui->actionSave, 	&QAction::triggered, 	this, 	&MainWindow::EnvironSave);
     connect(ui->actionSaveAs, 	&QAction::triggered, 	this, 	&MainWindow::EnvironSaveAs);
 
-    connect(ui->actionNew, 		&QAction::triggered, 	_classScene, 	&QGraphicsScene::clear);
+    connect(ui->actionNew, 		&QAction::triggered, 	_classScene, 		&QGraphicsScene::clear);
+    connect(ui->actionNew, 		&QAction::triggered,	_sequenceScene, 	&QGraphicsScene::clear);
 }
 
 void MainWindow::InitGraphicView(){
     _classScene = new ClassDiagramScene(this);
     ui->classView->setScene(_classScene);
 
+    _sequenceScene = new SequenceDiagramScene(this);
+    ui->sequenceView->setScene(_sequenceScene);
+
     connect(_classScene, &ClassDiagramScene::ClassChange, this, &MainWindow::RefreshClassList);
 }
 
 void MainWindow::RefreshClassList(){
     ui->classList->clear();
-    for(auto metaclass : _environment->GetClass()->GetClasses()){
+    for(auto metaclass : _environment->GetClassDiagram()->GetClasses()){
         ui->classList->addItem(QString::fromStdString(metaclass.first));
     }
 }
@@ -50,9 +54,10 @@ void MainWindow::EnvironOpen(){
     _currentFile = QFileDialog::getOpenFileName(this, tr("Open UML file"));
     _environment->ImportEnvironment(_currentFile.toStdString());
     RefreshClassList();
-    for(auto [name,metaclass] : _environment->GetClass()->GetClasses()){
+    for(auto [name,metaclass] : _environment->GetClassDiagram()->GetClasses()){
         _classScene->PlaceClass(metaclass);
     }
+    _sequenceScene->RedrawScene();
 }
 
 void MainWindow::EnvironSave(){
@@ -68,8 +73,8 @@ void MainWindow::EnvironSaveAs(){
 }
 
 void MainWindow::EnvironNew(){
-    _environment->GetClass()->Clear();
-    _environment->GetSequence()->Clear();
+    _environment->GetClassDiagram()->Clear();
+    _environment->GetSequenceDiagram()->Clear();
     _currentFile = "";
     RefreshClassList();
 }

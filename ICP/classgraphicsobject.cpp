@@ -121,7 +121,7 @@ void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsIte
 
     painter->setPen({Qt::black, 1});
 
-    QString str = QString::fromStdString(_class->GetName());
+    QString str = _titleStr;
 
     int xPos = (_width - fm.horizontalAdvance(str)) / 2;
     int yPos = (_titleHeight/2)+round(fm.height()/2.0);
@@ -136,12 +136,7 @@ void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsIte
     int index = 1;
     for(auto [name, attr]: _class->GetAttributes()){
 
-        str = QString();
-        str.append(QChar(attr->GetPermission()));
-        str.append(' ');
-        str.append(attr->GetDataType().data());
-        str.append(' ');
-        str.append(name.data());
+        str = _attrStr[index-1];
 
         yPos = _titleHeight + divider*index + round(fm.height()/2.0);
         painter->drawText(xPos, yPos, str);
@@ -153,29 +148,12 @@ void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsIte
     painter->drawLine(0, yPos, _width, yPos);
 
     int meth_cnt = _class->MethodCount();
-    divider = _methHeight/ (meth_cnt+1);
+    divider = _methHeight/(meth_cnt+1);
 
     index = 1;
-
     for(auto [name, meth]: _class->GetMethods()){
 
-        str = QString();
-        str.append(QChar(meth->GetPermission()));
-        str.append(' ');
-        str.append(meth->GetReturnType().data());
-        str.append(' ');
-        str.append(name.data());
-        str.append('(');
-
-        auto params = meth->GetParameters();
-        std::set<MetaClassMethod::DataType>::iterator it;
-        for(it = params.begin(); it != params.end(); it++){
-            str.append((*it).data());
-            if(it != std::prev(params.cend())){
-                str.append(',');
-            }
-        }
-        str.append(')');
+        str = _methStr[index-1];
 
         yPos = _titleHeight+_attrHeight+divider*index+round(fm.height()/2.0);
         painter->drawText(xPos, yPos, str);

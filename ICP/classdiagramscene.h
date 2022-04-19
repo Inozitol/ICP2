@@ -33,14 +33,9 @@ private:
     QAction* _newClass;
     QWidget* _parent;
 
-    enum Dimensions{
-        sceneX = -1000,
-        sceneY = -1000,
-        sceneW = 2000,
-        sceneH = 2000
-    };
-
     Environment* _environment;
+
+
 
 private slots:
     void NewClass();

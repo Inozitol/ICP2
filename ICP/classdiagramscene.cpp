@@ -1,7 +1,8 @@
 #include "classdiagramscene.h"
 
 ClassDiagramScene::ClassDiagramScene(QWidget* parent)
-    : QGraphicsScene(parent), _parent(parent), _environment(Environment::GetEnvironment()){
+    : QGraphicsScene(parent), _parent(parent), _environment(Environment::GetEnvironment())
+{
     setBackgroundBrush({B_CLR});
     InitActions();
 }
@@ -55,7 +56,7 @@ void ClassDiagramScene::NewClass(){
     ClassEditDialog diagram(_parent);
     if(diagram.exec()){
         auto metaclass = diagram.GetClassPtr();
-        _environment->GetClass()->InsertClass(diagram.GetClassPtr());
+        _environment->GetClassDiagram()->InsertClass(diagram.GetClassPtr());
         PlaceClass(metaclass);
         emit ClassChange();
     }
@@ -69,6 +70,6 @@ void ClassDiagramScene::PlaceClass(std::shared_ptr<MetaClass> metaclass){
 
 void ClassDiagramScene::DeleteClass(ClassGraphicsObject* classitem){
     removeItem(classitem);
-    _environment->GetClass()->EraseClass(classitem->GetClassName());
+    _environment->GetClassDiagram()->EraseClass(classitem->GetClassName());
     emit ClassChange();
 }

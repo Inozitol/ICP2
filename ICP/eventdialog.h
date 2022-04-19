@@ -1,5 +1,4 @@
-#ifndef EVENTDIALOG_H
-#define EVENTDIALOG_H
+#pragma once
 
 #include <QDialog>
 
@@ -18,5 +17,3 @@ public:
 private:
     Ui::EventDialog *ui;
 };
-
-#endif // EVENTDIALOG_H

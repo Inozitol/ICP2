@@ -17,13 +17,13 @@ class Environment
 public:
     static Environment* GetEnvironment();
 
-    void InsertClass(std::shared_ptr<ClassDiagram>);
-    void EraseClass();
-    std::shared_ptr<ClassDiagram> GetClass();
+    void InsertClassDiagram(std::shared_ptr<ClassDiagram>);
+    void EraseClassDiagram();
+    std::shared_ptr<ClassDiagram> GetClassDiagram();
 
-    void InsertSequence(std::shared_ptr<SequenceDiagram>);
-    void EraseSequence();
-    std::shared_ptr<SequenceDiagram> GetSequence();
+    void InsertSequenceDiagram(std::shared_ptr<SequenceDiagram>);
+    void EraseSequenceDiagram();
+    std::shared_ptr<SequenceDiagram> GetSequenceDiagram();
 
     void ExportEnvironment(std::string);
     void ImportEnvironment(std::string);

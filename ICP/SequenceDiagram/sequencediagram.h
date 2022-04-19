@@ -19,7 +19,9 @@ public:
     SequenceDiagram();
 
     void InsertLifeline(SequenceLifeline::Name, std::shared_ptr<MetaClass>);
+    void InsertLifeline(std::shared_ptr<SequenceLifeline>);
     void EraseLifeline(int);
+    std::shared_ptr<SequenceLifeline> GetLifeline(int);
     LifelineVector GetLifelines();
 
     void EventPush(std::shared_ptr<SequenceEvent>);

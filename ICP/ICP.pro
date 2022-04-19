@@ -26,20 +26,27 @@ SOURCES += \
     classgraphicsobject.cpp \
     environment.cpp \
     eventdialog.cpp \
+    lifelinedialog.cpp \
+    lifelinegraphicsobject.cpp \
     main.cpp \
     mainwindow.cpp \
     newclassform.cpp \
+    sequencediagramscene.cpp
 
 HEADERS += \
     classdiagramscene.h \
     classgraphicsobject.h \
     environment.h \
     eventdialog.h \
+    lifelinedialog.h \
+    lifelinegraphicsobject.h \
     mainwindow.h \
     newclassform.h \
+    sequencediagramscene.h
 
 FORMS += \
     eventdialog.ui \
+    lifelinedialog.ui \
     mainwindow.ui \
     newclassform.ui
 

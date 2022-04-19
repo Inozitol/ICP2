@@ -25,14 +25,15 @@ public:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     MetaClass::Name GetClassName();
 
+private:
     const int DEF_WIDTH = 200;
     const int V_MARGIN = 2;
     const int H_MARGIN = 2;
-private:
+
     void CalcHeight();
     void InitStrings();
     void InitActions();
-    bool willOverflow(QString);
+    inline bool willOverflow(QString);
 
     QFont _font;
     std::shared_ptr<MetaClass> _class;

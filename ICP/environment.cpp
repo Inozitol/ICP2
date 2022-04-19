@@ -28,19 +28,19 @@ Environment* Environment::GetEnvironment(){
     return _environment;
 }
 
-void Environment::InsertSequence(std::shared_ptr<SequenceDiagram> sequence){
+void Environment::InsertSequenceDiagram(std::shared_ptr<SequenceDiagram> sequence){
     _sequence_diag = sequence;
 }
 
-void Environment::EraseSequence(){
+void Environment::EraseSequenceDiagram(){
     _sequence_diag.reset();
 }
 
-std::shared_ptr<ClassDiagram> Environment::GetClass(){
+std::shared_ptr<ClassDiagram> Environment::GetClassDiagram(){
     return _class_diag;
 }
 
-std::shared_ptr<SequenceDiagram> Environment::GetSequence(){
+std::shared_ptr<SequenceDiagram> Environment::GetSequenceDiagram(){
     return _sequence_diag;
 }
 

@@ -8,6 +8,7 @@
 
 #include "environment.h"
 #include "classdiagramscene.h"
+#include "sequencediagramscene.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -29,6 +30,7 @@ private:
     Environment* _environment;
     QString _currentFile;
     ClassDiagramScene* _classScene;
+    SequenceDiagramScene* _sequenceScene;
 
 private slots:
     void EnvironNew();
