@@ -1,8 +1,9 @@
 #include "sequencediagramscene.h"
 
 SequenceDiagramScene::SequenceDiagramScene(QWidget* parent)
-    :QGraphicsScene(parent), _parent(parent),_environment(Environment::GetEnvironment())
+    :QGraphicsScene(parent), _parent(parent),_environment(Environment::GetEnvironment()),_font(FONT)
 {
+    _font.setPointSize(FONT_SIZE);
     setBackgroundBrush({B_CLR});
     InitActions();
 }
@@ -16,6 +17,7 @@ void SequenceDiagramScene::InitActions(){
     connect(_newLifeline, &QAction::triggered, this, &SequenceDiagramScene::NewLifeline);
 }
 
+/*
 void SequenceDiagramScene::drawBackground(QPainter* painter, const QRectF& rect){
     QGraphicsScene::drawBackground(painter, rect);
 
@@ -38,6 +40,7 @@ void SequenceDiagramScene::drawBackground(QPainter* painter, const QRectF& rect)
         painter->drawPoints(vec.data(), int(vec.size()));
     }
 }
+*/
 
 void SequenceDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     /*
@@ -79,6 +82,7 @@ void SequenceDiagramScene::RedrawScene(){
 
     yPos += LifelineGraphicsObject::height() + V_MARGIN;
 
+    SequenceEvent::Type prev_type = SequenceEvent::Nop;
     for(auto event : _environment->GetSequenceDiagram()->GetTimeline()){
         switch(event->GetType()){
             case SequenceEvent::Activation:
@@ -90,6 +94,10 @@ void SequenceDiagramScene::RedrawScene(){
                     // Actor is already activated
                 }else{
                     _actPoints[name] = yPos;
+                }
+
+                if(prev_type != SequenceEvent::Deactivation){
+                    yPos += V_MARGIN;
                 }
             }
             break;
@@ -119,6 +127,9 @@ void SequenceDiagramScene::RedrawScene(){
                     // Actor is not activated
                 }
 
+                if(prev_type != SequenceEvent::Activation){
+                    yPos += V_MARGIN;
+                }
             }
             break;
 
@@ -136,21 +147,51 @@ void SequenceDiagramScene::RedrawScene(){
 
                 addLine(line);
 
-                QPainterPath arrow;
-                arrow.moveTo({ll_destination_middle-6.0, yPos-6.0});
-                arrow.lineTo({ll_destination_middle, yPos});
-                arrow.lineTo({ll_destination_middle-6.0, yPos+6.0});
-                arrow.lineTo({ll_destination_middle-6.0, yPos-6.0});
-                arrow.setFillRule(Qt::WindingFill);
+                if(ll_destination_middle > ll_origin_middle){
 
-                addPath(arrow, QPen(), QBrush(Qt::SolidPattern));
+                    QPainterPath arrow;
+                    arrow.moveTo({ll_destination_middle-6.0, yPos-6.0});
+                    arrow.lineTo({ll_destination_middle, yPos});
+                    arrow.lineTo({ll_destination_middle-6.0, yPos+6.0});
+                    arrow.lineTo({ll_destination_middle-6.0, yPos-6.0});
+                    arrow.setFillRule(Qt::WindingFill);
 
+                    addPath(arrow, QPen(), QBrush(Qt::SolidPattern));
 
+                    QFontMetrics fm(_font);
+                    QString msg_str = QString::fromStdString(message->GetMessage());
+                    auto textitem = addText(msg_str, _font);
+                    qreal linelen = ll_destination_middle - ll_origin_middle;
+                    textitem->setPos(ll_origin_middle + (linelen - fm.horizontalAdvance(msg_str))/2, yPos - fm.height() - 3);
+
+                }else{
+
+                    QPainterPath arrow;
+                    arrow.moveTo({ll_destination_middle+6.0, yPos-6.0});
+                    arrow.lineTo({ll_destination_middle, yPos});
+                    arrow.lineTo({ll_destination_middle+6.0, yPos+6.0});
+                    arrow.lineTo({ll_destination_middle+6.0, yPos-6.0});
+                    arrow.setFillRule(Qt::WindingFill);
+
+                    addPath(arrow, QPen(), QBrush(Qt::SolidPattern));
+
+                    QFontMetrics fm(_font);
+                    QString msg_str = QString::fromStdString(message->GetMessage());
+                    auto textitem = addText(msg_str, _font);
+                    qreal linelen = ll_origin_middle - ll_destination_middle;
+                    textitem->setPos(ll_origin_middle + (linelen - fm.horizontalAdvance(msg_str))/2, yPos - fm.height() - 3);
+                }
+
+                if(prev_type == SequenceEvent::Message){
+                    yPos += V_MARGIN;
+                }
 
             break;
         }
-        yPos += V_MARGIN;
+        prev_type = event->GetType();
     }
+
+    yPos += V_MARGIN;
 
     for(auto lifeline : _environment->GetSequenceDiagram()->GetLifelines()){
         QPointF line_start = {

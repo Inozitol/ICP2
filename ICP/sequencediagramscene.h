@@ -2,6 +2,7 @@
 
 #define B_CLR "#FFF"
 #define F_CLR "#000"
+#define FONT "Arial"
 
 #include <map>
 
@@ -22,17 +23,19 @@ public:
     SequenceDiagramScene(QWidget*);
     ~SequenceDiagramScene();
 
-    void drawBackground(QPainter*, const QRectF&) override;
+    //void drawBackground(QPainter*, const QRectF&) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
     void RedrawScene();
 private:
     const int V_MARGIN = 10;
     const int H_MARGIN = 100;
+    const int FONT_SIZE = 9;
 
     void InitActions();
 
     QAction* _newLifeline;
     QWidget* _parent;
+    QFont _font;
 
     Environment* _environment;
 
