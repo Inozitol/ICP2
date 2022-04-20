@@ -168,3 +168,7 @@ void ClassGraphicsObject::killSelfSlot(){
 MetaClass::Name ClassGraphicsObject::GetClassName(){
     return _class->GetName();
 }
+
+QPointF ClassGraphicsObject::GetItemCenter(){
+    return { pos().x() + (_width/2) , pos().y() + (_totalHeight/2) };
+}

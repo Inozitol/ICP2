@@ -31,6 +31,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     newclassform.cpp \
+    relationgraphicsobject.cpp \
     sequencediagramscene.cpp
 
 HEADERS += \
@@ -42,6 +43,7 @@ HEADERS += \
     lifelinegraphicsobject.h \
     mainwindow.h \
     newclassform.h \
+    relationgraphicsobject.h \
     sequencediagramscene.h
 
 FORMS += \

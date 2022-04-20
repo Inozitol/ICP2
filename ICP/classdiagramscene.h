@@ -14,6 +14,7 @@
 #include "environment.h"
 #include "newclassform.h"
 #include "classgraphicsobject.h"
+#include "relationgraphicsobject.h"
 
 class ClassDiagramScene : public QGraphicsScene{
     Q_OBJECT
@@ -25,6 +26,7 @@ public:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
 
     void PlaceClass(std::shared_ptr<MetaClass>);
+    void PlaceRelation(std::shared_ptr<Relation>);
 
 private:
 
@@ -35,6 +37,7 @@ private:
 
     Environment* _environment;
 
+    std::map<MetaClass::Name, ClassGraphicsObject*> _graphicsObjectMap;
 
 public slots:
     void ClearScene();

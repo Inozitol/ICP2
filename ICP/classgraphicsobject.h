@@ -24,6 +24,7 @@ public:
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
     MetaClass::Name GetClassName();
+    QPointF GetItemCenter();
 
 private:
     const int DEF_WIDTH = 200;
