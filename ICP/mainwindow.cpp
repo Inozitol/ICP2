@@ -43,10 +43,9 @@ void MainWindow::InitGraphicView(){
     connect(_classScene, 	&ClassDiagramScene::ClassChange, 		this, 	&MainWindow::RefreshClassList);
     connect(_sequenceScene, &SequenceDiagramScene::SceneChange, 	this,	&MainWindow::RefreshTimelineList);
 
-    connect(this, &MainWindow::ClearScenes, _classScene, 	&ClassDiagramScene::clear);
+    connect(this, &MainWindow::ClearScenes, _classScene, 	&ClassDiagramScene::ClearScene);
     connect(this, &MainWindow::ClearScenes, _sequenceScene, &SequenceDiagramScene::clear);
 }
-
 void MainWindow::RefreshClassList(){
     ui->classList->clear();
     for(auto metaclass : _environment->GetClassDiagram()->GetClasses()){

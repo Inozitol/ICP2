@@ -73,3 +73,7 @@ void ClassDiagramScene::DeleteClass(ClassGraphicsObject* classitem){
     _environment->GetClassDiagram()->EraseClass(classitem->GetClassName());
     emit ClassChange();
 }
+
+void ClassDiagramScene::ClearScene(){
+
+}

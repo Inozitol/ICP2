@@ -36,6 +36,8 @@ private:
     Environment* _environment;
 
 
+public slots:
+    void ClearScene();
 
 private slots:
     void NewClass();
