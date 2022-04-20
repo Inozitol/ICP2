@@ -6,7 +6,8 @@ public:
     enum Type{
         Activation,
         Deactivation,
-        Message
+        Message,
+        Nop
     };
 
     SequenceEvent(Type);

@@ -17,7 +17,11 @@ class School {
 relation Person -- School
 actor Alice Person
 actor Amanda Person
+actor VUT School
 message Alice -> Amanda : GetName()
 activate Amanda
+message Amanda -> VUT : GetPersonByName("Amanda")
+message VUT -> Amanda : name
 deactivate Amanda
+message Amanda -> Alice : name
 @enduml

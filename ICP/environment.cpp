@@ -98,6 +98,7 @@ void Environment::ExportEnvironment(std::string file_name){
 
 void Environment::ImportEnvironment(std::string file_name){
     _class_diag->Clear();
+    _sequence_diag->Clear();
 
     std::ifstream file;
     file.open(file_name, std::ios::in);
