@@ -39,4 +39,8 @@ private slots:
     void EnvironSaveAs();
 
     void RefreshClassList();
+    void RefreshTimelineList();
+
+signals:
+    void ClearScenes();
 };

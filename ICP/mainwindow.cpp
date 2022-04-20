@@ -40,7 +40,11 @@ void MainWindow::InitGraphicView(){
     _sequenceScene = new SequenceDiagramScene(this);
     ui->sequenceView->setScene(_sequenceScene);
 
-    connect(_classScene, &ClassDiagramScene::ClassChange, this, &MainWindow::RefreshClassList);
+    connect(_classScene, 	&ClassDiagramScene::ClassChange, 		this, 	&MainWindow::RefreshClassList);
+    connect(_sequenceScene, &SequenceDiagramScene::SceneChange, 	this,	&MainWindow::RefreshTimelineList);
+
+    connect(this, &MainWindow::ClearScenes, _classScene, 	&ClassDiagramScene::clear);
+    connect(this, &MainWindow::ClearScenes, _sequenceScene, &SequenceDiagramScene::clear);
 }
 
 void MainWindow::RefreshClassList(){
@@ -50,7 +54,58 @@ void MainWindow::RefreshClassList(){
     }
 }
 
+void MainWindow::RefreshTimelineList(){
+    ui->sequenceList->clear();
+    for(auto event : _environment->GetSequenceDiagram()->GetTimeline()){
+        switch(event->GetType()){
+        case SequenceEvent::Activation:
+        {
+            auto activation = std::static_pointer_cast<SequenceActivation>(event);
+            QString str("Activate ");
+            str.append(QString::fromStdString(activation->GetLifeline()->GetName()));
+
+            ui->sequenceList->addItem(str);
+        }
+        break;
+
+        case SequenceEvent::Deactivation:
+        {
+            auto deactivation = std::static_pointer_cast<SequenceDeactivation>(event);
+            QString str("Deactivate ");
+            str.append(QString::fromStdString(deactivation->GetLifeline()->GetName()));
+
+            ui->sequenceList->addItem(str);
+        }
+        break;
+
+        case SequenceEvent::Message:
+        {
+            auto message = std::static_pointer_cast<SequenceMessage>(event);
+            QString str(QString::fromStdString(message->GetOrigin()->GetName()));
+            str.append(" -> ");
+            str.append(QString::fromStdString(message->GetOrigin()->GetName()));
+            str.append(" : ");
+            str.append(QString::fromStdString(message->GetMessage()));
+
+            ui->sequenceList->addItem(str);
+        }
+        break;
+
+        case SequenceEvent::Nop:
+        {
+            QString str("Spacer");
+
+            ui->sequenceList->addItem(str);
+        }
+        break;
+
+        }
+    }
+}
+
 void MainWindow::EnvironOpen(){
+    emit ClearScenes();
+
     _currentFile = QFileDialog::getOpenFileName(this, tr("Open UML file"));
     _environment->ImportEnvironment(_currentFile.toStdString());
     RefreshClassList();

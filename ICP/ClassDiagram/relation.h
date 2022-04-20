@@ -18,6 +18,9 @@ public:
     Relation(Type,std::shared_ptr<MetaClass>, std::shared_ptr<MetaClass>);
 
     Type GetType();
+    std::pair<std::shared_ptr<MetaClass>, std::shared_ptr<MetaClass>> GetPair();
+    std::shared_ptr<MetaClass> GetSource();
+    std::shared_ptr<Metaclass> GetDestination();
 protected:
     std::pair<std::shared_ptr<MetaClass>, std::shared_ptr<MetaClass>> _relation;
     Type _type;

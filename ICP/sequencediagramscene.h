@@ -27,7 +27,7 @@ public:
     void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
     void RedrawScene();
 private:
-    const int V_MARGIN = 10;
+    const int V_MARGIN = 25;
     const int H_MARGIN = 100;
     const int FONT_SIZE = 9;
 
@@ -44,4 +44,7 @@ private:
 
 private slots:
     void NewLifeline();
+
+signals:
+    void SceneChange();
 };
