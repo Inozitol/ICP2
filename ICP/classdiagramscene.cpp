@@ -66,10 +66,18 @@ void ClassDiagramScene::PlaceClass(std::shared_ptr<MetaClass> metaclass){
     auto newclass = new ClassGraphicsObject(metaclass);
     connect(newclass, &ClassGraphicsObject::killSelf, this, &ClassDiagramScene::DeleteClass);
     addItem(newclass);
+    _graphicsObjectMap.insert(std::make_pair(metaclass->GetName(), newclass));
 }
 
 void ClassDiagramScene::DeleteClass(ClassGraphicsObject* classitem){
     removeItem(classitem);
     _environment->GetClassDiagram()->EraseClass(classitem->GetClassName());
     emit ClassChange();
+    _graphicsObjectMap.erase(classitem->GetClassName());
 }
+void ClassDiagramScene::PlaceRelation(std::shared_ptr<Relation> relation){
+    std::make_pair(_graphicsObjectMap.at(relation.));
+    auto newrelation = new RelationGraphicsObject(s);
+    addItem(newrelation);
+}
+

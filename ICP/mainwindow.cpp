@@ -56,6 +56,10 @@ void MainWindow::EnvironOpen(){
     RefreshClassList();
     for(auto [name,metaclass] : _environment->GetClassDiagram()->GetClasses()){
         _classScene->PlaceClass(metaclass);
+
+    }
+    for(auto [index, relation] : _environment->GetClassDiagram()->GetRelations()){
+        _classScene->PlaceRelation();
     }
     _sequenceScene->RedrawScene();
 }
