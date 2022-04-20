@@ -76,8 +76,8 @@ void ClassDiagramScene::DeleteClass(ClassGraphicsObject* classitem){
     _graphicsObjectMap.erase(classitem->GetClassName());
 }
 void ClassDiagramScene::PlaceRelation(std::shared_ptr<Relation> relation){
-    std::make_pair(_graphicsObjectMap.at(relation.));
-    auto newrelation = new RelationGraphicsObject(s);
+    auto relationPair = std::make_pair(_graphicsObjectMap.at(relation->GetSource()->GetName()), _graphicsObjectMap.at(relation->GetDestination()->GetName()));
+    auto newrelation = new RelationGraphicsObject(relationPair);
     addItem(newrelation);
 }
 

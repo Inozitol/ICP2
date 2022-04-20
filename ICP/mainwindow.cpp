@@ -114,7 +114,7 @@ void MainWindow::EnvironOpen(){
 
     }
     for(auto [index, relation] : _environment->GetClassDiagram()->GetRelations()){
-        _classScene->PlaceRelation();
+        _classScene->PlaceRelation(relation);
     }
     _sequenceScene->RedrawScene();
 }
