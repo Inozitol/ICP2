@@ -77,7 +77,7 @@ void ClassDiagramScene::DeleteClass(ClassGraphicsObject* classitem){
 }
 
 void ClassDiagramScene::ClearScene(){
-
+    _graphicsObjectMap.clear();
 }
 
 void ClassDiagramScene::PlaceRelation(std::shared_ptr<Relation> relation){
