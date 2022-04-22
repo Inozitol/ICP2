@@ -5,7 +5,8 @@ SOURCES += \
     $$PWD/sequencediagram.cpp \
     $$PWD/sequenceevent.cpp \
     $$PWD/sequencelifeline.cpp \
-    $$PWD/sequencemessage.cpp
+    $$PWD/sequencemessage.cpp \
+    $$PWD/sequencereturn.cpp
 
 HEADERS += \
     $$PWD/sequenceactivation.h \
@@ -13,4 +14,5 @@ HEADERS += \
     $$PWD/sequencediagram.h \
     $$PWD/sequenceevent.h \
     $$PWD/sequencelifeline.h \
-    $$PWD/sequencemessage.h
+    $$PWD/sequencemessage.h \
+    $$PWD/sequencereturn.h

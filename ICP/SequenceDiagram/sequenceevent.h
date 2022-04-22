@@ -7,7 +7,8 @@ public:
         Activation,
         Deactivation,
         Message,
-        Nop
+        Nop,
+        Return
     };
 
     SequenceEvent(Type);

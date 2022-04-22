@@ -21,7 +21,7 @@ actor VUT School
 message Alice -> Amanda : GetName()
 activate Amanda
 message Amanda -> VUT : GetPersonByName("Amanda")
-message VUT -> Amanda : name
+return VUT -> Amanda : name
 deactivate Amanda
-message Amanda -> Alice : name
+return Amanda -> Alice : name
 @enduml
