@@ -13,19 +13,21 @@
 class SequenceDiagram
 {
 public:
-    using LifelineVector = std::vector<std::shared_ptr<SequenceLifeline>>;
+    using LifelineVector = std::map<SequenceLifeline::Name, std::shared_ptr<SequenceLifeline>>;
     using Timeline = std::vector<std::shared_ptr<SequenceEvent>>;
 
     SequenceDiagram();
 
     void InsertLifeline(SequenceLifeline::Name, std::shared_ptr<MetaClass>);
     void InsertLifeline(std::shared_ptr<SequenceLifeline>);
-    void EraseLifeline(int);
-    std::shared_ptr<SequenceLifeline> GetLifeline(int);
+    void EraseLifeline(SequenceLifeline::Name);
+    std::shared_ptr<SequenceLifeline> GetLifeline(SequenceLifeline::Name);
     LifelineVector GetLifelines();
 
     void EventPush(std::shared_ptr<SequenceEvent>);
     void EventPop();
+    void EventMoveUp(int);
+    void EventMoveDown(int);
 
     std::shared_ptr<SequenceEvent> GetEventTop();
     std::shared_ptr<SequenceEvent> GetEventIndex(int);

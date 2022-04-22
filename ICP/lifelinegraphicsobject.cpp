@@ -4,7 +4,9 @@ LifelineGraphicsObject::LifelineGraphicsObject(std::shared_ptr<SequenceLifeline>
     :_lifeline(lifeline), _font(FONT), _width(DEF_WIDTH)
 {
     InitStrings();
+    InitActions();
     CalcHeight();
+    setData(Qt::UserRole, IAMALIFELINE);
 }
 
 void LifelineGraphicsObject::InitStrings(){
@@ -61,6 +63,26 @@ void LifelineGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphics
     painter->drawText(xPos, yPos, _className);
 }
 
+void LifelineGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
+    QMenu menu;
+    menu.addAction(_deleteLifeline);
+    menu.exec(event->screenPos());
+    event->accept();
+}
+
+void LifelineGraphicsObject::InitActions(){
+    _deleteLifeline = new QAction("Delete lifeline");
+    connect(_deleteLifeline, &QAction::toggled, this, &LifelineGraphicsObject::killSelfSlot);
+}
+
+void LifelineGraphicsObject::killSelfSlot(){
+    emit killSelf(this);
+}
+
 qreal LifelineGraphicsObject::middle(){
     return x() + _width/2.0;
+}
+
+SequenceLifeline::Name LifelineGraphicsObject::GetName(){
+    return _lifeline->GetName();
 }

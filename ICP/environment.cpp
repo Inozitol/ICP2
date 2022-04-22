@@ -8,7 +8,7 @@
 #include "SequenceDiagram/sequencedeactivation.h"
 #include "SequenceDiagram/sequencemessage.h"
 #include "SequenceDiagram/sequenceevent.h"
-#include "Relation.h"
+#include "relation.h"
 
 #include <iostream>
 #include <algorithm>
@@ -72,7 +72,7 @@ void Environment::ExportEnvironment(std::string file_name){
     }
     if(_sequence_diag != nullptr){
         for(const auto& lifeline : _sequence_diag->GetLifelines()){
-        file << "actor " << lifeline->GetName() << " " << lifeline->GetClass()->GetName() << '\n';
+        file << "actor " << lifeline.first << " " << lifeline.second->GetClass()->GetName() << '\n';
         }
         for(const auto& event : _sequence_diag->GetTimeline()){
             switch(event->GetType()){
@@ -149,24 +149,24 @@ void Environment::ImportEnvironment(std::string file_name){
             }
         } else if(!words[i].compare("activate")){
             for(auto lifeline : _sequence_diag->GetLifelines()){
-                if(!words[i+1].compare(lifeline->GetName())){
-                    _sequence_diag->EventPush(std::make_shared<SequenceActivation>(lifeline));
+                if(!words[i+1].compare(lifeline.first)){
+                    _sequence_diag->EventPush(std::make_shared<SequenceActivation>(lifeline.second));
                     break;
                 }
             }
         } else if(!words[i].compare("deactivate")){
             for(auto lifeline : _sequence_diag->GetLifelines()){
-                if(!words[i+1].compare(lifeline->GetName())){
-                    _sequence_diag->EventPush(std::make_shared<SequenceDeactivation>(lifeline));
+                if(!words[i+1].compare(lifeline.first)){
+                    _sequence_diag->EventPush(std::make_shared<SequenceDeactivation>(lifeline.second));
                     break;
                 }
             }
         } else if(!words[i].compare("message")){
             for(auto sender : _sequence_diag->GetLifelines()){
-                if(!words[i+1].compare(sender->GetName())){
+                if(!words[i+1].compare(sender.first)){
                     for(auto receiver : _sequence_diag->GetLifelines()){
-                        if(!words[i+3].compare(receiver->GetName())){
-                            _sequence_diag->EventPush(std::make_shared<SequenceMessage>(sender, receiver, words[i+5].data()));
+                        if(!words[i+3].compare(receiver.first)){
+                            _sequence_diag->EventPush(std::make_shared<SequenceMessage>(sender.second, receiver.second, words[i+5].data()));
                             break;
                         }
                     }

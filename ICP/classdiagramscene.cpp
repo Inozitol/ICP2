@@ -58,7 +58,7 @@ void ClassDiagramScene::NewClass(){
         auto metaclass = diagram.GetClassPtr();
         _environment->GetClassDiagram()->InsertClass(diagram.GetClassPtr());
         PlaceClass(metaclass);
-        emit ClassChange();
+        emit ClassUpdate();
     }
 }
 
@@ -72,7 +72,7 @@ void ClassDiagramScene::PlaceClass(std::shared_ptr<MetaClass> metaclass){
 void ClassDiagramScene::DeleteClass(ClassGraphicsObject* classitem){
     removeItem(classitem);
     _environment->GetClassDiagram()->EraseClass(classitem->GetClassName());
-    emit ClassChange();
+    emit ClassUpdate();
     _graphicsObjectMap.erase(classitem->GetClassName());
 }
 

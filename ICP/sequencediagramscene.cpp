@@ -1,7 +1,7 @@
 ﻿#include "sequencediagramscene.h"
 
 SequenceDiagramScene::SequenceDiagramScene(QWidget* parent)
-    :QGraphicsScene(parent), _parent(parent),_environment(Environment::GetEnvironment()),_font(FONT)
+    :QGraphicsScene(parent), _parent(parent), _font(FONT), _environment(Environment::GetEnvironment())
 {
     _font.setPointSize(FONT_SIZE);
     setBackgroundBrush({B_CLR});
@@ -17,39 +17,14 @@ void SequenceDiagramScene::InitActions(){
     connect(_newLifeline, &QAction::triggered, this, &SequenceDiagramScene::NewLifeline);
 }
 
-/*
-void SequenceDiagramScene::drawBackground(QPainter* painter, const QRectF& rect){
-    QGraphicsScene::drawBackground(painter, rect);
-
-    const uint8_t grid_freq = 20;
-    auto leftBord = static_cast<int>(rect.left());
-    auto rightBord = static_cast<int>(rect.right());
-    auto topBord = static_cast<int>(rect.top());
-    auto downBord = static_cast<int>(rect.bottom());
-
-    const auto f_left = leftBord - (leftBord % grid_freq);
-    const auto f_top = topBord - (topBord % grid_freq);
-
-    for(auto y = f_top; y <= downBord; y += grid_freq) {
-        std::vector<QPoint> vec;
-        for (auto x = f_left; x <= rightBord; x += grid_freq) {
-            auto point = QPoint(x,y);
-            vec.push_back(point);
-        }
-        painter->setPen(F_CLR);
-        painter->drawPoints(vec.data(), int(vec.size()));
-    }
-}
-*/
-
 void SequenceDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
-    /*
-    auto item = static_cast<ClassGraphicsObject*>(itemAt(event->scenePos().toPoint(),QTransform()));
-    if(item){
-        item->contextMenuEvent(event);
+
+    auto item = itemAt(event->scenePos().toPoint(), QTransform());
+    if(item->data(Qt::UserRole) == IAMALIFELINE){
+        auto lifelineitem = static_cast<LifelineGraphicsObject*>(item);
+        lifelineitem->contextMenuEvent(event);
         return;
     }
-    */
 
     QMenu menu;
     menu.addAction(_newLifeline);
@@ -63,7 +38,7 @@ void SequenceDiagramScene::NewLifeline(){
         auto lifeline = diagram.GetLifeline();
         _environment->GetSequenceDiagram()->InsertLifeline(lifeline);
         RedrawScene();
-        emit SceneChange();
+        emit SceneUpdate();
     }
 }
 
@@ -74,10 +49,11 @@ void SequenceDiagramScene::RedrawScene(){
     qreal xPos = H_MARGIN;
     qreal yPos = V_MARGIN;
     for(auto lifeline : _environment->GetSequenceDiagram()->GetLifelines()){
-        auto lifelinegraphics = new LifelineGraphicsObject(lifeline);
+        auto lifelinegraphics = new LifelineGraphicsObject(lifeline.second);
+        //connect(lifelinegraphics, &LifelineGraphicsObject::killSelf, this, &SequenceDiagramScene::DeleteLifeline);
         lifelinegraphics->setPos({xPos, yPos});
         addItem(lifelinegraphics);
-        _lifelineGraphics[lifeline->GetName()] = lifelinegraphics;
+        _lifelineGraphics[lifeline.first] = lifelinegraphics;
 
         xPos += H_MARGIN + lifelinegraphics->boundingRect().width();
     }
@@ -89,9 +65,11 @@ void SequenceDiagramScene::RedrawScene(){
         switch(event->GetType()){
             case SequenceEvent::Activation:
             {
+                /*
                 if(prev_type != SequenceEvent::Deactivation){
                     yPos += V_MARGIN;
                 }
+                */
 
                 auto activation = std::static_pointer_cast<SequenceActivation>(event);
                 SequenceLifeline::Name name = activation->GetLifeline()->GetName();
@@ -106,8 +84,13 @@ void SequenceDiagramScene::RedrawScene(){
 
             case SequenceEvent::Deactivation:
             {
+            /*
                 if(prev_type != SequenceEvent::Activation){
                     yPos += V_MARGIN;
+                }
+            */
+                if(prev_type == SequenceEvent::Activation){
+                    break;
                 }
 
                 auto deactivation = std::static_pointer_cast<SequenceDeactivation>(event);
@@ -137,9 +120,11 @@ void SequenceDiagramScene::RedrawScene(){
 
             case SequenceEvent::Message:
             {
+            /*
                 if(prev_type == SequenceEvent::Message){
                     yPos += V_MARGIN;
                 }
+            */
 
                 auto message = std::static_pointer_cast<SequenceMessage>(event);
                 SequenceLifeline::Name origin_ll_name = message->GetOrigin()->GetName();
@@ -196,6 +181,7 @@ void SequenceDiagramScene::RedrawScene(){
                 yPos += V_MARGIN;
             break;
         }
+        yPos += V_MARGIN;
         prev_type = event->GetType();
     }
 
@@ -203,15 +189,26 @@ void SequenceDiagramScene::RedrawScene(){
 
     for(auto lifeline : _environment->GetSequenceDiagram()->GetLifelines()){
         QPointF line_start = {
-            _lifelineGraphics.at(lifeline->GetName())->middle(),
+            _lifelineGraphics.at(lifeline.first)->middle(),
             V_MARGIN + LifelineGraphicsObject::height()
         };
 
         QPointF line_end = {
-            _lifelineGraphics.at(lifeline->GetName())->middle(),
+            _lifelineGraphics.at(lifeline.first)->middle(),
             yPos
         };
 
         addLine({line_start, line_end})->setZValue(-1);
     }
+}
+
+void SequenceDiagramScene::DataChange(){
+    emit SceneUpdate();
+}
+
+// TODO Erase events
+void SequenceDiagramScene::DeleteLifeline(LifelineGraphicsObject* lifeline){
+    removeItem(lifeline);
+    _environment->GetSequenceDiagram()->EraseLifeline(lifeline->GetName());
+    emit SceneUpdate();
 }

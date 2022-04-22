@@ -47,5 +47,5 @@ private slots:
     void DeleteClass(ClassGraphicsObject*);
 
 signals:
-    void ClassChange();
+    void ClassUpdate();
 };

@@ -2,5 +2,8 @@
     <qresource prefix="/">
         <file>plus.png</file>
         <file>close.png</file>
+        <file>arrowdown.png</file>
+        <file>arrowup.png</file>
+        <file>icon.png</file>
     </qresource>
 </RCC>
