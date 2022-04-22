@@ -175,10 +175,10 @@ void Environment::ImportEnvironment(std::string file_name){
             }
         } else if(!words[i].compare("return")){
             for(auto sender : _sequence_diag->GetLifelines()){
-                if(!words[i+1].compare(sender->GetName())){
+                if(!words[i+1].compare(sender.first)){
                     for(auto receiver : _sequence_diag->GetLifelines()){
-                        if(!words[i+3].compare(receiver->GetName())){
-                            _sequence_diag->EventPush(std::make_shared<SequenceMessage>(sender, receiver, words[i+5].data()));
+                        if(!words[i+3].compare(receiver.first)){
+                            _sequence_diag->EventPush(std::make_shared<SequenceMessage>(sender.second, receiver.second, words[i+5].data()));
                             break;
                         }
                     }
