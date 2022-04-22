@@ -41,6 +41,9 @@ private slots:
     void RefreshClassList();
     void RefreshTimelineList();
 
+    void MoveEventUp();
+    void MoveEventDown();
+
 signals:
     void ClearScenes();
 };

@@ -23,7 +23,6 @@ public:
     SequenceDiagramScene(QWidget*);
     ~SequenceDiagramScene();
 
-    //void drawBackground(QPainter*, const QRectF&) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
     void RedrawScene();
 private:
@@ -42,9 +41,13 @@ private:
     std::map<SequenceLifeline::Name, LifelineGraphicsObject*> _lifelineGraphics;
     std::map<SequenceLifeline::Name, qreal> _actPoints;
 
+public slots:
+    void DataChange();
+
 private slots:
     void NewLifeline();
+    void DeleteLifeline(LifelineGraphicsObject*);
 
 signals:
-    void SceneChange();
+    void SceneUpdate();
 };

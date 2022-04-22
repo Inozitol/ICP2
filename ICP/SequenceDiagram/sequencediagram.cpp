@@ -5,19 +5,19 @@
 SequenceDiagram::SequenceDiagram(){}
 
 void SequenceDiagram::InsertLifeline(SequenceLifeline::Name name, std::shared_ptr<MetaClass> metaclass){
-    _lifelines.push_back(std::make_shared<SequenceLifeline>(name, metaclass));
+    _lifelines.insert(std::make_pair(name,std::make_shared<SequenceLifeline>(name, metaclass)));
 }
 
 void SequenceDiagram::InsertLifeline(std::shared_ptr<SequenceLifeline> lifeline){
-    _lifelines.push_back(lifeline);
+    _lifelines.insert(std::make_pair(lifeline->GetName(),lifeline));
 }
 
-void SequenceDiagram::EraseLifeline(int index){
-    _lifelines.erase(_lifelines.begin() + index);
+void SequenceDiagram::EraseLifeline(SequenceLifeline::Name name){
+    _lifelines.erase(name);
 }
 
-std::shared_ptr<SequenceLifeline> SequenceDiagram::GetLifeline(int index){
-    return _lifelines.at(index);
+std::shared_ptr<SequenceLifeline> SequenceDiagram::GetLifeline(SequenceLifeline::Name name){
+    return _lifelines.at(name);
 }
 
 SequenceDiagram::LifelineVector SequenceDiagram::GetLifelines(){
@@ -34,6 +34,18 @@ void SequenceDiagram::EventPush(std::shared_ptr<SequenceEvent> event){
 
 void SequenceDiagram::EventPop(){
     _timeline.pop_back();
+}
+
+void SequenceDiagram::EventMoveUp(int index){
+    auto item = _timeline.at(index);
+    _timeline.erase(_timeline.begin()+index);
+    _timeline.insert(_timeline.begin()+(index-1), item);
+}
+
+void SequenceDiagram::EventMoveDown(int index){
+    auto item = _timeline.at(index);
+    _timeline.erase(_timeline.begin()+index);
+    _timeline.insert(_timeline.begin()+(index+1), item);
 }
 
 std::shared_ptr<SequenceEvent> SequenceDiagram::GetEventTop(){
