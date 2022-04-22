@@ -173,6 +173,18 @@ void Environment::ImportEnvironment(std::string file_name){
                     break;
                 }
             }
+        } else if(!words[i].compare("return")){
+            for(auto sender : _sequence_diag->GetLifelines()){
+                if(!words[i+1].compare(sender->GetName())){
+                    for(auto receiver : _sequence_diag->GetLifelines()){
+                        if(!words[i+3].compare(receiver->GetName())){
+                            _sequence_diag->EventPush(std::make_shared<SequenceMessage>(sender, receiver, words[i+5].data()));
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
         } else if(!words[i].compare("relation")){
             for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
                 if(!words[i+1].compare(class_name)){
