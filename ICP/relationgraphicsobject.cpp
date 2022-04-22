@@ -23,32 +23,24 @@ void RelationGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphics
 
 [[nodiscard]] QRectF RelationGraphicsObject::boundingRect() const{
     QRectF rectangle;
-    int x1 = _relation.first->GetItemCenter().x();
-    int y1 = _relation.first->GetItemCenter().y();
-    int x2 = _relation.second->GetItemCenter().x();
-    int y2 = _relation.second->GetItemCenter().y();
-    if(x1 <= x2 && y1 <= y2){
-        rectangle.setBottomLeft(_relation.first->GetItemCenter());
-        rectangle.setTopRight(_relation.second->GetItemCenter());
-        if(x1 == x2) rectangle.setWidth(1);
-        if(y1 == y2) rectangle.setHeight(1);
-    } else if(x1 <= x2 && y1 >= y2){
+    float x1 = _relation.first->GetItemCenter().x();
+    float y1 = _relation.first->GetItemCenter().y();
+    float x2 = _relation.second->GetItemCenter().x();
+    float y2 = _relation.second->GetItemCenter().y();
+
+    if(x1 < x2 && y1 < y2){
         rectangle.setTopLeft(_relation.first->GetItemCenter());
         rectangle.setBottomRight(_relation.second->GetItemCenter());
-        if(x1 == x2) rectangle.setWidth(1);
-        if(y1 == y2) rectangle.setHeight(1);
-    } else if(x1 >= x2 && y1 <= y2){
-        rectangle.setTopLeft(_relation.second->GetItemCenter());
-        rectangle.setBottomRight(_relation.first->GetItemCenter());
-        if(x1 == x2) rectangle.setWidth(1);
-        if(y1 == y2) rectangle.setHeight(1);
-    } else if(x1 >= x2 && y1 >= y2){
-        rectangle.setBottomLeft(_relation.second->GetItemCenter());
+    } else if(x1 < x2 && y1 > y2){
+        rectangle.setBottomLeft(_relation.first->GetItemCenter());
+        rectangle.setTopRight(_relation.second->GetItemCenter());
+    } else if(x1 > x2 && y1 < y2){
         rectangle.setTopRight(_relation.first->GetItemCenter());
-        if(x1 == x2) rectangle.setWidth(1);
-        if(y1 == y2) rectangle.setHeight(1);
+        rectangle.setBottomLeft(_relation.second->GetItemCenter());
+    } else if(x1 > x2 && y1 > y2){
+        rectangle.setBottomRight(_relation.first->GetItemCenter());
+        rectangle.setTopLeft(_relation.second->GetItemCenter());
     }
-
     return rectangle;
 }
 
@@ -57,6 +49,7 @@ std::pair<MetaClass::Name, MetaClass::Name> RelationGraphicsObject::GetRelationP
 }
 
 void RelationGraphicsObject::updateLine(){
+    prepareGeometryChange();
     relationLine.setP1(_relation.first->GetItemCenter());
     relationLine.setP2(_relation.second->GetItemCenter());
     update();
