@@ -1,18 +1,18 @@
 @startuml
 class Person {
+	- date birthdate
 	- string name
-    - string surname
-    - date birthdate
-    ---
-    + string GetName ( )
-    + string GetWholeName ( )
-    + date GetBirthday ( )
-    + date GetAge ( )
+	- string surname
+	---
+	+ date GetAge (  )
+	+ date GetBirthday (  )
+	+ string GetName (  )
+	+ string GetWholeName (  )
 }
 class School {
-    - vector<Person> people
-    ---
-    + Person GetPersonByName ( string )
+	- vector<Person> people
+	---
+	+ Person GetPersonByName ( string )
 }
 relation Person -- School
 actor Alice Person

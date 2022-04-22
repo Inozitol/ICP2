@@ -12,7 +12,10 @@ public:
     [[nodiscard]] QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
     std::pair<MetaClass::Name, MetaClass::Name> GetRelationParts();
+public slots:
+    void updateLine();
 
 private:
     std::pair<ClassGraphicsObject*,ClassGraphicsObject*> _relation;
+    QLineF relationLine;
 };
