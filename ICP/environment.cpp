@@ -7,6 +7,7 @@
 #include "SequenceDiagram/sequenceactivation.h"
 #include "SequenceDiagram/sequencedeactivation.h"
 #include "SequenceDiagram/sequencemessage.h"
+#include "SequenceDiagram/sequencereturn.h"
 #include "SequenceDiagram/sequenceevent.h"
 #include "relation.h"
 
@@ -167,6 +168,18 @@ void Environment::ImportEnvironment(std::string file_name){
                     for(auto receiver : _sequence_diag->GetLifelines()){
                         if(!words[i+3].compare(receiver.first)){
                             _sequence_diag->EventPush(std::make_shared<SequenceMessage>(sender.second, receiver.second, words[i+5].data()));
+                            break;
+                        }
+                    }
+                    break;
+                }
+            }
+        } else if(!words[i].compare("return")){
+            for(auto sender : _sequence_diag->GetLifelines()){
+                if(!words[i+1].compare(sender.first)){
+                    for(auto receiver : _sequence_diag->GetLifelines()){
+                        if(!words[i+3].compare(receiver.first)){
+                            _sequence_diag->EventPush(std::make_shared<SequenceReturn>(sender.second, receiver.second, words[i+5].data()));
                             break;
                         }
                     }
