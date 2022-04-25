@@ -10,17 +10,21 @@ SequenceDiagramScene::SequenceDiagramScene(QWidget* parent)
 
 SequenceDiagramScene::~SequenceDiagramScene(){
     delete(_newLifeline);
+    delete(_newEvent);
 }
 
 void SequenceDiagramScene::InitActions(){
     _newLifeline = new QAction(tr("New Lifeline"), this);
     connect(_newLifeline, &QAction::triggered, this, &SequenceDiagramScene::NewLifeline);
+
+    _newEvent = new QAction(tr("New event"), this);
+    connect(_newEvent, &QAction::triggered, this, &SequenceDiagramScene::NewEvent);
 }
 
 void SequenceDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
 
     auto item = itemAt(event->scenePos().toPoint(), QTransform());
-    if(item->data(Qt::UserRole) == IAMALIFELINE){
+    if(item->data(Qt::UserRole) == LIFELINE_DEF){
         auto lifelineitem = static_cast<LifelineGraphicsObject*>(item);
         lifelineitem->contextMenuEvent(event);
         return;
@@ -28,21 +32,11 @@ void SequenceDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *even
 
     QMenu menu;
     menu.addAction(_newLifeline);
+    menu.addAction(_newEvent);
     menu.exec(event->screenPos());
     event->accept();
 }
 
-void SequenceDiagramScene::NewLifeline(){
-    LifelineDialog diagram(_parent);
-    if(diagram.exec()){
-        auto lifeline = diagram.GetLifeline();
-        _environment->GetSequenceDiagram()->InsertLifeline(lifeline);
-        RedrawScene();
-        emit SceneUpdate();
-    }
-}
-
-// TODO fix unique name for actor
 void SequenceDiagramScene::RedrawScene(){
     emit clear();
 
@@ -50,7 +44,7 @@ void SequenceDiagramScene::RedrawScene(){
     qreal yPos = V_MARGIN;
     for(auto lifeline : _environment->GetSequenceDiagram()->GetLifelines()){
         auto lifelinegraphics = new LifelineGraphicsObject(lifeline.second);
-        //connect(lifelinegraphics, &LifelineGraphicsObject::killSelf, this, &SequenceDiagramScene::DeleteLifeline);
+        connect(lifelinegraphics, &LifelineGraphicsObject::killSelf, this, &SequenceDiagramScene::DeleteLifeline);
         lifelinegraphics->setPos({xPos, yPos});
         addItem(lifelinegraphics);
         _lifelineGraphics[lifeline.first] = lifelinegraphics;
@@ -118,6 +112,9 @@ void SequenceDiagramScene::RedrawScene(){
             }
             break;
 
+            // Return event will be static_cased into Message event, but headers are basically the same, so it works
+            // ...still feels like sticking a fork into an outlet tho
+            case SequenceEvent::Return:
             case SequenceEvent::Message:
             {
             /*
@@ -137,7 +134,11 @@ void SequenceDiagramScene::RedrawScene(){
                     ll_destination_middle, 	yPos		// Destination point
                 };
 
-                addLine(line)->setZValue(1);
+                if(event->GetType() == SequenceEvent::Return){
+                    addLine(line, QPen(Qt::DashLine))->setZValue(1);
+                }else{
+                    addLine(line)->setZValue(1);
+                }
 
                 if(ll_destination_middle > ll_origin_middle){
 
@@ -206,9 +207,29 @@ void SequenceDiagramScene::DataChange(){
     emit SceneUpdate();
 }
 
-// TODO Erase events
+void SequenceDiagramScene::NewLifeline(){
+    LifelineDialog dialog(_parent);
+    if(dialog.exec()){
+        auto lifeline = dialog.GetLifeline();
+        _environment->GetSequenceDiagram()->InsertLifeline(lifeline);
+        RedrawScene();
+        emit SceneUpdate();
+    }
+}
+
 void SequenceDiagramScene::DeleteLifeline(LifelineGraphicsObject* lifeline){
     removeItem(lifeline);
     _environment->GetSequenceDiagram()->EraseLifeline(lifeline->GetName());
+    RedrawScene();
     emit SceneUpdate();
+}
+
+void SequenceDiagramScene::NewEvent(){
+    EventDialog dialog(_parent);
+    if(dialog.exec()){
+        auto event = dialog.GetEvent();
+        _environment->GetSequenceDiagram()->EventPush(event);
+        RedrawScene();
+        emit SceneUpdate();
+    }
 }

@@ -89,9 +89,11 @@ void MainWindow::RefreshTimelineList(){
         }
         break;
 
+        case SequenceEvent::Return:
         case SequenceEvent::Message:
         {
             auto message = std::static_pointer_cast<SequenceMessage>(event);
+
             QString str(QString::fromStdString(message->GetOrigin()->GetName()));
             str.append(" -> ");
             str.append(QString::fromStdString(message->GetDestination()->GetName()));
@@ -166,7 +168,7 @@ void MainWindow::MoveEventDown(){
     QListWidgetItem* item;
     int currRow = ui->sequenceList->currentRow();
     int itemCount = ui->sequenceList->count();
-    if(currRow < itemCount-1){
+    if(currRow < itemCount-1 && currRow != -1){
         item = ui->sequenceList->takeItem(currRow);
         ui->sequenceList->insertItem(currRow+1, item);
         ui->sequenceList->setCurrentRow(currRow+1);

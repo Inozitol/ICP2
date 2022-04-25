@@ -13,6 +13,43 @@ void SequenceDiagram::InsertLifeline(std::shared_ptr<SequenceLifeline> lifeline)
 }
 
 void SequenceDiagram::EraseLifeline(SequenceLifeline::Name name){
+    for (auto it = _timeline.begin(); it != _timeline.end(); it++){
+        switch((*it)->GetType()){
+            case SequenceEvent::Activation:
+            {
+                auto activation = std::static_pointer_cast<SequenceActivation>(*it);
+                if(activation->GetLifeline()->GetName() == name){
+                    _timeline.erase(it--);
+                }
+            }
+            break;
+
+            case SequenceEvent::Deactivation:
+            {
+                auto deactivation = std::static_pointer_cast<SequenceDeactivation>(*it);
+                if(deactivation->GetLifeline()->GetName() == name){
+                    _timeline.erase(it--);
+                }
+            }
+            break;
+
+            case SequenceEvent::Return:
+            case SequenceEvent::Message:
+            {
+                auto message = std::static_pointer_cast<SequenceMessage>(*it);
+                auto src_name = message->GetOrigin()->GetName();
+                auto dst_name = message->GetDestination()->GetName();
+                if(src_name == name || dst_name == name){
+                    _timeline.erase(it--);
+                }
+            }
+            break;
+
+            case SequenceEvent::Nop:
+            // Sip a cup of coffee
+            break;
+        }
+    }
     _lifelines.erase(name);
 }
 
