@@ -24,7 +24,7 @@ void SequenceDiagramScene::InitActions(){
 void SequenceDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
 
     auto item = itemAt(event->scenePos().toPoint(), QTransform());
-    if(item->data(Qt::UserRole) == LIFELINE_DEF){
+    if(item->data(Qt::UserRole) == GraphicsItem::Lifeline){
         auto lifelineitem = static_cast<LifelineGraphicsObject*>(item);
         lifelineitem->contextMenuEvent(event);
         return;
@@ -44,6 +44,7 @@ void SequenceDiagramScene::RedrawScene(){
     qreal yPos = V_MARGIN;
     for(auto lifeline : _environment->GetSequenceDiagram()->GetLifelines()){
         auto lifelinegraphics = new LifelineGraphicsObject(lifeline.second);
+        lifelinegraphics->setData(Qt::UserRole, GraphicsItem::Lifeline);
         connect(lifelinegraphics, &LifelineGraphicsObject::killSelf, this, &SequenceDiagramScene::DeleteLifeline);
         lifelinegraphics->setPos({xPos, yPos});
         addItem(lifelinegraphics);

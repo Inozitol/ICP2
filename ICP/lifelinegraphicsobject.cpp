@@ -6,7 +6,6 @@ LifelineGraphicsObject::LifelineGraphicsObject(std::shared_ptr<SequenceLifeline>
     InitStrings();
     InitActions();
     CalcHeight();
-    setData(Qt::UserRole, LIFELINE_DEF);
 }
 
 void LifelineGraphicsObject::InitStrings(){

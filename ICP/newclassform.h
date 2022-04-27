@@ -1,9 +1,5 @@
 #pragma once
 
-#include "ClassDiagram/metaclass.h"
-#include "ClassDiagram/metaclassattribute.h"
-#include "ClassDiagram/metaclassmethod.h"
-
 #include <memory>
 #include <string>
 #include <sstream>
@@ -15,6 +11,10 @@
 #include <QAction>
 #include <QDebug>
 
+#include "ClassDiagram/metaclass.h"
+#include "ClassDiagram/metaclassattribute.h"
+#include "ClassDiagram/metaclassmethod.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class NewClassForm; }
 QT_END_NAMESPACE
@@ -25,11 +25,16 @@ class ClassEditDialog : public QDialog
 
 public:
     ClassEditDialog(QWidget* parent = nullptr);
+    ClassEditDialog(std::shared_ptr<MetaClass>, QWidget* parent = nullptr);
     ~ClassEditDialog();
     std::shared_ptr<MetaClass> GetClassPtr();
 
 private:
     void InitButtons();
+    void InitContent();
+
+    void _AddAttrRow(std::shared_ptr<MetaClassAttribute>);
+    void _AddMethRow(std::shared_ptr<MetaClassMethod>);
 
     Ui::NewClassForm* ui;
 
