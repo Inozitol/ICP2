@@ -1,4 +1,4 @@
-
+﻿
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -10,13 +10,15 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     setWindowIcon(QIcon(":/icon.png"));
-    setWindowTitle("Diagramy alespoň za 50 bodů");
+    setWindowTitle(tr("Diagramy alespoň za 50 bodů"));
+
     int largeWidth = QGuiApplication::primaryScreen()->virtualSize().width();
     ui->classSplitter->setSizes(QList<int>{largeWidth/7,6*(largeWidth/7)});
     ui->sequenceSplitter->setSizes(QList<int>{largeWidth/7,6*(largeWidth/7)});
     setWindowState(Qt::WindowMaximized);
     _environment = Environment::GetEnvironment();
     _currentFile = "";
+    InitActions();
     InitGraphicView();
     InitMenuBar();
 }
@@ -35,6 +37,18 @@ void MainWindow::InitMenuBar(){
     connect(ui->actionNew, 		&QAction::triggered,	_sequenceScene, 	&QGraphicsScene::clear);
 
     connect(ui->actionOpen, 	&QAction::triggered, 	_sequenceScene,		&SequenceDiagramScene::DataChange);
+}
+
+void MainWindow::InitActions(){
+    connect(ui->sequenceList, &QListWidget::customContextMenuRequested, this, &MainWindow::SequenceListContextMenu);
+
+    _deleteEvent = new QAction(tr("Delete Event"));
+    connect(_deleteEvent, &QAction::triggered, [this](){
+        auto item = ui->sequenceList->currentItem();
+        if(item){
+            DeleteEvent(item);
+        }
+    });
 }
 
 void MainWindow::InitGraphicView(){
@@ -117,9 +131,13 @@ void MainWindow::RefreshTimelineList(){
 }
 
 void MainWindow::EnvironOpen(){
-    emit ClearScenes();
 
     _currentFile = QFileDialog::getOpenFileName(this, tr("Open UML file"));
+    if(_currentFile.isEmpty()){
+        return;
+    }
+
+    emit ClearScenes();
     _environment->ImportEnvironment(_currentFile.toStdString());
     RefreshClassList();
     for(auto [name,metaclass] : _environment->GetClassDiagram()->GetClasses()){
@@ -177,4 +195,20 @@ void MainWindow::MoveEventDown(){
 
         _sequenceScene->RedrawScene();
     }
+}
+
+void MainWindow::SequenceListContextMenu(QPoint point){
+    auto item = ui->sequenceList->itemAt(point);
+    if(item){
+        QMenu menu;
+        menu.addAction(_deleteEvent);
+        menu.exec(ui->sequenceList->mapToGlobal(point));
+    }
+}
+
+void MainWindow::DeleteEvent(QListWidgetItem* eventItem){
+    auto row = ui->sequenceList->row(eventItem);
+    _environment->GetSequenceDiagram()->RemoveEvent(row);
+    delete(eventItem);
+    _sequenceScene->RedrawScene();
 }

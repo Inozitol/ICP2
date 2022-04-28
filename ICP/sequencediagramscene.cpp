@@ -17,7 +17,7 @@ void SequenceDiagramScene::InitActions(){
     _newLifeline = new QAction(tr("New Lifeline"), this);
     connect(_newLifeline, &QAction::triggered, this, &SequenceDiagramScene::NewLifeline);
 
-    _newEvent = new QAction(tr("New event"), this);
+    _newEvent = new QAction(tr("New Event"), this);
     connect(_newEvent, &QAction::triggered, this, &SequenceDiagramScene::NewEvent);
 }
 

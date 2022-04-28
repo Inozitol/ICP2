@@ -5,6 +5,7 @@
 #include <QMainWindow>
 #include <QAction>
 #include <QFileDialog>
+#include <QListWidgetItem>
 
 #include "environment.h"
 #include "classdiagramscene.h"
@@ -24,6 +25,7 @@ public:
 
 private:
     void InitMenuBar();
+    void InitActions();
     void InitGraphicView();
 
     Ui::MainWindow* ui;
@@ -31,6 +33,8 @@ private:
     QString _currentFile;
     ClassDiagramScene* _classScene;
     SequenceDiagramScene* _sequenceScene;
+    QAction* _deleteEvent;
+    void DeleteEvent(QListWidgetItem*);
 
 private slots:
     void EnvironNew();
@@ -43,6 +47,8 @@ private slots:
 
     void MoveEventUp();
     void MoveEventDown();
+
+    void SequenceListContextMenu(QPoint);
 
 signals:
     void ClearScenes();

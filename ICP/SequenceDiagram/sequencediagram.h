@@ -28,6 +28,7 @@ public:
     void EventPop();
     void EventMoveUp(int);
     void EventMoveDown(int);
+    void RemoveEvent(int);
 
     std::shared_ptr<SequenceEvent> GetEventTop();
     std::shared_ptr<SequenceEvent> GetEventIndex(int);

@@ -42,8 +42,6 @@ void ClassDiagramScene::drawBackground(QPainter* painter, const QRectF& rect){
 void ClassDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     auto item = itemAt(event->scenePos().toPoint(), QTransform());
 
-    qDebug() << item->data(Qt::UserRole).toInt();
-
     switch(item->data(Qt::UserRole).toInt()){
 
     case GraphicsItem::Class:

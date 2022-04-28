@@ -98,3 +98,7 @@ void SequenceDiagram::Clear(){
     _lifelines.clear();
     _timeline.clear();
 }
+
+void SequenceDiagram::RemoveEvent(int index){
+    _timeline.erase(_timeline.begin()+index);
+}
