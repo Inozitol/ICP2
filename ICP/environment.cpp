@@ -92,8 +92,11 @@ void Environment::ExportEnvironment(std::string file_name){
                 case SequenceEvent::Return:
                 {
                     auto ReturnEvent = std::static_pointer_cast<SequenceReturn>(event);
-                    file << "return" << ReturnEvent->GetOrigin()->GetName() << " -> " << ReturnEvent->GetDestination()->GetName() << " : " << ReturnEvent->GetMessage() << '\n';
+                    file << "return" << ReturnEvent->GetOrigin()->GetName() << " -> " << ReturnEvent->GetDestination()->GetName() << " : " << ReturnEvent->GetMessage() << ' ' << ReturnEvent->GetReturnType() << '\n';
                 }
+                break;
+                case SequenceEvent::Nop:
+                    file << "spacer\n";
                 break;
             }
         }

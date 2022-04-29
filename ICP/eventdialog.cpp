@@ -189,12 +189,13 @@ std::shared_ptr<SequenceEvent> EventDialog::GetEvent(){
             SequenceLifeline::Name origin_name = uiRet->originComboBox->currentText().toStdString();
             SequenceLifeline::Name destination_name = uiRet->destinationComboBox->currentText().toStdString();
 
-            std::string msg = uiRet->returnLineEdit->text().toStdString();
+            std::string msg = uiRet->valueLineEdit->text().toStdString();
+            std::string type = uiRet->returnLineEdit->text().toStdString();
 
             std::shared_ptr<SequenceLifeline> origin_lifeline = _environment->GetSequenceDiagram()->GetLifeline(origin_name);
             std::shared_ptr<SequenceLifeline> destination_lifeline = _environment->GetSequenceDiagram()->GetLifeline(destination_name);
 
-            return std::make_shared<SequenceReturn>(origin_lifeline, destination_lifeline, msg);
+            return std::make_shared<SequenceReturn>(origin_lifeline, destination_lifeline, msg, type);
         }
         break;
 
