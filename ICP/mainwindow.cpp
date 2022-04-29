@@ -127,6 +127,7 @@ void MainWindow::EnvironOpen(){
         _classScene->PlaceRelation(relation);
     }
     _sequenceScene->RedrawScene();
+    _environment->CheckSequenceEvents();
 }
 
 void MainWindow::EnvironSave(){

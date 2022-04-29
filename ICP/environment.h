@@ -28,6 +28,8 @@ public:
     void ExportEnvironment(std::string);
     void ImportEnvironment(std::string);
 
+    void CheckSequenceEvents();
+
 private:
     std::shared_ptr<ClassDiagram> _class_diag;
     std::shared_ptr<SequenceDiagram> _sequence_diag;
