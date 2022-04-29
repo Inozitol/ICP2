@@ -185,7 +185,7 @@ void Environment::ImportEnvironment(std::string file_name){
                 if(!words[i+1].compare(sender.first)){
                     for(auto receiver : _sequence_diag->GetLifelines()){
                         if(!words[i+3].compare(receiver.first)){
-                            _sequence_diag->EventPush(std::make_shared<SequenceReturn>(sender.second, receiver.second, words[i+5].data()));
+                            _sequence_diag->EventPush(std::make_shared<SequenceReturn>(sender.second, receiver.second, words[i+6].data(), words[i+5].data()));
                             break;
                         }
                     }
@@ -230,6 +230,7 @@ void Environment::ImportEnvironment(std::string file_name){
 }
 
 void Environment::CheckSequenceEvents(){
+    std::vector<std::shared_ptr<SequenceMessage>> returns;
     std::map<SequenceLifeline::Name, bool> activations;
     for(auto timeline : _sequence_diag->GetLifelines()){
         activations.insert({timeline.second->GetName(), false});
@@ -258,9 +259,12 @@ void Environment::CheckSequenceEvents(){
                 break;
             }
             case SequenceEvent::Message:{
+                event->SetStatus(false);
                 auto message = std::static_pointer_cast<SequenceMessage>(event);
                 auto messageRecipient = message->GetDestination()->GetClass()->GetName();
                 auto messageContent = message->GetMessage();
+
+                returns.push_back(message);
 
                 std::string delimiter = "(";
                 std::string methodName = messageContent.substr(0, messageContent.find(delimiter));
@@ -278,14 +282,33 @@ void Environment::CheckSequenceEvents(){
 
                 qDebug() << "Calling method" << methodName.data() << "with" << methodParamsCount << "parameters";
 
-                auto methods = message->GetDestination()->GetClass()->GetMethods();
-                for (const auto& [key, value] : methods) {
-                    qDebug() << "----" << key.data() << ":" << value->GetName().data();
+                for (const auto& [key, value] : message->GetDestination()->GetClass()->GetMethods()) {
+                    if(!methodName.compare(key) && methodParamsCount == value->GetParameters().size()){
+                        event->SetStatus(true);
+                        break;
+                    }
                 }
 
                 break;
             }
             case SequenceEvent::Return:{
+                event->SetStatus(false);
+                auto message = std::static_pointer_cast<SequenceReturn>(event);
+                auto messageRecipient = message->GetDestination()->GetClass()->GetName();
+                auto messageSender = message->GetOrigin()->GetClass()->GetName();
+
+                if(returns.empty()){
+                    //TODO some explanation
+                    break;
+                }
+
+                auto messageCall = returns.back();
+                returns.pop_back();
+
+                if(!messageSender.compare(messageCall->GetDestination()->GetName()) && !messageRecipient.compare(messageCall->GetOrigin()->GetName())){
+                    event->SetStatus(true);
+                }
+
                 break;
             }
         }
