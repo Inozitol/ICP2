@@ -14,3 +14,11 @@ bool SequenceEvent::GetStatus(){
 void SequenceEvent::SetStatus(bool stat){
     this->_status = stat;
 }
+
+std::string SequenceEvent::GetErrorMsg(){
+    return _errorMsg;
+}
+
+void SequenceEvent::SetErrorMsg(std::string msg){
+    this->_errorMsg = msg;
+}
