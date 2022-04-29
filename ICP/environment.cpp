@@ -233,7 +233,7 @@ void Environment::ImportEnvironment(std::string file_name){
 }
 
 void Environment::CheckSequenceEvents(){
-    std::vector<std::shared_ptr<SequenceMessage>> returns;
+    std::vector<std::pair<std::shared_ptr<MetaClassMethod>, std::shared_ptr<SequenceMessage>>> returns;
     std::map<SequenceLifeline::Name, bool> activations;
     for(auto timeline : _sequence_diag->GetLifelines()){
         activations.insert({timeline.second->GetName(), false});
@@ -264,10 +264,7 @@ void Environment::CheckSequenceEvents(){
             case SequenceEvent::Message:{
                 event->SetStatus(false);
                 auto message = std::static_pointer_cast<SequenceMessage>(event);
-                auto messageRecipient = message->GetDestination()->GetClass()->GetName();
                 auto messageContent = message->GetMessage();
-
-                returns.push_back(message);
 
                 std::string delimiter = "(";
                 std::string methodName = messageContent.substr(0, messageContent.find(delimiter));
@@ -280,7 +277,7 @@ void Environment::CheckSequenceEvents(){
                 std::istream_iterator<std::string> end;
                 std::vector<std::string> vstrings(begin, end);
 
-                int methodParamsCount = vstrings.size();
+                std::size_t methodParamsCount = vstrings.size();
                 if(!vstrings[0].compare("()")) methodParamsCount = 0;
 
                 qDebug() << "Calling method" << methodName.data() << "with" << methodParamsCount << "parameters";
@@ -288,17 +285,17 @@ void Environment::CheckSequenceEvents(){
                 for (const auto& [key, value] : message->GetDestination()->GetClass()->GetMethods()) {
                     if(!methodName.compare(key) && methodParamsCount == value->GetParameters().size()){
                         event->SetStatus(true);
+                        returns.push_back(std::make_pair(value, message));
                         break;
                     }
                 }
-
                 break;
             }
             case SequenceEvent::Return:{
                 event->SetStatus(false);
                 auto message = std::static_pointer_cast<SequenceReturn>(event);
-                auto messageRecipient = message->GetDestination()->GetClass()->GetName();
-                auto messageSender = message->GetOrigin()->GetClass()->GetName();
+                auto messageRecipient = message->GetDestination()->GetName();
+                auto messageSender = message->GetOrigin()->GetName();
 
                 if(returns.empty()){
                     //TODO some explanation
@@ -308,10 +305,11 @@ void Environment::CheckSequenceEvents(){
                 auto messageCall = returns.back();
                 returns.pop_back();
 
-                if(!messageSender.compare(messageCall->GetDestination()->GetName()) && !messageRecipient.compare(messageCall->GetOrigin()->GetName())){
-                    event->SetStatus(true);
+                if(!messageSender.compare(messageCall.second->GetDestination()->GetName()) && !messageRecipient.compare(messageCall.second->GetOrigin()->GetName())){
+                    if(!message->GetReturnType().compare(messageCall.first->GetReturnType())){
+                        event->SetStatus(true);
+                    }
                 }
-
                 break;
             }
         }
