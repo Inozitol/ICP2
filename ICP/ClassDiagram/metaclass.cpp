@@ -39,3 +39,13 @@ int MetaClass::MethodCount(){
 int MetaClass::AttributesCount(){
     return _attributes.size();
 }
+
+void MetaClass::SetName(Name name){
+    _name = name;
+}
+
+void MetaClass::Clear(){
+    _name = "";
+    _methods.clear();
+    _attributes.clear();
+}

@@ -1,5 +1,3 @@
-                                                                                                                                                                                                                                        #include <utility>
-
 #include <fstream>
 
 #include "environment.h"
@@ -86,8 +84,16 @@ void Environment::ExportEnvironment(std::string file_name){
                 break;
 
                 case SequenceEvent::Message:
+                {
                     auto MessageEvent = std::static_pointer_cast<SequenceMessage>(event);
                     file << "message " << MessageEvent->GetOrigin()->GetName() << " -> " << MessageEvent->GetDestination()->GetName() << " : " << MessageEvent->GetMessage() << '\n';
+                }
+                break;
+                case SequenceEvent::Return:
+                {
+                    auto ReturnEvent = std::static_pointer_cast<SequenceReturn>(event);
+                    file << "return" << ReturnEvent->GetOrigin()->GetName() << " -> " << ReturnEvent->GetDestination()->GetName() << " : " << ReturnEvent->GetMessage() << '\n';
+                }
                 break;
             }
         }

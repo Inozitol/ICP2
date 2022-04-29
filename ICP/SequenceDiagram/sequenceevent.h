@@ -4,11 +4,11 @@ class SequenceEvent
 {
 public:
     enum Type{
-        Activation,
+        Activation = 0,
         Deactivation,
         Message,
-        Nop,
-        Return
+        Return,
+        Nop
     };
 
     SequenceEvent(Type);

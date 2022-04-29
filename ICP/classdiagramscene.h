@@ -15,6 +15,7 @@
 #include "newclassform.h"
 #include "classgraphicsobject.h"
 #include "relationgraphicsobject.h"
+#include "graphicsenum.h"
 
 class ClassDiagramScene : public QGraphicsScene{
     Q_OBJECT
@@ -27,7 +28,7 @@ public:
 
     void PlaceClass(std::shared_ptr<MetaClass>);
     void PlaceRelation(std::shared_ptr<Relation>);
-
+    QWidget* GetParent();
 private:
 
     void InitActions();

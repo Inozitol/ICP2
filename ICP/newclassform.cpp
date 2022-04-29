@@ -2,11 +2,32 @@
 #include "ui_newclassform.h"
 
 ClassEditDialog::ClassEditDialog(QWidget* parent)
-    :QDialog(parent)
-    , ui(new Ui::NewClassForm)
+    :QDialog(parent),
+     ui(new Ui::NewClassForm),
+     _class(nullptr)
 {
     ui->setupUi(this);
     InitButtons();
+}
+
+ClassEditDialog::ClassEditDialog(std::shared_ptr<MetaClass> metaclass, QWidget* parent)
+    :QDialog(parent),
+    ui(new Ui::NewClassForm),
+    _class(metaclass)
+{
+    ui->setupUi(this);
+    InitButtons();
+    InitContent();
+}
+
+void ClassEditDialog::InitContent(){
+    ui->className->setText(QString::fromStdString(_class->GetName()));
+    for(auto attr : _class->GetAttributes()){
+        _AddAttrRow(attr.second);
+    }
+    for(auto meth : _class->GetMethods()){
+        _AddMethRow(meth.second);
+    }
 }
 
 ClassEditDialog::~ClassEditDialog(){
@@ -14,7 +35,13 @@ ClassEditDialog::~ClassEditDialog(){
 }
 
 std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
-    _class = std::make_shared<MetaClass>(ui->className->text().toStdString());
+    if(_class){
+        _class->Clear();
+        _class->SetName(ui->className->text().toStdString());
+    }else{
+        _class = std::make_shared<MetaClass>(ui->className->text().toStdString());
+    }
+
     QComboBox* q_perm;
     QTableWidgetItem* q_dtype;
     QTableWidgetItem* q_name;
@@ -43,8 +70,6 @@ std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
         }else{
             name = 	q_name->text().toStdString();
         }
-
-        qDebug() << "Attr: " << name.data() << " " << dtype.data();
 
         _class->AddAttribute(std::make_shared<MetaClassAttribute>(name, perm, dtype));
     }
@@ -109,6 +134,25 @@ void ClassEditDialog::AddAttrRow(){
     ui->attrTable->setCellWidget(rowCount, 0, perms);
 }
 
+void ClassEditDialog::_AddAttrRow(std::shared_ptr<MetaClassAttribute> attr){
+
+    QComboBox* perms = new QComboBox(this);
+    perms->addItem(tr("Public"), 	QChar('+'));
+    perms->addItem(tr("Private"), 	QChar('-'));
+    perms->addItem(tr("Protected"), QChar('#'));
+    perms->addItem(tr("Package"), 	QChar('~'));
+
+    int index = perms->findData(QChar(attr->GetPermission()));
+    perms->setCurrentIndex(index);
+
+    int rowCount = ui->attrTable->rowCount();
+    ui->attrTable->setRowCount(rowCount+1);
+
+    ui->attrTable->setCellWidget(rowCount, A_PERM, perms);
+    ui->attrTable->setItem(rowCount, A_DATA_TYPE, new QTableWidgetItem(QString::fromStdString(attr->GetDataType())));
+    ui->attrTable->setItem(rowCount, A_NAME, new QTableWidgetItem(QString::fromStdString(attr->GetName())));
+}
+
 void ClassEditDialog::RemoveAttrRow(){
     QModelIndexList sel_indexes = ui->attrTable->selectionModel()->selectedIndexes();
     for(auto index : sel_indexes){
@@ -120,15 +164,43 @@ void ClassEditDialog::RemoveAttrRow(){
 void ClassEditDialog::AddMethRow(){
 
     QComboBox* perms = new QComboBox(this);
-    perms->addItem(tr("Public"), 	'+');
-    perms->addItem(tr("Private"), 	'-');
-    perms->addItem(tr("Protected"), '#');
-    perms->addItem(tr("Package"), 	'~');
+    perms->addItem(tr("Public"), 	QChar('+'));
+    perms->addItem(tr("Private"), 	QChar('-'));
+    perms->addItem(tr("Protected"), QChar('#'));
+    perms->addItem(tr("Package"), 	QChar('~'));
 
     int rowCount = ui->methTable->rowCount();
     ui->methTable->setRowCount(rowCount+1);
 
     ui->methTable->setCellWidget(rowCount, 0, perms);
+}
+
+void ClassEditDialog::_AddMethRow(std::shared_ptr<MetaClassMethod> meth){
+    QComboBox* perms = new QComboBox(this);
+    perms->addItem(tr("Public"), 	QChar('+'));
+    perms->addItem(tr("Private"), 	QChar('-'));
+    perms->addItem(tr("Protected"), QChar('#'));
+    perms->addItem(tr("Package"), 	QChar('~'));
+
+    int index = perms->findData(QChar(meth->GetPermission()));
+    perms->setCurrentIndex(index);
+
+    int rowCount = ui->methTable->rowCount();
+    ui->methTable->setRowCount(rowCount+1);
+
+    ui->methTable->setCellWidget(rowCount, M_PERM, perms);
+    ui->methTable->setItem(rowCount, M_RETURN_TYPE, new QTableWidgetItem(QString::fromStdString(meth->GetReturnType())));
+    ui->methTable->setItem(rowCount, M_NAME, new QTableWidgetItem(QString::fromStdString(meth->GetName())));
+    QString str;
+    std::set<MetaClassMethod::DataType>::iterator it;
+    auto params = meth->GetParameters();
+    for(it = params.begin(); it != params.end(); ++it){
+        str.append(QString::fromStdString(*it));
+        if(it != std::prev(params.cend())){
+            str.append(',');
+        }
+    }
+    ui->methTable->setItem(rowCount, M_PARAMS, new QTableWidgetItem(str));
 }
 
 void ClassEditDialog::RemoveMethRow(){

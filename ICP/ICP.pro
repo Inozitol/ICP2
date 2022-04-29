@@ -39,6 +39,7 @@ HEADERS += \
     classgraphicsobject.h \
     environment.h \
     eventdialog.h \
+    graphicsenum.h \
     lifelinedialog.h \
     lifelinegraphicsobject.h \
     mainwindow.h \
@@ -47,6 +48,11 @@ HEADERS += \
     sequencediagramscene.h
 
 FORMS += \
+    event_activation.ui \
+    event_deactivation.ui \
+    event_message.ui \
+    event_return.ui \
+    event_spacer.ui \
     eventdialog.ui \
     lifelinedialog.ui \
     mainwindow.ui \

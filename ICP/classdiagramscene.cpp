@@ -40,16 +40,37 @@ void ClassDiagramScene::drawBackground(QPainter* painter, const QRectF& rect){
 }
 
 void ClassDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
-    auto item = static_cast<ClassGraphicsObject*>(itemAt(event->scenePos().toPoint(),QTransform()));
-    if(item){
-        item->contextMenuEvent(event);
+    auto item = itemAt(event->scenePos().toPoint(), QTransform());
+
+    switch(item->data(Qt::UserRole).toInt()){
+
+    case GraphicsItem::Class:
+    {
+        auto classitem = static_cast<ClassGraphicsObject*>(item);
+        classitem->contextMenuEvent(event);
         return;
+
+    }
+        break;
+
+    case GraphicsItem::Relation:
+    {
+        //auto relationitem = static_cast<RelationGraphicsObject*>(item);
+        //relationitem->contextMenuEvent(event);
+        event->accept();
+    }
+        break;
+
+    default:
+    {
+        QMenu menu;
+        menu.addAction(_newClass);
+        menu.exec(event->screenPos());
+        event->accept();
+    }
+        break;
     }
 
-    QMenu menu;
-    menu.addAction(_newClass);
-    menu.exec(event->screenPos());
-    event->accept();
 }
 
 void ClassDiagramScene::NewClass(){
@@ -64,6 +85,7 @@ void ClassDiagramScene::NewClass(){
 
 void ClassDiagramScene::PlaceClass(std::shared_ptr<MetaClass> metaclass){
     auto newclass = new ClassGraphicsObject(metaclass);
+    newclass->setData(Qt::UserRole, GraphicsItem::Class);
     connect(newclass, &ClassGraphicsObject::killSelf, this, &ClassDiagramScene::DeleteClass);
     addItem(newclass);
     _graphicsObjectMap.insert(std::make_pair(metaclass->GetName(), newclass));
@@ -83,6 +105,7 @@ void ClassDiagramScene::ClearScene(){
 void ClassDiagramScene::PlaceRelation(std::shared_ptr<Relation> relation){
     auto relationPair = std::make_pair(_graphicsObjectMap.at(relation->GetSource()->GetName()), _graphicsObjectMap.at(relation->GetDestination()->GetName()));
     auto newrelation = new RelationGraphicsObject(relationPair);
+    newrelation->setData(Qt::UserRole, GraphicsItem::Relation);
     connect(relationPair.first, &QGraphicsObject::xChanged, newrelation, &RelationGraphicsObject::updateLine);
     connect(relationPair.first, &QGraphicsObject::yChanged, newrelation, &RelationGraphicsObject::updateLine);
     connect(relationPair.second, &QGraphicsObject::xChanged, newrelation, &RelationGraphicsObject::updateLine);
@@ -90,3 +113,6 @@ void ClassDiagramScene::PlaceRelation(std::shared_ptr<Relation> relation){
     addItem(newrelation);
 }
 
+QWidget* ClassDiagramScene::GetParent(){
+    return _parent;
+}

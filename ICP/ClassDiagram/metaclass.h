@@ -16,6 +16,8 @@ public:
 
     MetaClass(Name);
 
+    void SetName(Name);
+
     void AddMethod(std::shared_ptr<MetaClassMethod>);
     void RemoveMethod(MetaClassObject::Name);
     void AddAttribute(std::shared_ptr<MetaClassAttribute>);
@@ -28,6 +30,8 @@ public:
     int AttributesCount();
 
     Name GetName();
+
+    void Clear();
 
 protected:
     Name _name;

@@ -12,8 +12,10 @@
 #include <QMenu>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
 
 #include "ClassDiagram/metaclass.h"
+#include "newclassform.h"
 
 class ClassGraphicsObject : public QGraphicsObject
 {
@@ -23,6 +25,7 @@ public:
     [[nodiscard]] QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
+    //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     MetaClass::Name GetClassName();
     QPointF GetItemCenter();
 
@@ -48,9 +51,10 @@ private:
     std::vector<QString> _methStr;
 
     QAction* _deleteClass;
+    QAction* _editClass;
 
 private slots:
-    void killSelfSlot();
+    void editSelf();
 
 signals:
     void killSelf(ClassGraphicsObject*);

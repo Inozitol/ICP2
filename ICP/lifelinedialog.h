@@ -4,6 +4,8 @@
 
 #include <QDialog>
 #include <QComboBox>
+#include <QDialogButtonBox>
+#include <QMessageBox>
 
 #include "environment.h"
 #include "SequenceDiagram/sequencelifeline.h"
@@ -27,4 +29,10 @@ private:
 
     Ui::LifelineDialog *ui;
     Environment* _environment;
+
+private slots:
+    void acceptCondition();
+
+signals:
+    void acceptedSafe();
 };

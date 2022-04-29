@@ -103,6 +103,21 @@
         <string>Sequence Diagram</string>
        </attribute>
        <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <property name="spacing">
+         <number>0</number>
+        </property>
+        <property name="leftMargin">
+         <number>0</number>
+        </property>
+        <property name="topMargin">
+         <number>0</number>
+        </property>
+        <property name="rightMargin">
+         <number>0</number>
+        </property>
+        <property name="bottomMargin">
+         <number>0</number>
+        </property>
         <item>
          <widget class="QSplitter" name="sequenceSplitter">
           <property name="orientation">
@@ -164,8 +179,8 @@
                   <string>Move Down</string>
                  </property>
                  <property name="icon">
-                  <iconset>
-                   <normaloff>arrowdown.png</normaloff>arrowdown.png</iconset>
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/arrowdown.png</normaloff>:/arrowdown.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -175,8 +190,8 @@
                   <string>Move up</string>
                  </property>
                  <property name="icon">
-                  <iconset>
-                   <normaloff>arrowup.png</normaloff>arrowup.png</iconset>
+                  <iconset resource="icons.qrc">
+                   <normaloff>:/arrowup.png</normaloff>:/arrowup.png</iconset>
                  </property>
                 </widget>
                </item>
@@ -190,6 +205,9 @@
                 <horstretch>0</horstretch>
                 <verstretch>1</verstretch>
                </sizepolicy>
+              </property>
+              <property name="contextMenuPolicy">
+               <enum>Qt::CustomContextMenu</enum>
               </property>
               <property name="dragDropMode">
                <enum>QAbstractItemView::InternalMove</enum>
@@ -237,7 +255,6 @@
    </widget>
    <addaction name="menuFile"/>
   </widget>
-  <widget class="QStatusBar" name="statusbar"/>
   <action name="actionNew">
    <property name="text">
     <string>New</string>
@@ -259,6 +276,8 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="icons.qrc"/>
+ </resources>
  <connections/>
 </ui>

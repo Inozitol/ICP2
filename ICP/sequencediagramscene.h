@@ -16,6 +16,8 @@
 #include "environment.h"
 #include "lifelinedialog.h"
 #include "lifelinegraphicsobject.h"
+#include "eventdialog.h"
+#include "graphicsenum.h"
 
 class SequenceDiagramScene : public QGraphicsScene{
     Q_OBJECT
@@ -25,6 +27,7 @@ public:
 
     void contextMenuEvent(QGraphicsSceneContextMenuEvent*) override;
     void RedrawScene();
+
 private:
     const int V_MARGIN = 25;
     const int H_MARGIN = 100;
@@ -33,6 +36,7 @@ private:
     void InitActions();
 
     QAction* _newLifeline;
+    QAction* _newEvent;
     QWidget* _parent;
     QFont _font;
 
@@ -47,6 +51,7 @@ public slots:
 private slots:
     void NewLifeline();
     void DeleteLifeline(LifelineGraphicsObject*);
+    void NewEvent();
 
 signals:
     void SceneUpdate();

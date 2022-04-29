@@ -3,16 +3,18 @@
 ClassGraphicsObject::ClassGraphicsObject(std::shared_ptr<MetaClass> metaclass)
     :_font(FONT), _class(metaclass), _width(DEF_WIDTH)
 {
+    setFlag(QGraphicsItem::ItemIsSelectable);
+    setFlag(QGraphicsItem::ItemIsMovable);
     CalcHeight();
     InitStrings();
     InitActions();
-    setFlag(QGraphicsItem::ItemIsSelectable);
-    setFlag(QGraphicsItem::ItemIsMovable);
 }
 
 void ClassGraphicsObject::InitActions(){
     _deleteClass = new QAction(tr("Delete class"));
-    connect(_deleteClass, &QAction::triggered, this, &ClassGraphicsObject::killSelfSlot);
+    connect(_deleteClass, &QAction::triggered, this, [this](){emit killSelf(this);});
+    _editClass = new QAction(tr("Edit class"));
+    connect(_editClass, &QAction::triggered, this, &ClassGraphicsObject::editSelf);
 }
 
 void ClassGraphicsObject::CalcHeight(){
@@ -26,12 +28,13 @@ void ClassGraphicsObject::CalcHeight(){
     _methHeight =  2*V_MARGIN + (meth_cnt-1)*V_MARGIN + meth_cnt*fm.height();
 
     _totalHeight = _titleHeight + _attrHeight + _methHeight + 4; // 4 for borders
-
-    qDebug() << "Height: " << _totalHeight;
 }
 
 void ClassGraphicsObject::InitStrings(){
     auto fm = QFontMetrics(_font);
+
+    _attrStr.clear();
+    _methStr.clear();
 
     _titleStr = QString(QString::fromStdString(_class->GetName()));
     if(willOverflow(_titleStr)){
@@ -88,6 +91,7 @@ void ClassGraphicsObject::InitStrings(){
 void ClassGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     QMenu menu;
     menu.addAction(_deleteClass);
+    menu.addAction(_editClass);
     menu.exec(event->screenPos());
     event->accept();
 }
@@ -161,10 +165,6 @@ void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsIte
     }
 }
 
-void ClassGraphicsObject::killSelfSlot(){
-    emit killSelf(this);
-}
-
 MetaClass::Name ClassGraphicsObject::GetClassName(){
     return _class->GetName();
 }
@@ -172,3 +172,15 @@ MetaClass::Name ClassGraphicsObject::GetClassName(){
 QPointF ClassGraphicsObject::GetItemCenter(){
     return { pos().x() + (_width/2) , pos().y() + (_totalHeight/2) };
 }
+
+void ClassGraphicsObject::editSelf(){
+    ClassEditDialog dialog(_class);
+    if(dialog.exec()){
+        dialog.GetClassPtr();
+        CalcHeight();
+        InitStrings();
+        prepareGeometryChange();
+    }
+}
+
+

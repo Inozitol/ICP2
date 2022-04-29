@@ -6,7 +6,6 @@ LifelineGraphicsObject::LifelineGraphicsObject(std::shared_ptr<SequenceLifeline>
     InitStrings();
     InitActions();
     CalcHeight();
-    setData(Qt::UserRole, IAMALIFELINE);
 }
 
 void LifelineGraphicsObject::InitStrings(){
@@ -72,11 +71,24 @@ void LifelineGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *ev
 
 void LifelineGraphicsObject::InitActions(){
     _deleteLifeline = new QAction("Delete lifeline");
-    connect(_deleteLifeline, &QAction::toggled, this, &LifelineGraphicsObject::killSelfSlot);
+    connect(_deleteLifeline, &QAction::triggered, this, &LifelineGraphicsObject::killSelfSlot);
 }
 
 void LifelineGraphicsObject::killSelfSlot(){
-    emit killSelf(this);
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText("Erasing lifeline will erase all its events!");
+    msgBox.setInformativeText("Are you sure you want that?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    switch(msgBox.exec()){
+        case QMessageBox::Yes:
+            emit killSelf(this);
+        break;
+
+        case QMessageBox::No:
+        break;
+    }
 }
 
 qreal LifelineGraphicsObject::middle(){
