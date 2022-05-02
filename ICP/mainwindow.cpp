@@ -182,13 +182,13 @@ void MainWindow::MoveEventUp(){
     QListWidgetItem* item;
     int currRow = ui->sequenceList->currentRow();
     if(currRow > 0){
-        UpdateTimelineColors();
-
         item = ui->sequenceList->takeItem(currRow);
         ui->sequenceList->insertItem(currRow-1, item);
         ui->sequenceList->setCurrentRow(currRow-1);
 
         _environment->GetSequenceDiagram()->EventMoveUp(currRow);
+
+        UpdateTimelineColors();
 
         _sequenceScene->RedrawScene();
     }
@@ -199,13 +199,13 @@ void MainWindow::MoveEventDown(){
     int currRow = ui->sequenceList->currentRow();
     int itemCount = ui->sequenceList->count();
     if(currRow < itemCount-1 && currRow != -1){
-        UpdateTimelineColors();
-
         item = ui->sequenceList->takeItem(currRow);
         ui->sequenceList->insertItem(currRow+1, item);
         ui->sequenceList->setCurrentRow(currRow+1);
 
         _environment->GetSequenceDiagram()->EventMoveDown(currRow);
+
+        UpdateTimelineColors();
 
         _sequenceScene->RedrawScene();
     }
@@ -221,8 +221,10 @@ void MainWindow::UpdateTimelineColors(){
         event = qvariant_cast<std::shared_ptr<SequenceEvent>>(item->data(Qt::UserRole));
         if(event->GetStatus()){
             item->setBackground(QBrush(Qt::white));
+            item->setToolTip("");
         }else{
             item->setBackground(QBrush(Qt::darkRed));
+            item->setToolTip(QString::fromStdString(event->GetErrorMsg()));
         }
     }
 }
