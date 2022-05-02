@@ -27,6 +27,7 @@ private:
     void InitMenuBar();
     void InitActions();
     void InitGraphicView();
+    void UpdateTimelineColors();
 
     Ui::MainWindow* ui;
     Environment* _environment;

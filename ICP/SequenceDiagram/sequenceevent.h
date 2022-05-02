@@ -1,4 +1,5 @@
 #pragma once
+#include <QObject>
 
 class SequenceEvent
 {
@@ -20,3 +21,6 @@ private:
     Type _type;
     bool _status = true;
 };
+
+
+Q_DECLARE_METATYPE(std::shared_ptr<SequenceEvent>);

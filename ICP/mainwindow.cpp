@@ -21,6 +21,7 @@ MainWindow::MainWindow(QWidget *parent)
     InitActions();
     InitGraphicView();
     InitMenuBar();
+    UpdateTimelineColors();
 }
 
 MainWindow::~MainWindow(){
@@ -81,6 +82,10 @@ void MainWindow::RefreshTimelineList(){
 
     for(std::size_t i = 0, end = _environment->GetSequenceDiagram()->GetTimeline().size(); i != end; ++i){
         auto event = _environment->GetSequenceDiagram()->GetEventIndex(i);
+        QListWidgetItem* item = new QListWidgetItem();
+        QVariant data;
+        data.setValue(event);
+        item->setData(Qt::UserRole, data);
 
         switch(event->GetType()){
         case SequenceEvent::Activation:
@@ -89,7 +94,8 @@ void MainWindow::RefreshTimelineList(){
             QString str("Activate ");
             str.append(QString::fromStdString(activation->GetLifeline()->GetName()));
 
-            ui->sequenceList->addItem(str);
+            item->setText(str);
+            ui->sequenceList->addItem(item);
         }
         break;
 
@@ -99,7 +105,8 @@ void MainWindow::RefreshTimelineList(){
             QString str("Deactivate ");
             str.append(QString::fromStdString(deactivation->GetLifeline()->GetName()));
 
-            ui->sequenceList->addItem(str);
+            item->setText(str);
+            ui->sequenceList->addItem(item);
         }
         break;
 
@@ -114,7 +121,8 @@ void MainWindow::RefreshTimelineList(){
             str.append(" : ");
             str.append(QString::fromStdString(message->GetMessage()));
 
-            ui->sequenceList->addItem(str);
+            item->setText(str);
+            ui->sequenceList->addItem(item);
         }
         break;
 
@@ -122,7 +130,8 @@ void MainWindow::RefreshTimelineList(){
         {
             QString str("Spacer");
 
-            ui->sequenceList->addItem(str);
+            item->setText(str);
+            ui->sequenceList->addItem(item);
         }
         break;
 
@@ -173,6 +182,8 @@ void MainWindow::MoveEventUp(){
     QListWidgetItem* item;
     int currRow = ui->sequenceList->currentRow();
     if(currRow > 0){
+        UpdateTimelineColors();
+
         item = ui->sequenceList->takeItem(currRow);
         ui->sequenceList->insertItem(currRow-1, item);
         ui->sequenceList->setCurrentRow(currRow-1);
@@ -188,6 +199,8 @@ void MainWindow::MoveEventDown(){
     int currRow = ui->sequenceList->currentRow();
     int itemCount = ui->sequenceList->count();
     if(currRow < itemCount-1 && currRow != -1){
+        UpdateTimelineColors();
+
         item = ui->sequenceList->takeItem(currRow);
         ui->sequenceList->insertItem(currRow+1, item);
         ui->sequenceList->setCurrentRow(currRow+1);
@@ -195,6 +208,22 @@ void MainWindow::MoveEventDown(){
         _environment->GetSequenceDiagram()->EventMoveDown(currRow);
 
         _sequenceScene->RedrawScene();
+    }
+}
+
+void MainWindow::UpdateTimelineColors(){
+    _environment->CheckSequenceEvents();
+
+    QListWidgetItem* item;
+    std::shared_ptr<SequenceEvent> event;
+    for(int i=0; i < ui->sequenceList->count(); ++i){
+        item = ui->sequenceList->item(i);
+        event = qvariant_cast<std::shared_ptr<SequenceEvent>>(item->data(Qt::UserRole));
+        if(event->GetStatus()){
+            item->setBackground(QBrush(Qt::white));
+        }else{
+            item->setBackground(QBrush(Qt::darkRed));
+        }
     }
 }
 
