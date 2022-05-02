@@ -1,7 +1,7 @@
 #pragma once
 
 #include <QObject>
-#import <iostream>
+#include <iostream>
 
 class SequenceEvent
 {
@@ -19,7 +19,7 @@ public:
 
     bool GetStatus();
     void SetStatus(bool stat);
-    bool GetErrorMsg();
+    std::string GetErrorMsg();
     void SetErrorMsg(std::string msg);
 private:
     Type _type;

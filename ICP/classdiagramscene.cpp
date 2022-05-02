@@ -104,7 +104,7 @@ void ClassDiagramScene::ClearScene(){
 
 void ClassDiagramScene::PlaceRelation(std::shared_ptr<Relation> relation){
     auto relationPair = std::make_pair(_graphicsObjectMap.at(relation->GetSource()->GetName()), _graphicsObjectMap.at(relation->GetDestination()->GetName()));
-    auto newrelation = new RelationGraphicsObject(relationPair);
+    auto newrelation = new RelationGraphicsObject(relationPair, relation->GetType());
     newrelation->setData(Qt::UserRole, GraphicsItem::Relation);
     connect(relationPair.first, &QGraphicsObject::xChanged, newrelation, &RelationGraphicsObject::updateLine);
     connect(relationPair.first, &QGraphicsObject::yChanged, newrelation, &RelationGraphicsObject::updateLine);

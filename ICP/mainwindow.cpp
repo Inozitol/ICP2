@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent)
     InitActions();
     InitGraphicView();
     InitMenuBar();
-    UpdateTimelineColors();
 }
 
 MainWindow::~MainWindow(){
@@ -137,6 +136,7 @@ void MainWindow::RefreshTimelineList(){
 
         }
     }
+    UpdateTimelineColors();
 }
 
 void MainWindow::EnvironOpen(){

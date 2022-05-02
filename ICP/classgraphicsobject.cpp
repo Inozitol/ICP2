@@ -1,4 +1,5 @@
 ﻿#include "classgraphicsobject.h"
+#include "ClassDiagram/relation.h"
 
 ClassGraphicsObject::ClassGraphicsObject(std::shared_ptr<MetaClass> metaclass)
     :_font(FONT), _class(metaclass), _width(DEF_WIDTH)
