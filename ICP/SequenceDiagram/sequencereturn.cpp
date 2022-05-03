@@ -19,3 +19,19 @@ std::string SequenceReturn::GetMessage(){
 SequenceReturn::DataType SequenceReturn::GetReturnType(){
     return _return_type;
 }
+
+void SequenceReturn::SetOrigin(std::shared_ptr<SequenceLifeline> lifeline){
+    _origin = lifeline;
+}
+
+void SequenceReturn::SetDestination(std::shared_ptr<SequenceLifeline> lifeline){
+    _destination = lifeline;
+}
+
+void SequenceReturn::SetMessage(std::string msg){
+    _msg = msg;
+}
+
+void SequenceReturn::SetReturnType(DataType type){
+    _return_type = type;
+}

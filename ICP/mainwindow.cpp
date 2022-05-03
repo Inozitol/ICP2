@@ -49,6 +49,16 @@ void MainWindow::InitActions(){
             DeleteEvent(item);
         }
     });
+
+    _editEvent = new QAction(tr("Edit event"));
+    connect(_editEvent, &QAction::triggered, [this](){
+        auto item = ui->sequenceList->currentItem();
+        if(item){
+            EditEvent(item);
+        }
+    });
+
+    connect(ui->sequenceList, &QListWidget::itemDoubleClicked, [this](QListWidgetItem *item){EditEvent(item);});
 }
 
 void MainWindow::InitGraphicView(){
@@ -80,7 +90,7 @@ void MainWindow::RefreshTimelineList(){
     ui->sequenceList->clear();
 
     for(std::size_t i = 0, end = _environment->GetSequenceDiagram()->GetTimeline().size(); i != end; ++i){
-        auto event = _environment->GetSequenceDiagram()->GetEventIndex(i);
+        auto event = _environment->GetSequenceDiagram()->GetEvent(i);
         QListWidgetItem* item = new QListWidgetItem();
         QVariant data;
         data.setValue(event);
@@ -234,6 +244,7 @@ void MainWindow::SequenceListContextMenu(QPoint point){
     if(item){
         QMenu menu;
         menu.addAction(_deleteEvent);
+        menu.addAction(_editEvent);
         menu.exec(ui->sequenceList->mapToGlobal(point));
     }
 }
@@ -243,4 +254,16 @@ void MainWindow::DeleteEvent(QListWidgetItem* eventItem){
     _environment->GetSequenceDiagram()->RemoveEvent(row);
     delete(eventItem);
     _sequenceScene->RedrawScene();
+}
+
+void MainWindow::EditEvent(QListWidgetItem* eventItem){
+    auto row = ui->sequenceList->row(eventItem);
+    auto event = _environment->GetSequenceDiagram()->GetEvent(row);
+    EventDialog dialog(event, this);
+    if(dialog.exec()){
+        dialog.GetEvent();
+        _sequenceScene->RedrawScene();
+        UpdateTimelineColors();
+        RefreshTimelineList();
+    }
 }

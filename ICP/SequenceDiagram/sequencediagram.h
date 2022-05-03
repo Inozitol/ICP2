@@ -31,7 +31,7 @@ public:
     void RemoveEvent(int);
 
     std::shared_ptr<SequenceEvent> GetEventTop();
-    std::shared_ptr<SequenceEvent> GetEventIndex(int);
+    std::shared_ptr<SequenceEvent> GetEvent(int);
 
     Timeline GetTimeline();
 

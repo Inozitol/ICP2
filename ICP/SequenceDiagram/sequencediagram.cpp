@@ -90,7 +90,7 @@ std::shared_ptr<SequenceEvent> SequenceDiagram::GetEventTop(){
 }
 
 // Will return out_of_range exception if out of range!
-std::shared_ptr<SequenceEvent> SequenceDiagram::GetEventIndex(int index){
+std::shared_ptr<SequenceEvent> SequenceDiagram::GetEvent(int index){
     return _timeline.at(index);
 }
 

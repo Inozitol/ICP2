@@ -35,7 +35,9 @@ private:
     ClassDiagramScene* _classScene;
     SequenceDiagramScene* _sequenceScene;
     QAction* _deleteEvent;
+    QAction* _editEvent;
     void DeleteEvent(QListWidgetItem*);
+    void EditEvent(QListWidgetItem*);
 
 private slots:
     void EnvironNew();

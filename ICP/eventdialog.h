@@ -26,7 +26,8 @@ class EventDialog : public QDialog
     Q_OBJECT
 
 public:
-    explicit EventDialog(QWidget *parent = nullptr);
+    EventDialog(QWidget *parent = nullptr);
+    EventDialog(std::shared_ptr<SequenceEvent>, QWidget* parent= nullptr);
     ~EventDialog();
 
     std::shared_ptr<SequenceEvent> GetEvent();
@@ -54,6 +55,8 @@ private:
     Environment* _environment;
 
     SequenceEvent::Type _currType;
+
+    std::shared_ptr<SequenceEvent> _event;
 
 signals:
     void acceptedSafe();
