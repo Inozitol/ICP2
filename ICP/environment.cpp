@@ -13,6 +13,7 @@
 #include <algorithm>
 #include <sstream>
 #include <QDebug>
+#include <string>
 
 Environment* Environment::_environment = nullptr;
 
@@ -152,8 +153,9 @@ void Environment::ImportEnvironment(std::string file_name){
             _class_diag->InsertClass(metaclass);
         } else if(!words[i].compare("actor")){
             for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
-                if(!words[i+2].compare(class_name.data())){
+                if(!words[i+2].compare(class_name)){
                     _sequence_diag->InsertLifeline(words[i+1], metaclass);
+		break;
                 }
                 //if class not found...
             }
@@ -245,7 +247,7 @@ void Environment::CheckSequenceEvents(){
                 auto activation = std::static_pointer_cast<SequenceActivation>(event);
                 if(activations.at(activation->GetLifeline()->GetName())){
                     event->SetStatus(false);
-                    //already active
+                    event->SetErrorMsg("Lifeline " + activation->GetLifeline()->GetName() + " is already active.");
                 } else {
                     activations[activation->GetLifeline()->GetName()] = true;
                 }
@@ -255,7 +257,7 @@ void Environment::CheckSequenceEvents(){
                 auto deactivation = std::static_pointer_cast<SequenceDeactivation>(event);
                 if(!activations.at(deactivation->GetLifeline()->GetName())){
                     event->SetStatus(false);
-                    //already inactive
+                    event->SetErrorMsg("Lifeline " + deactivation->GetLifeline()->GetName() + " is already inactive.");
                 } else {
                     activations[deactivation->GetLifeline()->GetName()] = false;
                 }
@@ -280,13 +282,29 @@ void Environment::CheckSequenceEvents(){
                 std::size_t methodParamsCount = vstrings.size();
                 if(!vstrings[0].compare("()")) methodParamsCount = 0;
 
-                qDebug() << "Calling method" << methodName.data() << "with" << methodParamsCount << "parameters";
+                bool paramCountFlag = false, methodNameFlag = false;
+                int errorInt = 0;
 
                 for (const auto& [key, value] : message->GetDestination()->GetClass()->GetMethods()) {
-                    if(!methodName.compare(key) && methodParamsCount == value->GetParameters().size()){
-                        event->SetStatus(true);
-                        returns.push_back(std::make_pair(value, message));
-                        break;
+                    if(!methodName.compare(key)){
+                        methodNameFlag = true;
+                        if(methodParamsCount == value->GetParameters().size()){
+                            paramCountFlag = true;
+                            errorInt = value->GetParameters().size();
+                            event->SetStatus(true);
+                            returns.push_back(std::make_pair(value, message));
+                            break;
+                        }
+                    }
+                }
+
+                if(!methodNameFlag){
+                    event->SetErrorMsg("Class " + message->GetDestination()->GetClass()->GetName() +
+                    " does not have method " + methodName.data() + ".");
+                } else {
+                    if(!paramCountFlag){
+                        event->SetErrorMsg("Method " + methodName + " expects " + std::to_string(errorInt) +
+                        " parameters, but got " + std::to_string(methodParamsCount) + ".");
                     }
                 }
                 break;
@@ -298,7 +316,7 @@ void Environment::CheckSequenceEvents(){
                 auto messageSender = message->GetOrigin()->GetName();
 
                 if(returns.empty()){
-                    //TODO some explanation
+                    event->SetErrorMsg("Unexpected return.");
                     break;
                 }
 
@@ -308,7 +326,11 @@ void Environment::CheckSequenceEvents(){
                 if(!messageSender.compare(messageCall.second->GetDestination()->GetName()) && !messageRecipient.compare(messageCall.second->GetOrigin()->GetName())){
                     if(!message->GetReturnType().compare(messageCall.first->GetReturnType())){
                         event->SetStatus(true);
+                    } else {
+                        event->SetErrorMsg("Invalid return type.");
                     }
+                } else {
+                    event->SetErrorMsg("Invalid message sender/recipient.");
                 }
                 break;
             }
