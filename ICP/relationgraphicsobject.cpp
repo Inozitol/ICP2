@@ -3,15 +3,57 @@
 RelationGraphicsObject::RelationGraphicsObject(std::pair<ClassGraphicsObject*, ClassGraphicsObject*> relation, Relation::Type type)
     : _relation(relation),
       _graphicsLine({_relation.first->GetItemCenter(), _relation.second->GetItemCenter()}, this),
-      _type(type)
+      _type(type),
+      _dstSymb(new QGraphicsPolygonItem)
 {
     setZValue(-1);
     srcCollisionPoint = new QPointF;
     LineRectCollision(srcCollisionPoint, _graphicsLine.line(), _relation.first->boundingRect());
+    InitPolygon();
+}
+
+void RelationGraphicsObject::InitPolygon(){
+
+    QPolygonF polygon;
+    switch(_type){
+        case Relation::Gener:
+            polygon << QPointF(0.0, 0.0)
+                    << QPointF(POLYGON_SIDE, -POLYGON_SIDE/2)
+                    << QPointF(POLYGON_SIDE, POLYGON_SIDE/2);
+            _dstSymb->setBrush({Qt::gray, Qt::SolidPattern});
+            _dstSymb->setPen({Qt::black});
+        break;
+
+        case Relation::Compo:
+            polygon << QPointF(0.0, 0.0)
+                    << QPointF(POLYGON_SIDE, -POLYGON_SIDE/2)
+                    << QPointF(2*POLYGON_SIDE, 0.0)
+                    << QPointF(POLYGON_SIDE, POLYGON_SIDE/2);
+
+            _dstSymb->setBrush({Qt::gray, Qt::SolidPattern});
+            _dstSymb->setPen({Qt::black});
+        break;
+
+        case Relation::Aggre:
+            polygon << QPointF(0.0, 0.0)
+                    << QPointF(POLYGON_SIDE, -POLYGON_SIDE/2)
+                    << QPointF(2*POLYGON_SIDE, 0.0)
+                    << QPointF(POLYGON_SIDE, POLYGON_SIDE/2);
+
+            _dstSymb->setBrush({Qt::white, Qt::SolidPattern});
+            _dstSymb->setPen({Qt::black});
+        break;
+    }
+
+    _dstSymb->setPolygon(polygon);
+    _dstSymb->setParentItem(this);
+    _dstSymb->setPos(*srcCollisionPoint);
+
 }
 
 RelationGraphicsObject::~RelationGraphicsObject(){
     delete(srcCollisionPoint);
+    delete(_dstSymb);
 }
 
 void RelationGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*){
@@ -20,10 +62,6 @@ void RelationGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphics
     }else{
         painter->setPen({Qt::black, 1});
     }
-
-    painter->setBrush({WHOLEBOX_CLR});
-    painter->setPen({Qt::black, 10});
-    painter->drawPoint(*srcCollisionPoint);
 }
 
 [[nodiscard]] QRectF RelationGraphicsObject::boundingRect() const{
@@ -41,6 +79,9 @@ void RelationGraphicsObject::updateLine(){
     bndRectSrc.moveTo(_relation.first->pos());
 
     LineRectCollision(srcCollisionPoint, _graphicsLine.line(), bndRectSrc);
+
+    _dstSymb->setPos(*srcCollisionPoint);
+    _dstSymb->setRotation(-_graphicsLine.line().angle());
     update();
 }
 

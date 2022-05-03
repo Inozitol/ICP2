@@ -14,7 +14,7 @@ class School {
 	---
 	+ Person GetPersonByName ( string )
 }
-relation Person -- School
+relation Person -<> School
 actor Alice Person
 actor Amanda Person
 actor VUT School

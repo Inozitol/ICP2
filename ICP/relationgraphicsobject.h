@@ -2,6 +2,7 @@
 
 #include <QGraphicsObject>
 #include <QGraphicsLineItem>
+#include <QGraphicsPolygonItem>
 
 #include "classgraphicsobject.h"
 #include "ClassDiagram/relation.h"
@@ -20,6 +21,8 @@ public slots:
     void updateLine();
 
 private:
+    void InitPolygon();
+
     inline void LineLineCollision(QPointF*, QLineF, QLineF);
     inline void LineRectCollision(QPointF*, QLineF, QRectF);
 
@@ -27,4 +30,7 @@ private:
     QGraphicsLineItem _graphicsLine;
     QPointF* srcCollisionPoint;
     Relation::Type _type;
+    QGraphicsPolygonItem* _dstSymb;
+
+    const qreal POLYGON_SIDE = 15.0;
 };
