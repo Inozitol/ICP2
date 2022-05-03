@@ -13,6 +13,9 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QtGlobal>
+
+#include <cmath>
 
 #include "ClassDiagram/metaclass.h"
 #include "newclassform.h"

@@ -51,9 +51,6 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="placeholderText">
-         <string>Lifeline</string>
-        </property>
        </widget>
       </item>
       <item>
@@ -183,9 +180,6 @@
        <widget class="QComboBox" name="destinationComboBox">
         <property name="currentText">
          <string/>
-        </property>
-        <property name="placeholderText">
-         <string>Lifeline</string>
         </property>
        </widget>
       </item>

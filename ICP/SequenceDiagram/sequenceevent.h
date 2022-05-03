@@ -2,6 +2,7 @@
 
 #include <QObject>
 #include <iostream>
+#include <memory>
 
 class SequenceEvent
 {

@@ -4,8 +4,6 @@
 #define TITLEBOX_CLR "#DFC6AE"
 #define FONT "Arial"
 
-#define LIFELINE_DEF 420
-
 #include <QGraphicsObject>
 #include <QObject>
 #include <QFont>
@@ -16,6 +14,8 @@
 #include <QMenu>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMessageBox>
+
+#include <cmath>
 
 #include "SequenceDiagram/sequencelifeline.h"
 

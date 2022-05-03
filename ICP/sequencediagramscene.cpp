@@ -156,7 +156,11 @@ void SequenceDiagramScene::RedrawScene(){
                     QString msg_str = QString::fromStdString(message->GetMessage());
                     auto textitem = addText(msg_str, _font);
                     qreal linelen = ll_destination_middle - ll_origin_middle;
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+                    textitem->setPos(ll_origin_middle + (linelen - fm.width(msg_str))/2, yPos - fm.height() - 3);
+#else
                     textitem->setPos(ll_origin_middle + (linelen - fm.horizontalAdvance(msg_str))/2, yPos - fm.height() - 3);
+#endif
 
                 }else{
 
@@ -173,7 +177,11 @@ void SequenceDiagramScene::RedrawScene(){
                     QString msg_str = QString::fromStdString(message->GetMessage());
                     auto textitem = addText(msg_str, _font);
                     qreal linelen = ll_origin_middle - ll_destination_middle;
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+                    textitem->setPos(ll_destination_middle + (linelen - fm.width(msg_str))/2, yPos - fm.height() - 3);
+#else
                     textitem->setPos(ll_destination_middle + (linelen - fm.horizontalAdvance(msg_str))/2, yPos - fm.height() - 3);
+#endif
                 }
 
             }

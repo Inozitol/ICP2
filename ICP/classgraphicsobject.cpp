@@ -39,7 +39,11 @@ void ClassGraphicsObject::InitStrings(){
 
     _titleStr = QString(QString::fromStdString(_class->GetName()));
     if(willOverflow(_titleStr)){
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+        _width = fm.width(_titleStr);
+#else
         _width = fm.horizontalAdvance(_titleStr);
+#endif
     }
 
     for(auto [name, attr]: _class->GetAttributes()){
@@ -52,7 +56,11 @@ void ClassGraphicsObject::InitStrings(){
 
         _attrStr.push_back(str);
         if(willOverflow(str)){
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+            _width = fm.width(str);
+#else
             _width = fm.horizontalAdvance(str);
+#endif
         }
     }
 
@@ -79,7 +87,11 @@ void ClassGraphicsObject::InitStrings(){
 
         _methStr.push_back(str);
         if(willOverflow(str)){
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+            _width = fm.width(str);
+#else
             _width = fm.horizontalAdvance(str);
+#endif
         }
     }
 
@@ -100,7 +112,11 @@ void ClassGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *event
 bool ClassGraphicsObject::willOverflow(QString str){
     auto fm = QFontMetrics(_font);
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+    return fm.width(str) > _width;
+#else
     return fm.horizontalAdvance(str) > _width;
+#endif
 }
 
 void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*){
@@ -128,7 +144,11 @@ void ClassGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsIte
 
     QString str = _titleStr;
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+    int xPos = (_width - fm.width(str)) / 2;
+#else
     int xPos = (_width - fm.horizontalAdvance(str)) / 2;
+#endif
     int yPos = (_titleHeight/2)+round(fm.height()/2.0);
 
     painter->drawText(xPos, yPos, str);

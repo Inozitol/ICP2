@@ -13,12 +13,20 @@ void LifelineGraphicsObject::InitStrings(){
 
     _lifelineName = QString(QString::fromStdString(_lifeline->GetName()));
     if(willOverflow(_lifelineName)){
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+        _width = fm.width(_lifelineName);
+#else
         _width = fm.horizontalAdvance(_lifelineName);
+#endif
     }
 
     _className = QString(QString::fromStdString(_lifeline->GetClass()->GetName())).prepend('<').append('>');
     if(willOverflow(_className)){
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+        _width = fm.width(_className);
+#else
         _width = fm.horizontalAdvance(_className);
+#endif
     }
 }
 
@@ -36,7 +44,11 @@ qreal LifelineGraphicsObject::height(){
 bool LifelineGraphicsObject::willOverflow(QString str){
     auto fm = QFontMetrics(_font);
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+    return fm.width(str) > _width;
+#else
     return fm.horizontalAdvance(str) > _width;
+#endif
 }
 
 [[nodiscard]] QRectF LifelineGraphicsObject::boundingRect() const{
@@ -53,11 +65,19 @@ void LifelineGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphics
     lifelinebox.addRect(0, 0,  _width, _height);
     painter->drawPath(lifelinebox);
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+    int xPos = (_width - fm.width(_lifelineName)) / 2;
+#else
     int xPos = (_width - fm.horizontalAdvance(_lifelineName)) / 2;
+#endif
     int yPos = V_MARGIN + round(fm.height());
     painter->drawText(xPos, yPos, _lifelineName);
 
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+    xPos = (_width - fm.width(_className)) / 2;
+#else
     xPos = (_width - fm.horizontalAdvance(_className)) / 2;
+#endif
     yPos = 2*V_MARGIN + 2*round(fm.height());
     painter->drawText(xPos, yPos, _className);
 }
