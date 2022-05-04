@@ -72,7 +72,7 @@ void Environment::ExportEnvironment(std::string file_name){
     }
     for(const auto& [index , relation] : _class_diag->GetRelations()){
         Relation::Cardinality srcCrd = relation->GetSrcCardinality();
-        Relation::Cardinality dstCrd = relation->GetDesCardinality();
+        Relation::Cardinality dstCrd = relation->GetDstCardinality();
 
         srcCrd = srcCrd.empty() ? "_" : srcCrd;
         dstCrd = dstCrd.empty() ? "_" : dstCrd;

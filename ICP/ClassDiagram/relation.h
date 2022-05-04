@@ -24,7 +24,7 @@ public:
     std::shared_ptr<MetaClass> GetSource();
     std::shared_ptr<MetaClass> GetDestination();
     Cardinality GetSrcCardinality();
-    Cardinality GetDesCardinality();
+    Cardinality GetDstCardinality();
     void SetSrcCardinality(Cardinality);
     void SetDstCardinality(Cardinality);
     void SetIndex(int index);
