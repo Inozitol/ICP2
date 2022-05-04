@@ -52,7 +52,6 @@ private slots:
     void MoveEventDown();
 
     void SequenceListContextMenu(QPoint);
-
 signals:
     void ClearScenes();
 };

@@ -8,6 +8,10 @@
 #include "SequenceDiagram/sequencediagram.h"
 #include "ClassDiagram/relation.h"
 #include "ClassDiagram/metaclass.h"
+#include "ClassDiagram/association.h"
+#include "ClassDiagram/aggregation.h"
+#include "ClassDiagram/composition.h"
+#include "ClassDiagram/generalization.h"
 
 ///
 /// \brief Singleton class holding all of back-end datastructures

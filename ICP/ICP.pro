@@ -31,6 +31,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     newclassform.cpp \
+    relationdialog.cpp \
     relationgraphicsobject.cpp \
     sequencediagramscene.cpp
 
@@ -44,6 +45,7 @@ HEADERS += \
     lifelinegraphicsobject.h \
     mainwindow.h \
     newclassform.h \
+    relationdialog.h \
     relationgraphicsobject.h \
     sequencediagramscene.h
 
@@ -56,7 +58,8 @@ FORMS += \
     eventdialog.ui \
     lifelinedialog.ui \
     mainwindow.ui \
-    newclassform.ui
+    newclassform.ui \
+    relationdialog.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

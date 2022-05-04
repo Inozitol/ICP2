@@ -12,10 +12,13 @@ ClassGraphicsObject::ClassGraphicsObject(std::shared_ptr<MetaClass> metaclass)
 }
 
 void ClassGraphicsObject::InitActions(){
-    _deleteClass = new QAction(tr("Delete class"));
-    connect(_deleteClass, &QAction::triggered, this, [this](){emit killSelf(this);});
-    _editClass = new QAction(tr("Edit class"));
-    connect(_editClass, &QAction::triggered, this, &ClassGraphicsObject::editSelf);
+    _deleteClass 	= 	new QAction(tr("Delete class"));
+    _editClass 		= 	new QAction(tr("Edit class"));
+    _createRelation = 	new QAction(tr("Create relation"));
+
+    connect(_deleteClass, 		&QAction::triggered, this, [this](){emit killSelf(this);});
+    connect(_editClass, 		&QAction::triggered, this, &ClassGraphicsObject::editSelf);
+    connect(_createRelation, 	&QAction::triggered, this, [this](){emit initRelation(this);});
 }
 
 void ClassGraphicsObject::CalcHeight(){
@@ -105,6 +108,8 @@ void ClassGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *event
     QMenu menu;
     menu.addAction(_deleteClass);
     menu.addAction(_editClass);
+    menu.addSeparator();
+    menu.addAction(_createRelation);
     menu.exec(event->screenPos());
     event->accept();
 }
@@ -204,4 +209,6 @@ void ClassGraphicsObject::editSelf(){
     }
 }
 
-
+std::shared_ptr<MetaClass> ClassGraphicsObject::GetClass(){
+    return _class;
+}

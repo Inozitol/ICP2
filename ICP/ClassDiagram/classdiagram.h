@@ -17,7 +17,7 @@ public:
     void ClearClasses();
     std::shared_ptr<MetaClass> GetClass(MetaClass::Name);
 
-    int InsertRelation(std::shared_ptr<Relation>);
+    void InsertRelation(std::shared_ptr<Relation>);
     void EraseRelation(int);
     RelationMap GetRelations();
     void ClearRelations();

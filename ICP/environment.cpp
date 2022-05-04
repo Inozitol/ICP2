@@ -70,6 +70,29 @@ void Environment::ExportEnvironment(std::string file_name){
         }
         file << "}\n";
     }
+    for(const auto& [index , relation] : _class_diag->GetRelations()){
+        Relation::Cardinality srcCrd = relation->GetSrcCardinality();
+        Relation::Cardinality dstCrd = relation->GetDesCardinality();
+
+        srcCrd = srcCrd.empty() ? "_" : srcCrd;
+        dstCrd = dstCrd.empty() ? "_" : dstCrd;
+
+        MetaClass::Name srcName = relation->GetSource()->GetName();
+        MetaClass::Name dstName = relation->GetDestination()->GetName();
+
+        file << "relation "
+             << srcName
+             << ' '
+             << srcCrd
+             << ' '
+             << Relation::type2symb.at(relation->GetType())
+             << ' '
+             << dstCrd
+             << ' '
+             << dstName
+             << '\n';
+    }
+
     if(_sequence_diag != nullptr){
         for(const auto& lifeline : _sequence_diag->GetLifelines()){
         file << "actor " << lifeline.first << " " << lifeline.second->GetClass()->GetName() << '\n';
@@ -202,25 +225,24 @@ void Environment::ImportEnvironment(std::string file_name){
                 if(!words[i+1].compare(class_name)){
                     for(const auto& [class_name2,metaclass2] : _class_diag->GetClasses()){
                         if(!words[i+3].compare(class_name2)){
-                            Relation::Type type;
+                            std::shared_ptr<Relation> rel;
                             switch(valuesMap[words[i+2].data()]){
                                 case Value1:
-                                    type = Relation::Assoc;
+                                    rel = std::make_shared<Association>(metaclass, metaclass2);
                                     break;
                                 case Value2:
-                                    type = Relation::Aggre;
+                                    rel = std::make_shared<Aggregation>(metaclass, metaclass2);
                                     break;
                                 case Value3:
-                                    type = Relation::Compo;
+                                    rel = std::make_shared<Composition>(metaclass, metaclass2);
                                     break;
                                 case Value4:
-                                    type = Relation::Gener;
+                                    rel = std::make_shared<Generalization>(metaclass, metaclass2);
                                     break;
                                 default:
                                     qDebug() << "unknown relation";
                                     break;
                             }
-                            std::shared_ptr<Relation> rel = std::make_shared<Relation>(type, metaclass, metaclass2);
                             _class_diag->InsertRelation(rel);
                             break;
                         }
