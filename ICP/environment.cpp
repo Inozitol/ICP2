@@ -116,7 +116,7 @@ void Environment::ExportEnvironment(std::string file_name){
                 case SequenceEvent::Return:
                 {
                     auto ReturnEvent = std::static_pointer_cast<SequenceReturn>(event);
-                    file << "return" << ReturnEvent->GetOrigin()->GetName() << " -> " << ReturnEvent->GetDestination()->GetName() << " : "  << ReturnEvent->GetReturnType() << ' ' << ReturnEvent->GetMessage() << '\n';
+                    file << "return " << ReturnEvent->GetOrigin()->GetName() << " -> " << ReturnEvent->GetDestination()->GetName() << " : "  << ReturnEvent->GetReturnType() << ' ' << ReturnEvent->GetMessage() << '\n';
                 }
                 break;
                 case SequenceEvent::Nop:
@@ -224,9 +224,9 @@ void Environment::ImportEnvironment(std::string file_name){
             for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
                 if(!words[i+1].compare(class_name)){
                     for(const auto& [class_name2,metaclass2] : _class_diag->GetClasses()){
-                        if(!words[i+3].compare(class_name2)){
+                        if(!words[i+5].compare(class_name2)){
                             std::shared_ptr<Relation> rel;
-                            switch(valuesMap[words[i+2].data()]){
+                            switch(valuesMap[words[i+3].data()]){
                                 case Value1:
                                     rel = std::make_shared<Association>(metaclass, metaclass2);
                                     break;
@@ -243,6 +243,8 @@ void Environment::ImportEnvironment(std::string file_name){
                                     qDebug() << "unknown relation";
                                     break;
                             }
+                            rel->SetSrcCardinality(words[i+2]);
+                            rel->SetDstCardinality(words[i+4]);
                             _class_diag->InsertRelation(rel);
                             break;
                         }

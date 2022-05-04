@@ -1,0 +1,42 @@
+@startuml
+class SocketServer {
+	- boost::asio::io_service io_service
+	- tcp::endpoint endpoint
+	- tcp::iostream socketStream
+	- tcp::acceptor* acceptor
+	- stringstream* buffer
+	---
+	+ void SocketServer ( string u16int_t stringstream )
+	+ void ~SocketServer ( )
+	+ void start ( )
+}
+class SocketClient {
+	- tcp::iostream socketStream
+	- stringstream* buffer
+	- string address
+	- u16int_t port
+	---
+	+ void SocketClient ( string u16int_t stringstream )
+	+ void start ( )
+}
+class SocketServerListener {
+	---
+	+ void start ( )
+}
+class SocketServerSender {
+	---
+	+ void start ( )
+}
+class SocketClientListener {
+	---
+	+ void start ( )
+}
+class SocketClientSender {
+	---
+	+ void start ( )
+}
+relation SocketServer _ --> _ SocketServerListener
+relation SocketServer _ --> _ SocketServerSender
+relation SocketClient _ --> _ SocketClientListener
+relation SocketClient _ --> _ SocketClientSender
+@enduml
