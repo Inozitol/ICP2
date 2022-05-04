@@ -1,15 +1,21 @@
 #include "relationgraphicsobject.h"
 
-RelationGraphicsObject::RelationGraphicsObject(std::pair<ClassGraphicsObject*, ClassGraphicsObject*> relation, Relation::Type type)
+RelationGraphicsObject::RelationGraphicsObject(std::pair<ClassGraphicsObject*, ClassGraphicsObject*> relation, Relation::Type type, int index)
     : _relation(relation),
+      _index(index),
       _graphicsLine({_relation.first->GetItemCenter(), _relation.second->GetItemCenter()}, this),
       _type(type),
       _dstSymb(new QGraphicsPolygonItem)
 {
     setZValue(-1);
-    srcCollisionPoint = new QPointF;
-    LineRectCollision(srcCollisionPoint, _graphicsLine.line(), _relation.first->boundingRect());
+    dstCollisionPoint = new QPointF;
     InitPolygon();
+    InitActions();
+    InitSymbol();
+}
+
+int RelationGraphicsObject::GetIndex(){
+    return _index;
 }
 
 void RelationGraphicsObject::InitPolygon(){
@@ -47,12 +53,26 @@ void RelationGraphicsObject::InitPolygon(){
 
     _dstSymb->setPolygon(polygon);
     _dstSymb->setParentItem(this);
-    _dstSymb->setPos(*srcCollisionPoint);
+    _dstSymb->setPos(*dstCollisionPoint);
+}
 
+void RelationGraphicsObject::InitActions(){
+    _deleteRelation = new QAction(tr("Delete relation"));
+    connect(_deleteRelation, &QAction::triggered, this, [this](){emit killSelf(this);});
+}
+
+void RelationGraphicsObject::InitSymbol(){
+    QRectF bndRectDst = _relation.second->boundingRect();
+    bndRectDst.moveTo(_relation.second->pos());
+
+    LineRectCollision(dstCollisionPoint, _graphicsLine.line(), bndRectDst);
+
+    _dstSymb->setPos(*dstCollisionPoint);
+    _dstSymb->setRotation((-_graphicsLine.line().angle())+180.0);
 }
 
 RelationGraphicsObject::~RelationGraphicsObject(){
-    delete(srcCollisionPoint);
+    delete(dstCollisionPoint);
     delete(_dstSymb);
 }
 
@@ -62,6 +82,13 @@ void RelationGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphics
     }else{
         painter->setPen({Qt::black, 1});
     }
+}
+
+void RelationGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
+    QMenu menu;
+    menu.addAction(_deleteRelation);
+    menu.exec(event->screenPos());
+    event->accept();
 }
 
 [[nodiscard]] QRectF RelationGraphicsObject::boundingRect() const{
@@ -75,13 +102,13 @@ std::pair<MetaClass::Name, MetaClass::Name> RelationGraphicsObject::GetRelationP
 void RelationGraphicsObject::updateLine(){
     prepareGeometryChange();
     _graphicsLine.setLine({_relation.first->GetItemCenter(), _relation.second->GetItemCenter()});
-    QRectF bndRectSrc = _relation.first->boundingRect();
-    bndRectSrc.moveTo(_relation.first->pos());
+    QRectF bndRectDst = _relation.second->boundingRect();
+    bndRectDst.moveTo(_relation.second->pos());
 
-    LineRectCollision(srcCollisionPoint, _graphicsLine.line(), bndRectSrc);
+    LineRectCollision(dstCollisionPoint, _graphicsLine.line(), bndRectDst);
 
-    _dstSymb->setPos(*srcCollisionPoint);
-    _dstSymb->setRotation(-_graphicsLine.line().angle());
+    _dstSymb->setPos(*dstCollisionPoint);
+    _dstSymb->setRotation((-_graphicsLine.line().angle())+180.0);
     update();
 }
 

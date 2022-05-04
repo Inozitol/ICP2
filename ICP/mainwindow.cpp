@@ -58,7 +58,7 @@ void MainWindow::InitActions(){
         }
     });
 
-    connect(ui->sequenceList, &QListWidget::itemDoubleClicked, [this](QListWidgetItem *item){EditEvent(item);});
+    connect(ui->sequenceList, &QListWidget::itemDoubleClicked, [this](QListWidgetItem *item){EditEvent(item);});    
 }
 
 void MainWindow::InitGraphicView(){

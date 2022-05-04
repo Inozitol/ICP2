@@ -33,7 +33,7 @@ public:
 
     /// \brief Method for getting a shared pointer to a class by name.
     /// \param name name of the class.
-    int InsertRelation(std::shared_ptr<Relation>);
+    void InsertRelation(std::shared_ptr<Relation>);
     void EraseRelation(int);
     RelationMap GetRelations();
     void ClearRelations();

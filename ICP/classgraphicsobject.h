@@ -31,6 +31,7 @@ public:
     //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     MetaClass::Name GetClassName();
     QPointF GetItemCenter();
+    std::shared_ptr<MetaClass> GetClass();
 
 private:
     const int DEF_WIDTH = 200;
@@ -55,10 +56,12 @@ private:
 
     QAction* _deleteClass;
     QAction* _editClass;
+    QAction* _createRelation;
 
 private slots:
     void editSelf();
 
 signals:
     void killSelf(ClassGraphicsObject*);
+    void initRelation(ClassGraphicsObject*);
 };

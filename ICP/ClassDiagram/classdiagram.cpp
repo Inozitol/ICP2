@@ -23,13 +23,13 @@ std::shared_ptr<MetaClass> ClassDiagram::GetClass(MetaClass::Name name){
     return _classes.at(name);
 }
 
-int ClassDiagram::InsertRelation(std::shared_ptr<Relation> relation){
+void ClassDiagram::InsertRelation(std::shared_ptr<Relation> relation){
     if(_relations.empty()){
         _relations[0] = relation;
     } else {
         _relations.insert(std::make_pair(_relations.rbegin()->first,relation));
     }
-    return _relations.rbegin()->first;
+    relation->SetIndex(_relations.rbegin()->first);
 }
 
 void ClassDiagram::EraseRelation(int relation_reference){
