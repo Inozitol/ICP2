@@ -9,5 +9,8 @@
 class Composition : public Relation
 {
 public:
-    Composition(std::shared_ptr<MetaClass>, std::shared_ptr<MetaClass>);
+    /// \brief Class constructor.
+    /// \param class1 origin of relation.
+    /// \param class2 destination of relation.
+    Composition(std::shared_ptr<MetaClass> class1, std::shared_ptr<MetaClass> class2);
 };

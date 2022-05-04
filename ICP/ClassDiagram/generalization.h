@@ -9,5 +9,8 @@
 class Generalization : public Relation
 {
 public:
-    Generalization(std::shared_ptr<MetaClass>, std::shared_ptr<MetaClass>);
+    /// \brief Class constructor.
+    /// \param class1 origin of relation.
+    /// \param class2 destination of relation.
+    Generalization(std::shared_ptr<MetaClass> class1, std::shared_ptr<MetaClass> class2);
 };
