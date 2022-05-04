@@ -243,8 +243,16 @@ void Environment::ImportEnvironment(std::string file_name){
                                     qDebug() << "unknown relation";
                                     break;
                             }
-                            rel->SetSrcCardinality(words[i+2]);
-                            rel->SetDstCardinality(words[i+4]);
+                            if(!words[i+2].compare("_")){
+                                rel->SetSrcCardinality("");
+                            } else {
+                                rel->SetSrcCardinality(words[i+2]);
+                            }
+                            if(!words[i+4].compare("_")){
+                                rel->SetDstCardinality("");
+                            } else {
+                                rel->SetDstCardinality(words[i+4]);
+                            }
                             _class_diag->InsertRelation(rel);
                             break;
                         }
