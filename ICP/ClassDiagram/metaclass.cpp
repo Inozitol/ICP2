@@ -32,16 +32,16 @@ MetaClass::AttributeMap MetaClass::GetAttributes(){
     return _attributes;
 }
 
+void MetaClass::SetName(Name name){
+    _name = name;
+}
+
 int MetaClass::MethodCount(){
     return _methods.size();
 }
 
 int MetaClass::AttributesCount(){
     return _attributes.size();
-}
-
-void MetaClass::SetName(Name name){
-    _name = name;
 }
 
 void MetaClass::Clear(){

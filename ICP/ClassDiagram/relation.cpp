@@ -48,6 +48,7 @@ void Relation::SetDstCardinality(Cardinality crd){
 void Relation::SetIndex(int index){
     _index = index;
 }
+
 int Relation::GetIndex(){
     return _index;
 }
