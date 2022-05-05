@@ -57,4 +57,5 @@ private slots:
 
 signals:
     void ClassUpdate();
+    void SyncClassPos();
 };

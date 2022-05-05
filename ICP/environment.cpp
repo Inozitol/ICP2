@@ -51,6 +51,7 @@ void Environment::ExportEnvironment(std::string file_name){
     file << "@startuml\n";
 
     for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
+        file << metaclass->GetPos().x() << ' ' << metaclass->GetPos().y() << '\n';
         file << "class " << class_name << " {\n";
         for(const auto& [attribute_name, attribute] : metaclass->GetAttributes()){
             file << '\t' << attribute->GetPermission() << ' ' << attribute->GetDataType() << ' ' << attribute_name << '\n';
@@ -155,7 +156,9 @@ void Environment::ImportEnvironment(std::string file_name){
 
     for (unsigned int i = 0; i < words.size(); i++){
         if(!words[i].compare("class")){
+            QPoint pos = QPoint(std::stoi(words[i-2]), std::stoi(words[i-1]));
             std::shared_ptr<MetaClass> metaclass = std::make_shared<MetaClass>(words[++i]);
+            metaclass->SetPos(pos);
             i = i + 2;
             while(words[i].compare("---")){
                 metaclass->AddAttribute(std::make_shared<MetaClassAttribute>(words[i+2], words[i][0], words[i+1]));

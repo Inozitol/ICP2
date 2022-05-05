@@ -11,9 +11,12 @@
 #include <QAction>
 #include <QDebug>
 
+#include "environment.h"
 #include "ClassDiagram/metaclass.h"
 #include "ClassDiagram/metaclassattribute.h"
 #include "ClassDiagram/metaclassmethod.h"
+
+#include "utils.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class NewClassForm; }
@@ -37,6 +40,7 @@ private:
     void _AddMethRow(std::shared_ptr<MetaClassMethod>);
 
     Ui::NewClassForm* ui;
+    Environment* _environment;
 
     enum AttrCol{
         A_PERM = 0,

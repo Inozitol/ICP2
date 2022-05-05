@@ -4,6 +4,7 @@
 ClassEditDialog::ClassEditDialog(QWidget* parent)
     :QDialog(parent),
      ui(new Ui::NewClassForm),
+     _environment(Environment::GetEnvironment()),
      _class(nullptr)
 {
     ui->setupUi(this);
@@ -13,6 +14,7 @@ ClassEditDialog::ClassEditDialog(QWidget* parent)
 ClassEditDialog::ClassEditDialog(std::shared_ptr<MetaClass> metaclass, QWidget* parent)
     :QDialog(parent),
     ui(new Ui::NewClassForm),
+     _environment(Environment::GetEnvironment()),
     _class(metaclass)
 {
     ui->setupUi(this);
@@ -36,10 +38,13 @@ ClassEditDialog::~ClassEditDialog(){
 
 std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
     if(_class){
+        MetaClass::Name oldName = _class->GetName();
+        MetaClass::Name newName = antiwhite(ui->className->text().toStdString());
         _class->Clear();
-        _class->SetName(ui->className->text().toStdString());
+        _class->SetName(newName);
+        _environment->GetClassDiagram()->RenameClass(oldName, newName);
     }else{
-        _class = std::make_shared<MetaClass>(ui->className->text().toStdString());
+        _class = std::make_shared<MetaClass>(antiwhite(ui->className->text().toStdString()));
     }
 
     QComboBox* q_perm;
@@ -62,13 +67,13 @@ std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
         if(q_dtype == nullptr){
             dtype = "";
         }else{
-            dtype = q_dtype->text().toStdString();
+            dtype = antiwhite(q_dtype->text().toStdString());
         }
 
         if(q_name == nullptr){
             name = "";
         }else{
-            name = 	q_name->text().toStdString();
+            name = 	antiwhite(q_name->text().toStdString());
         }
 
         _class->AddAttribute(std::make_shared<MetaClassAttribute>(name, perm, dtype));
@@ -85,19 +90,19 @@ std::shared_ptr<MetaClass> ClassEditDialog::GetClassPtr(){
         if(q_dtype == nullptr){
             dtype = "";
         }else{
-            dtype = q_dtype->text().toStdString();
+            dtype = antiwhite(q_dtype->text().toStdString());
         }
 
         if(q_name == nullptr){
             name = "";
         }else{
-            name = 	q_name->text().toStdString();
+            name = 	antiwhite(q_name->text().toStdString());
         }
 
         auto method = std::make_shared<MetaClassMethod>(name, perm, dtype);
 
         if(q_params != nullptr){
-            std::stringstream ss(q_params->text().toStdString());
+            std::stringstream ss(antiwhite(q_params->text().toStdString()));
             MetaClassObject::DataType param;
             while(std::getline(ss, param, ',')){
                 method->AddParameter(param);

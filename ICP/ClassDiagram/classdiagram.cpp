@@ -48,3 +48,10 @@ void ClassDiagram::Clear(){
     ClearClasses();
     ClearRelations();
 }
+
+void ClassDiagram::RenameClass(MetaClass::Name from, MetaClass::Name to){
+    if(from != to){
+        _classes[to] = _classes.at(from);
+        _classes.erase(from);
+    }
+}

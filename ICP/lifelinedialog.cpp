@@ -19,7 +19,7 @@ LifelineDialog::~LifelineDialog()
 
 std::shared_ptr<SequenceLifeline> LifelineDialog::GetLifeline(){
     auto metaclass = _environment->GetClassDiagram()->GetClass(ui->classComboBox->currentText().toStdString());
-    return std::make_shared<SequenceLifeline>(ui->name->text().toStdString(), metaclass);
+    return std::make_shared<SequenceLifeline>(antiwhite(ui->name->text().toStdString()), metaclass);
 }
 
 void LifelineDialog::InitComboBox(){

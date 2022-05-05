@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QPointF>
+
 #include <string>
 #include <vector>
 #include <map>
@@ -33,8 +35,18 @@ public:
 
     void Clear();
 
+    /// \brief Get position of Class in scene
+    /// \return Position
+    QPoint GetPos();
+    /// \brief Set position for drawing later
+    /// \param pos Position
+    void SetPos(QPoint pos);
+
 protected:
     Name _name;
     MethodMap _methods;
     AttributeMap _attributes;
+
+    /// \brief Position of the class in scene
+    QPoint _pos;
 };

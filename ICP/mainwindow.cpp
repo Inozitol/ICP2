@@ -28,6 +28,9 @@ MainWindow::~MainWindow(){
 }
 
 void MainWindow::InitMenuBar(){
+    connect(ui->actionSave, 	&QAction::triggered, 	_classScene,		&ClassDiagramScene::SyncClassPos);
+    connect(ui->actionSaveAs, 	&QAction::triggered, 	_classScene,		&ClassDiagramScene::SyncClassPos);
+
     connect(ui->actionNew, 		&QAction::triggered, 	this, 	&MainWindow::EnvironNew);
     connect(ui->actionOpen, 	&QAction::triggered, 	this, 	&MainWindow::EnvironOpen);
     connect(ui->actionSave, 	&QAction::triggered, 	this, 	&MainWindow::EnvironSave);
@@ -151,7 +154,7 @@ void MainWindow::RefreshTimelineList(){
 
 void MainWindow::EnvironOpen(){
 
-    _currentFile = QFileDialog::getOpenFileName(this, tr("Open UML file"));
+    _currentFile = QFileDialog::getOpenFileName(this, tr("Open UML file"), _currentFile, tr("UML Diagrams (*.uml);;All files (*.*)"));
     if(_currentFile.isEmpty()){
         return;
     }
@@ -171,13 +174,13 @@ void MainWindow::EnvironOpen(){
 
 void MainWindow::EnvironSave(){
     if(_currentFile == ""){
-        _currentFile = QFileDialog::getSaveFileName(this, tr("Save UML file"));
+        _currentFile = QFileDialog::getSaveFileName(this, tr("Save UML file"), _currentFile, tr("UML Diagrams (*.uml);;All files (*.*)"));
     }
     _environment->ExportEnvironment(_currentFile.toStdString());
 }
 
 void MainWindow::EnvironSaveAs(){
-    _currentFile = QFileDialog::getSaveFileName(this, tr("Save UML file"));
+    _currentFile = QFileDialog::getSaveFileName(this, tr("Save UML file"), _currentFile, tr("UML Diagrams (*.uml);;All files (*.*)"));
     _environment->ExportEnvironment(_currentFile.toStdString());
 }
 

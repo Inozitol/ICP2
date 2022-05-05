@@ -3,6 +3,7 @@
 #include <vector>
 #include <map>
 #include <memory>
+#include <string>
 
 #include "ClassDiagram/classdiagram.h"
 #include "SequenceDiagram/sequencediagram.h"

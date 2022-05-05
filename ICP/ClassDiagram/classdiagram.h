@@ -47,6 +47,10 @@ public:
     void ClearRelations();
     /// \brief Method for clearing all relations and meta classes in the diagram.
     void Clear();
+    /// \brief Will rename class inside environment
+    /// \param from Rename from
+    /// \param to Rename to
+    void RenameClass(MetaClass::Name from, MetaClass::Name to);
 
 private:
     /// \brief a map for meta classes.
