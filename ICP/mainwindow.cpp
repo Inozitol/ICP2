@@ -162,7 +162,7 @@ void MainWindow::EnvironOpen(){
     for(auto [name,metaclass] : _environment->GetClassDiagram()->GetClasses()){
         _classScene->PlaceClass(metaclass);
     }
-    for(auto [index, relation] : _environment->GetClassDiagram()->GetRelations()){
+    for(const auto &[index, relation] : _environment->GetClassDiagram()->GetRelations()){
         _classScene->PlaceRelation(relation);
     }
     _sequenceScene->RedrawScene();

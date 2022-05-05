@@ -100,6 +100,12 @@ void RelationGraphicsObject::InitCircles(){
     dstCrdGraphic->setPos(xDstPos, yDstPos);
 
     UpdateCircles();
+    if(_relation->GetSrcCardinality().empty()){
+        _srcCircle->setVisible(false);
+    }
+    if(_relation->GetDstCardinality().empty()){
+        _dstCircle->setVisible(false);
+    }
 }
 
 void RelationGraphicsObject::InitActions(){
@@ -126,8 +132,12 @@ void RelationGraphicsObject::UpdateCircles(){
         _dstCircle->setVisible(false);
         _dstSymb->setVisible(false);
     }else{
-        _srcCircle->setVisible(true);
-        _dstCircle->setVisible(true);
+        if(!_relation->GetSrcCardinality().empty()){
+            _srcCircle->setVisible(true);
+        }
+        if(!_relation->GetDstCardinality().empty()){
+            _dstCircle->setVisible(true);
+        }
         _dstSymb->setVisible(true);
     }
 

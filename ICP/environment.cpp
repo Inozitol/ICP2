@@ -226,6 +226,7 @@ void Environment::ImportEnvironment(std::string file_name){
                     for(const auto& [class_name2,metaclass2] : _class_diag->GetClasses()){
                         if(!words[i+5].compare(class_name2)){
                             std::shared_ptr<Relation> rel;
+                            rel.reset();
                             switch(valuesMap[words[i+3].data()]){
                                 case Value1:
                                     rel = std::make_shared<Association>(metaclass, metaclass2);
