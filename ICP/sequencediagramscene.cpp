@@ -68,10 +68,7 @@ void SequenceDiagramScene::RedrawScene(){
 
                 auto activation = std::static_pointer_cast<SequenceActivation>(event);
                 SequenceLifeline::Name name = activation->GetLifeline()->GetName();
-                if(_actPoints.count(name)){
-                    // TODO Error
-                    // Actor is already activated
-                }else{
+                if(!_actPoints.count(name)){
                     _actPoints[name] = yPos;
                 }
             }

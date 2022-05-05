@@ -10,6 +10,8 @@
 #include "environment.h"
 #include "SequenceDiagram/sequencelifeline.h"
 
+#include "utils.h"
+
 namespace Ui {
     class LifelineDialog;
 }

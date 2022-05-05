@@ -56,6 +56,8 @@ private:
     QAction* _deleteClass;
     QAction* _editClass;
     QAction* _createRelation;
+public slots:
+    void SyncClassPos();
 
 private slots:
     void editSelf();

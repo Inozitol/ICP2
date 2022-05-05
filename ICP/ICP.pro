@@ -33,7 +33,8 @@ SOURCES += \
     newclassform.cpp \
     relationdialog.cpp \
     relationgraphicsobject.cpp \
-    sequencediagramscene.cpp
+    sequencediagramscene.cpp \
+    utils.cpp
 
 HEADERS += \
     classdiagramscene.h \
@@ -47,7 +48,8 @@ HEADERS += \
     newclassform.h \
     relationdialog.h \
     relationgraphicsobject.h \
-    sequencediagramscene.h
+    sequencediagramscene.h \
+    utils.h
 
 FORMS += \
     event_activation.ui \

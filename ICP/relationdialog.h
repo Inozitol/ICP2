@@ -9,6 +9,8 @@
 #include "ClassDiagram/composition.h"
 #include "ClassDiagram/generalization.h"
 
+#include "utils.h"
+
 namespace Ui {
 class RelationDialog;
 }

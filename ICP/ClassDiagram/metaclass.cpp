@@ -49,3 +49,11 @@ void MetaClass::Clear(){
     _methods.clear();
     _attributes.clear();
 }
+
+void MetaClass::SetPos(QPoint pos){
+    _pos = pos;
+}
+
+QPoint MetaClass::GetPos(){
+    return _pos;
+}

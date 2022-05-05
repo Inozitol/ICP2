@@ -12,6 +12,8 @@
 #include "SequenceDiagram/sequencereturn.h"
 #include "SequenceDiagram/sequencespacer.h"
 
+#include "utils.h"
+
 namespace Ui {
     class EventDialog;
     class EventActivation;

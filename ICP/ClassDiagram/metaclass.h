@@ -1,5 +1,7 @@
 #pragma once
 
+#include <QPointF>
+
 #include <string>
 #include <vector>
 #include <map>
@@ -64,6 +66,13 @@ public:
     /// \brief Method for clearing all data in the meta class.
     void Clear();
 
+    /// \brief Get position of Class in scene
+    /// \return Position
+    QPoint GetPos();
+    /// \brief Set position for drawing later
+    /// \param pos Position
+    void SetPos(QPoint pos);
+
 protected:
     /// \brief Name of the meta class.
     Name _name;
@@ -71,4 +80,7 @@ protected:
     MethodMap _methods;
     /// \brief Map of all the attributes.
     AttributeMap _attributes;
+
+    /// \brief Position of the class in scene
+    QPoint _pos;
 };

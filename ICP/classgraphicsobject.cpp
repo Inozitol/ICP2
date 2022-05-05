@@ -212,3 +212,7 @@ void ClassGraphicsObject::editSelf(){
 std::shared_ptr<MetaClass> ClassGraphicsObject::GetClass(){
     return _class;
 }
+
+void ClassGraphicsObject::SyncClassPos(){
+    _class->SetPos(pos().toPoint());
+}

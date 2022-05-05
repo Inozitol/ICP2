@@ -30,8 +30,8 @@ std::shared_ptr<Relation> RelationDialog::GetRelation(){
     std::shared_ptr<MetaClass> srcClass = _pair.first->GetClass();
     std::shared_ptr<MetaClass> dstClass = _pair.second->GetClass();
 
-    std::string srcCrd = ui->srcCrd->text().toStdString();
-    std::string dstCrd = ui->dstCrd->text().toStdString();
+    std::string srcCrd = antiwhite(ui->srcCrd->text().toStdString());
+    std::string dstCrd = antiwhite(ui->dstCrd->text().toStdString());
 
     switch(ui->typeComboBox->currentIndex()){
         case Relation::Assoc:
