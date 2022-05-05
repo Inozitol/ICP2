@@ -33,7 +33,7 @@ Relation::Cardinality Relation::GetSrcCardinality(){
     return _srcCardinality;
 }
 
-Relation::Cardinality Relation::GetDesCardinality(){
+Relation::Cardinality Relation::GetDstCardinality(){
     return _dstCardinality;
 }
 

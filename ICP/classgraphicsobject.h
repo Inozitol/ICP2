@@ -28,7 +28,6 @@ public:
     [[nodiscard]] QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
-    //void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
     MetaClass::Name GetClassName();
     QPointF GetItemCenter();
     std::shared_ptr<MetaClass> GetClass();

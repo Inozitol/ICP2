@@ -27,7 +27,7 @@ void ClassDiagram::InsertRelation(std::shared_ptr<Relation> relation){
     if(_relations.empty()){
         _relations[0] = relation;
     } else {
-        _relations.insert(std::make_pair(_relations.rbegin()->first,relation));
+        _relations.insert(std::make_pair(_relations.rbegin()->first+1,relation));
     }
     relation->SetIndex(_relations.rbegin()->first);
 }
