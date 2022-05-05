@@ -6,7 +6,7 @@
 ///
 /// \brief Class for the class diagram.
 ///
-///  Class maintains all meta classes and relations between them.
+/// Class maintains all meta classes and relations between them.
 ///
 class ClassDiagram
 {
@@ -53,9 +53,9 @@ public:
     void RenameClass(MetaClass::Name from, MetaClass::Name to);
 
 private:
-    /// \brief a map for meta classes.
+    /// \brief Map for meta classes.
     MetaClassMap _classes;
-    /// \brief a map for relations.
+    /// \brief Map for relations.
     RelationMap _relations;
 };
 
