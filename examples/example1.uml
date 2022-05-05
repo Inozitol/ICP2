@@ -1,0 +1,29 @@
+@startuml
+0 0
+class Person {
+	- date birthdate
+	- string name
+	- string surname
+	---
+	+ date GetAge (  )
+	+ date GetBirthday (  )
+	+ string GetName (  )
+	+ string GetWholeName (  )
+}
+0 0
+class School {
+	- vector<Person> people
+	---
+	+ Person GetPersonByName ( string )
+}
+relation Person N -<> 1 School
+actor Alice Person
+actor Amanda Person
+actor VUT School
+message Alice -> Amanda : GetName()
+activate Amanda
+message Amanda -> VUT : GetPersonByName("Amanda")
+return VUT -> Amanda : Person kekW
+deactivate Amanda
+return Amanda -> Alice : string name
+@enduml

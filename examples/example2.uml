@@ -1,0 +1,48 @@
+@startuml
+325 -175
+class SocketClient {
+	- string address
+	- stringstream* buffer
+	- u16int_t port
+	- tcp::iostream socketStream
+	---
+	+ void SocketClient ( string stringstream u16int_t )
+	+ void start (  )
+}
+275 167
+class SocketClientListener {
+	---
+	+ void start (  )
+}
+501 171
+class SocketClientSender {
+	---
+	+ void start (  )
+}
+-250 -212
+class SocketServer {
+	- tcp::acceptor* acceptor
+	- stringstream* buffer
+	- tcp::endpoint endpoint
+	- boost::asio::io_service io_service
+	- tcp::iostream socketStream
+	---
+	+ void SocketServer ( string stringstream u16int_t )
+	+ void start (  )
+	+ void ~SocketServer (  )
+}
+-38 173
+class SocketServerListener {
+	---
+	+ void start (  )
+}
+-362 166
+class SocketServerSender {
+	---
+	+ void start (  )
+}
+relation SocketServer _ --> _ SocketServerListener
+relation SocketServer _ --> _ SocketServerSender
+relation SocketClient _ --> _ SocketClientListener
+relation SocketClient _ --> _ SocketClientSender
+@enduml
