@@ -49,13 +49,13 @@ public:
     /// \return the cardinality on the destination side of the relation.
     Cardinality GetDstCardinality();
     /// \brief Method for setting the cardinality on the source side of the relation
-    /// \param crd Source side cardinality.
+    /// \param crd source side cardinality.
     void SetSrcCardinality(Cardinality crd);
     /// \brief Method for setting the cardinality on the destination side of the relation
-    /// \param crd Destination side cardinality.
+    /// \param crd destination side cardinality.
     void SetDstCardinality(Cardinality crd);
     /// \brief Method for setting the index of the relation.
-    /// \param index The new index.
+    /// \param index the new index.
     void SetIndex(int index);
     /// \brief Method for obtaining the index of the relation.
     /// \return the index of the relation.
