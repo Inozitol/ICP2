@@ -60,12 +60,6 @@ void SequenceDiagramScene::RedrawScene(){
         switch(event->GetType()){
             case SequenceEvent::Activation:
             {
-                /*
-                if(prev_type != SequenceEvent::Deactivation){
-                    yPos += V_MARGIN;
-                }
-                */
-
                 auto activation = std::static_pointer_cast<SequenceActivation>(event);
                 SequenceLifeline::Name name = activation->GetLifeline()->GetName();
                 if(!_actPoints.count(name)){
@@ -75,13 +69,7 @@ void SequenceDiagramScene::RedrawScene(){
             break;
 
             case SequenceEvent::Deactivation:
-            {
-            /*
-                if(prev_type != SequenceEvent::Activation){
-                    yPos += V_MARGIN;
-                }
-            */
-                if(prev_type == SequenceEvent::Activation){
+            {                if(prev_type == SequenceEvent::Activation){
                     break;
                 }
 
@@ -101,26 +89,17 @@ void SequenceDiagramScene::RedrawScene(){
                         yPos-actPoint
                     };
 
-                    addRect(rect, QPen(), QBrush(Qt::red));
+                    addRect(rect, QPen(), QBrush(Qt::darkRed));
 
-                }else{
-                    // TODO Error
-                    // Actor is not activated
                 }
             }
             break;
 
-            // Return event will be static_cased into Message event, but headers are basically the same, so it works
+            // Return event will be static_casted into Message event, but headers are almost the same, so it works
             // ...still feels like sticking a fork into an outlet tho
             case SequenceEvent::Return:
             case SequenceEvent::Message:
             {
-            /*
-                if(prev_type == SequenceEvent::Message){
-                    yPos += V_MARGIN;
-                }
-            */
-
                 auto message = std::static_pointer_cast<SequenceMessage>(event);
                 SequenceLifeline::Name origin_ll_name = message->GetOrigin()->GetName();
                 SequenceLifeline::Name destination_ll_name = message->GetDestination()->GetName();
@@ -133,9 +112,21 @@ void SequenceDiagramScene::RedrawScene(){
                 };
 
                 if(event->GetType() == SequenceEvent::Return){
-                    addLine(line, QPen(Qt::DashLine))->setZValue(1);
+                    if(event->GetStatus()){
+                        addLine(line, QPen(Qt::DashLine))->setZValue(1);
+                    }else{
+                        auto pen = QPen(Qt::DashLine);
+                        pen.setColor(Qt::red);
+                        addLine(line, pen)->setZValue(1);
+                    }
                 }else{
-                    addLine(line)->setZValue(1);
+                    if(event->GetStatus()){
+                        addLine(line)->setZValue(1);
+                    }else{
+                        auto pen = QPen();
+                        pen.setColor(Qt::red);
+                        addLine(line, pen)->setZValue(1);
+                    }
                 }
 
                 if(ll_destination_middle > ll_origin_middle){
@@ -194,7 +185,7 @@ void SequenceDiagramScene::RedrawScene(){
 
     yPos += V_MARGIN;
 
-    for(auto lifeline : _environment->GetSequenceDiagram()->GetLifelines()){
+    for(const auto &lifeline : _environment->GetSequenceDiagram()->GetLifelines()){
         QPointF line_start = {
             _lifelineGraphics.at(lifeline.first)->middle(),
             V_MARGIN + LifelineGraphicsObject::height()
@@ -207,10 +198,6 @@ void SequenceDiagramScene::RedrawScene(){
 
         addLine({line_start, line_end})->setZValue(-1);
     }
-}
-
-void SequenceDiagramScene::DataChange(){
-    emit SceneUpdate();
 }
 
 void SequenceDiagramScene::NewLifeline(){

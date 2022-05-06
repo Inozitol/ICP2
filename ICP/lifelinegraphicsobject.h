@@ -26,7 +26,6 @@ public:
     LifelineGraphicsObject(std::shared_ptr<SequenceLifeline>);
     [[nodiscard]] QRectF boundingRect() const override;
     void paint(QPainter* painter, const QStyleOptionGraphicsItem* option, QWidget* widget = nullptr) override;
-    // TODO context menu
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
 
     qreal middle();
@@ -43,6 +42,7 @@ private:
     void InitStrings();
     void CalcHeight();
     inline bool willOverflow(QString);
+    bool deleteWarn();
 
     std::shared_ptr<SequenceLifeline> _lifeline;
 
@@ -53,10 +53,6 @@ private:
     QString _className;
     int _width;
     int _height;
-
-private slots:
-
-    void killSelfSlot();
 
 signals:
     void killSelf(LifelineGraphicsObject*);

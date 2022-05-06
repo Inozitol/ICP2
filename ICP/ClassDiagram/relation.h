@@ -47,7 +47,7 @@ public:
     Cardinality GetSrcCardinality();
     /// \brief Method for obtaining destination cardinality.
     /// \return the cardinality on the destination side of the relation.
-    Cardinality GetDesCardinality();
+    Cardinality GetDstCardinality();
     /// \brief Method for setting the cardinality on the source side of the relation
     /// \param crd Source side cardinality.
     void SetSrcCardinality(Cardinality crd);

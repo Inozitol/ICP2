@@ -45,9 +45,6 @@ private:
     std::map<SequenceLifeline::Name, LifelineGraphicsObject*> _lifelineGraphics;
     std::map<SequenceLifeline::Name, qreal> _actPoints;
 
-public slots:
-    void DataChange();
-
 private slots:
     void NewLifeline();
     void DeleteLifeline(LifelineGraphicsObject*);

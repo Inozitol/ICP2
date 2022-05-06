@@ -41,7 +41,7 @@ class SocketServerSender {
 	---
 	+ void start (  )
 }
-relation SocketServer _ --> _ SocketServerListener
+relation SocketServer _ --> N SocketServerListener
 relation SocketServer _ --> _ SocketServerSender
 relation SocketClient _ --> _ SocketClientListener
 relation SocketClient _ --> _ SocketClientSender

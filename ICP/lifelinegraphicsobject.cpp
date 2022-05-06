@@ -91,10 +91,10 @@ void LifelineGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *ev
 
 void LifelineGraphicsObject::InitActions(){
     _deleteLifeline = new QAction("Delete lifeline");
-    connect(_deleteLifeline, &QAction::triggered, this, &LifelineGraphicsObject::killSelfSlot);
+    connect(_deleteLifeline, &QAction::triggered, this, [this](){if(deleteWarn()){ emit killSelf(this); }});
 }
 
-void LifelineGraphicsObject::killSelfSlot(){
+bool LifelineGraphicsObject::deleteWarn(){
     QMessageBox msgBox;
     msgBox.setIcon(QMessageBox::Warning);
     msgBox.setText("Erasing lifeline will erase all its events!");
@@ -103,12 +103,15 @@ void LifelineGraphicsObject::killSelfSlot(){
     msgBox.setDefaultButton(QMessageBox::No);
     switch(msgBox.exec()){
         case QMessageBox::Yes:
-            emit killSelf(this);
+            return true;
         break;
 
         case QMessageBox::No:
+            return false;
         break;
     }
+
+    return false;
 }
 
 qreal LifelineGraphicsObject::middle(){

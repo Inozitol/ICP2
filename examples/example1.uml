@@ -1,5 +1,5 @@
 @startuml
-0 0
+-205 -98
 class Person {
 	- date birthdate
 	- string name
@@ -10,7 +10,7 @@ class Person {
 	+ string GetName (  )
 	+ string GetWholeName (  )
 }
-0 0
+343 -50
 class School {
 	- vector<Person> people
 	---

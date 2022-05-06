@@ -285,6 +285,7 @@ void Environment::CheckSequenceEvents(){
                     event->SetStatus(false);
                     event->SetErrorMsg("Lifeline " + activation->GetLifeline()->GetName() + " is already active.");
                 } else {
+                    event->SetStatus(true);
                     activations[activation->GetLifeline()->GetName()] = true;
                 }
                 break;
@@ -293,8 +294,9 @@ void Environment::CheckSequenceEvents(){
                 auto deactivation = std::static_pointer_cast<SequenceDeactivation>(event);
                 if(!activations.at(deactivation->GetLifeline()->GetName())){
                     event->SetStatus(false);
-                    event->SetErrorMsg("Lifeline " + deactivation->GetLifeline()->GetName() + " is already inactive.");
+                    event->SetErrorMsg("Lifeline " + deactivation->GetLifeline()->GetName() + " is inactive.");
                 } else {
+                    event->SetStatus(true);
                     activations[deactivation->GetLifeline()->GetName()] = false;
                 }
                 break;

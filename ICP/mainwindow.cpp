@@ -39,7 +39,7 @@ void MainWindow::InitMenuBar(){
     connect(ui->actionNew, 		&QAction::triggered, 	_classScene, 		&QGraphicsScene::clear);
     connect(ui->actionNew, 		&QAction::triggered,	_sequenceScene, 	&QGraphicsScene::clear);
 
-    connect(ui->actionOpen, 	&QAction::triggered, 	_sequenceScene,		&SequenceDiagramScene::DataChange);
+    connect(ui->actionOpen, 	&QAction::triggered, 	_sequenceScene,		&SequenceDiagramScene::SceneUpdate);
 }
 
 void MainWindow::InitActions(){
@@ -122,7 +122,6 @@ void MainWindow::RefreshTimelineList(){
         }
         break;
 
-        case SequenceEvent::Return:
         case SequenceEvent::Message:
         {
             auto message = std::static_pointer_cast<SequenceMessage>(event);
@@ -132,6 +131,23 @@ void MainWindow::RefreshTimelineList(){
             str.append(QString::fromStdString(message->GetDestination()->GetName()));
             str.append(" : ");
             str.append(QString::fromStdString(message->GetMessage()));
+
+            item->setText(str);
+            ui->sequenceList->addItem(item);
+        }
+        break;
+
+        case SequenceEvent::Return:
+        {
+            auto returnmsg = std::static_pointer_cast<SequenceReturn>(event);
+
+            QString str(QString::fromStdString(returnmsg->GetOrigin()->GetName()));
+            str.append(" -> ");
+            str.append(QString::fromStdString(returnmsg->GetDestination()->GetName()));
+            str.append(" : ");
+            str.append(QString::fromStdString(returnmsg->GetReturnType()));
+            str.append(" - ");
+            str.append(QString::fromStdString(returnmsg->GetMessage()));
 
             item->setText(str);
             ui->sequenceList->addItem(item);
@@ -233,10 +249,10 @@ void MainWindow::UpdateTimelineColors(){
         item = ui->sequenceList->item(i);
         event = qvariant_cast<std::shared_ptr<SequenceEvent>>(item->data(Qt::UserRole));
         if(event->GetStatus()){
-            item->setBackground(QBrush(Qt::white));
+            item->setForeground(Qt::black);
             item->setToolTip("");
         }else{
-            item->setBackground(QBrush(Qt::darkRed));
+            item->setForeground(Qt::red);
             item->setToolTip(QString::fromStdString(event->GetErrorMsg()));
         }
     }
@@ -264,9 +280,10 @@ void MainWindow::EditEvent(QListWidgetItem* eventItem){
     auto event = _environment->GetSequenceDiagram()->GetEvent(row);
     EventDialog dialog(event, this);
     if(dialog.exec()){
-        dialog.GetEvent();
-        _sequenceScene->RedrawScene();
+        event = dialog.GetEvent();
+        qDebug() << event.use_count();
         UpdateTimelineColors();
+        _sequenceScene->RedrawScene();
         RefreshTimelineList();
     }
 }

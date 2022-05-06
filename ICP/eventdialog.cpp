@@ -99,6 +99,12 @@ void EventDialog::InitLayouts(){
 
     if(_event){
         _currType = _event->GetType();
+        ui->radioActivate->setDisabled(true);
+        ui->radioDeactivate->setDisabled(true);
+        ui->radioMessage->setDisabled(true);
+        ui->radioReturn->setDisabled(true);
+        ui->radioNop->setDisabled(true);
+        ui->groupRadioBox->setToolTip(tr("Can't change event type while editing"));
     }else{
         _currType = SequenceEvent::Activation;
     }
