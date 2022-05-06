@@ -15,30 +15,39 @@
 #include "ClassDiagram/generalization.h"
 
 ///
-/// \brief Singleton class holding all of back-end datastructures
+/// \brief Singleton class holding all of backend datastructures.
 ///
 class Environment
 {
 public:
+    /// \brief Class instance provider (singleton constructor).
+    /// \return an instance of the environment.
     static Environment* GetEnvironment();
 
-    void InsertClassDiagram(std::shared_ptr<ClassDiagram>);
-    void EraseClassDiagram();
+    /// \brief Method for obtaining the shared pointer to the class diagram.
+    /// \return shared pointer to the class diagram.
     std::shared_ptr<ClassDiagram> GetClassDiagram();
-
-    void InsertSequenceDiagram(std::shared_ptr<SequenceDiagram>);
-    void EraseSequenceDiagram();
+    /// \brief Method for obtaining the shared pointer to the sequence diagram.
+    /// \return shared pointer to the sequence diagram.
     std::shared_ptr<SequenceDiagram> GetSequenceDiagram();
 
-    void ExportEnvironment(std::string);
-    void ImportEnvironment(std::string);
-
+    /// \brief Method for serializing, saving and exporting the opened environment.
+    /// \param file_name name of the file, into which the environment will be saved.
+    void ExportEnvironment(std::string file_name);
+    /// \brief Method for deserializing, loading and importing an environment.
+    /// \param file_name name of the file, from which the environment will be loaded.
+    void ImportEnvironment(std::string file_name);
+    /// \brief Method for checking the semantics of events in the sequence diagram.
     void CheckSequenceEvents();
 
 private:
+    /// \brief Shared pointer to the class diagram.
     std::shared_ptr<ClassDiagram> _class_diag;
+    /// \brief Shared pointer to the sequence diagram.
     std::shared_ptr<SequenceDiagram> _sequence_diag;
 
+    /// \brief Class constructor.
     Environment();
+    /// \brief Singleton environment variable.
     static Environment* _environment;
 };

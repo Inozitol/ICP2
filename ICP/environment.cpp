@@ -28,14 +28,6 @@ Environment* Environment::GetEnvironment(){
     return _environment;
 }
 
-void Environment::InsertSequenceDiagram(std::shared_ptr<SequenceDiagram> sequence){
-    _sequence_diag = sequence;
-}
-
-void Environment::EraseSequenceDiagram(){
-    _sequence_diag.reset();
-}
-
 std::shared_ptr<ClassDiagram> Environment::GetClassDiagram(){
     return _class_diag;
 }

@@ -48,8 +48,8 @@ public:
     /// \brief Method for clearing all relations and meta classes in the diagram.
     void Clear();
     /// \brief Will rename class inside environment
-    /// \param from Rename from
-    /// \param to Rename to
+    /// \param from rename from
+    /// \param to rename to
     void RenameClass(MetaClass::Name from, MetaClass::Name to);
 
 private:

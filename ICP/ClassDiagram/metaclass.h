@@ -67,10 +67,10 @@ public:
     void Clear();
 
     /// \brief Get position of Class in scene
-    /// \return Position
+    /// \return position
     QPoint GetPos();
     /// \brief Set position for drawing later
-    /// \param pos Position
+    /// \param pos position
     void SetPos(QPoint pos);
 
 protected:
