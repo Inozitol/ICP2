@@ -88,4 +88,5 @@ signals:
     void ClassUpdate();
     /// \brief Signal for synchronizing positions of graphic objects into backend.
     void SyncClassPos();
+    /// \brief Signal that's called when any class get's changed
 };

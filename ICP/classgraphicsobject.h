@@ -108,4 +108,6 @@ signals:
     void killSelf(ClassGraphicsObject* item);
     /// \brief Signal for initializing a relation.
     void initRelation(ClassGraphicsObject* item);
+    /// \brief Signaled called when class got changed.
+    void changed();
 };

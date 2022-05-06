@@ -72,6 +72,7 @@ void MainWindow::InitGraphicView(){
     ui->sequenceView->setScene(_sequenceScene);
 
     connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this, 	&MainWindow::RefreshClassList);
+    connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this,	[this](){ UpdateTimelineColors(); });
     connect(_sequenceScene, &SequenceDiagramScene::SceneUpdate, 	this,	&MainWindow::RefreshTimelineList);
 
     connect(this, &MainWindow::ClearScenes, _classScene, 	&ClassDiagramScene::clear);
@@ -80,6 +81,7 @@ void MainWindow::InitGraphicView(){
 
     connect(ui->buttonDown, &QPushButton::pressed, this, &MainWindow::MoveEventDown);
     connect(ui->buttonUp, &QPushButton::pressed, this, &MainWindow::MoveEventUp);
+
 }
 
 void MainWindow::RefreshClassList(){
