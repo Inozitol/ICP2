@@ -312,7 +312,7 @@ void Environment::CheckSequenceEvents(){
                 std::size_t methodParamsCount = vstrings.size();
                 if(!vstrings[0].compare("()")) methodParamsCount = 0;
 
-                bool paramCountFlag = false, methodNameFlag = false;
+                bool paramCountFlag = false, methodNameFlag = false, publicFlag = false;
                 int errorInt = 0;
 
                 for (const auto& [key, value] : message->GetDestination()->GetClass()->GetMethods()) {
@@ -321,8 +321,11 @@ void Environment::CheckSequenceEvents(){
                         if(methodParamsCount == value->GetParameters().size()){
                             paramCountFlag = true;
                             errorInt = value->GetParameters().size();
-                            event->SetStatus(true);
-                            returns.push_back(std::make_pair(value, message));
+                            if(value->GetPermission() == '+'){
+                                event->SetStatus(true);
+                                publicFlag = true;
+                                returns.push_back(std::make_pair(value, message));
+                            }
                             break;
                         }
                     }
@@ -335,6 +338,10 @@ void Environment::CheckSequenceEvents(){
                     if(!paramCountFlag){
                         event->SetErrorMsg("Method " + methodName + " expects " + std::to_string(errorInt) +
                         " parameters, but got " + std::to_string(methodParamsCount) + ".");
+                    } else {
+                        if(!publicFlag){
+                            event->SetErrorMsg("Method " + methodName + " is not public.");
+                        }
                     }
                 }
                 break;
