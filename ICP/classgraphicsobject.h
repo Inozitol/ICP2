@@ -66,6 +66,7 @@ private:
     /// \brief Method for initializing actions within the class graphic object.
     void InitActions();
     /// \brief Method for determining whether text on the graphic object will flow over the current width.
+    /// \return bool, determining overflow.
     inline bool willOverflow(QString);
 
     /// \brief Font of the text in the graphic objects.
