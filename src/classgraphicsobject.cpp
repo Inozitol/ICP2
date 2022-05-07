@@ -17,7 +17,8 @@ void ClassGraphicsObject::InitActions(){
     _createRelation = 	new QAction(tr("Create relation"));
 
     connect(_deleteClass, 		&QAction::triggered, this, [this](){emit killSelf(this);});
-    connect(_editClass, 		&QAction::triggered, this, &ClassGraphicsObject::editSelf);
+    connect(_editClass, 		&QAction::triggered, this, [this](){emit edit(this);});
+    connect(_editClass, 		&QAction::triggered, this, &ClassGraphicsObject::update);
     connect(_createRelation, 	&QAction::triggered, this, [this](){emit initRelation(this);});
 }
 
@@ -199,15 +200,11 @@ QPointF ClassGraphicsObject::GetItemCenter(){
     return { pos().x() + (_width/2) , pos().y() + (_totalHeight/2) };
 }
 
-void ClassGraphicsObject::editSelf(){
-    ClassEditDialog dialog(_class);
-    if(dialog.exec()){
-        dialog.GetClassPtr();
-        CalcHeight();
-        InitStrings();
-        emit changed();
-        prepareGeometryChange();
-    }
+void ClassGraphicsObject::update(){
+    CalcHeight();
+    InitStrings();
+    emit changed();
+    prepareGeometryChange();
 }
 
 std::shared_ptr<MetaClass> ClassGraphicsObject::GetClass(){

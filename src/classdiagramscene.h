@@ -55,6 +55,10 @@ private:
     void InitActions();
     /// \brief Method for resetting relation creation variable.
     void ResetRelation();
+    /// \brief Method for renaming a class to maintain consistency accross map keys.
+    /// \param from Old map name
+    /// \param to New map name
+    void RenameClass(MetaClass::Name from, MetaClass::Name to);
     /// \brief Action for creating a new meta class.
     QAction* _newClass;
     /// \brief Parent of the scene.
@@ -76,6 +80,9 @@ private slots:
     /// \brief Slot for starting the process of class deletion.
     /// \param classitem graphic object of the class, which is to be deleted.
     void DeleteClass(ClassGraphicsObject* classitem);
+    /// \brief Slot for starting the process of class editing.
+    /// \param classitem graphic object of the class, which is to be edited.
+    void EditClass(ClassGraphicsObject* classitem);
     /// \brief Slot for initializing and completing the process of relation creation.
     /// \param item one of the meta class graphic objects of the relation.
     void CreateRelation(ClassGraphicsObject* item);

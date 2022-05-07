@@ -90,6 +90,7 @@ void ClassDiagramScene::PlaceClass(std::shared_ptr<MetaClass> metaclass){
     newclass->setPos(metaclass->GetPos());
     newclass->setData(Qt::UserRole, GraphicsItem::Class);
     connect(newclass, &ClassGraphicsObject::killSelf, this, &ClassDiagramScene::DeleteClass);
+    connect(newclass, &ClassGraphicsObject::edit, this, &ClassDiagramScene::EditClass);
     connect(newclass, &ClassGraphicsObject::initRelation, this, &ClassDiagramScene::CreateRelation);
     connect(newclass, &ClassGraphicsObject::changed, this, &ClassDiagramScene::ClassUpdate);
     connect(this, &ClassDiagramScene::SyncClassPos, newclass, &ClassGraphicsObject::SyncClassPos);
@@ -188,5 +189,21 @@ void ClassDiagramScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
         ResetRelation();
     break;
 
+    }
+}
+
+void ClassDiagramScene::EditClass(ClassGraphicsObject* classitem){
+    MetaClass::Name oldName = classitem->GetClassName();
+    ClassEditDialog dialog(classitem->GetClass());
+    if(dialog.exec()){
+        auto metaclass = dialog.GetClassPtr();
+        RenameClass(oldName, metaclass->GetName());
+    }
+}
+
+void ClassDiagramScene::RenameClass(MetaClass::Name from, MetaClass::Name to){
+    if(from != to){
+        _graphicsObjectMap[to] = _graphicsObjectMap.at(from);
+        _graphicsObjectMap.erase(from);
     }
 }

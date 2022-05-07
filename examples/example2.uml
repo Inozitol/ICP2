@@ -31,7 +31,7 @@ class SocketServer {
 	+ void start (  )
 	+ void ~SocketServer (  )
 }
--38 173
+-38 166
 class SocketServerListener {
 	---
 	+ void start (  )
@@ -41,8 +41,8 @@ class SocketServerSender {
 	---
 	+ void start (  )
 }
-relation SocketServer _ --> N SocketServerListener
 relation SocketServer _ --> _ SocketServerSender
 relation SocketClient _ --> _ SocketClientListener
 relation SocketClient _ --> _ SocketClientSender
+relation SocketServer _ --> _ SocketServerListener
 @enduml

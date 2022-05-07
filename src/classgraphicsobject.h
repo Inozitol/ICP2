@@ -53,9 +53,14 @@ public:
     /// \brief Method for obtaining the shared pointer to the class of the object.
     /// \return shared pointer to the class.
     std::shared_ptr<MetaClass> GetClass();
-
+    /// \brief Method for adding a relation into the class graphics object
+    /// \param item Relation graphics object to be added
     void AddRelation(RelationGraphicsObject* item);
+    /// \brief Method for removing a relation from the class graphics object
+    /// \param item Relation graphics object to be removed
     void RemoveRelation(RelationGraphicsObject* item);
+    /// \brief Method for getting a list of relations connected to this class
+    /// \return A list of relations connected to this class
     QVector<RelationGraphicsObject*> GetRelations();
 
 private:
@@ -112,13 +117,15 @@ public slots:
 
 private slots:
     /// \brief Slot for starting a dialog for class editing.
-    void editSelf();
+    void update();
 
 signals:
     /// \brief Signal for making a graphic object delete itself.
     void killSelf(ClassGraphicsObject* item);
     /// \brief Signal for initializing a relation.
     void initRelation(ClassGraphicsObject* item);
-    /// \brief Signaled called when class got changed.
+    /// \brief Signal called when class got changed.
     void changed();
+    /// \brief Signal for starting edit dialog in scene.
+    void edit(ClassGraphicsObject* item);
 };
