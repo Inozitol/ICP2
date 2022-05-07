@@ -18,7 +18,10 @@
 #include <cmath>
 
 #include "ClassDiagram/metaclass.h"
+#include "relationgraphicsobject.h"
 #include "newclassform.h"
+
+class RelationGraphicsObject;
 
 ///
 /// \brief Class representing the class graphic object.
@@ -50,6 +53,10 @@ public:
     /// \brief Method for obtaining the shared pointer to the class of the object.
     /// \return shared pointer to the class.
     std::shared_ptr<MetaClass> GetClass();
+
+    void AddRelation(RelationGraphicsObject* item);
+    void RemoveRelation(RelationGraphicsObject* item);
+    QVector<RelationGraphicsObject*> GetRelations();
 
 private:
     /// \brief Default class graphic object width.
@@ -96,6 +103,9 @@ private:
     QAction* _editClass;
     /// \brief Action for initializing a relation creation process.
     QAction* _createRelation;
+
+    /// \brief Vector containing all connected relation graphics objects
+    QVector<RelationGraphicsObject*> _relations;
 public slots:
     /// \brief Slot for synchronizing positions of classes within the scene with backend.
     void SyncClassPos();

@@ -217,3 +217,22 @@ std::shared_ptr<MetaClass> ClassGraphicsObject::GetClass(){
 void ClassGraphicsObject::SyncClassPos(){
     _class->SetPos(pos().toPoint());
 }
+
+void ClassGraphicsObject::AddRelation(RelationGraphicsObject* item){
+    _relations.push_back(item);
+}
+
+void ClassGraphicsObject::RemoveRelation(RelationGraphicsObject* item){
+    auto it = _relations.begin();
+    while(it != _relations.end()){
+        if(*it == item){
+            it = _relations.erase(it);
+        }else{
+            it++;
+        }
+    }
+}
+
+QList<RelationGraphicsObject*> ClassGraphicsObject::GetRelations(){
+    return _relations;
+}

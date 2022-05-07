@@ -241,3 +241,7 @@ void RelationGraphicsObject::LineRectCollision(QPointF* pointBuff, QLineF line, 
     LineLineCollision(pointBuff, line, topL);
     LineLineCollision(pointBuff, line, bottomL);
 }
+
+std::pair<ClassGraphicsObject*, ClassGraphicsObject*> RelationGraphicsObject::GetPair(){
+    return _pair;
+}

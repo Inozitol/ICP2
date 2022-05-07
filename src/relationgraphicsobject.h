@@ -11,6 +11,8 @@
 #include "classgraphicsobject.h"
 #include "ClassDiagram/relation.h"
 
+class ClassGraphicsObject;
+
 ///
 /// \brief Class representing the graphic objects for relations.
 ///
@@ -41,6 +43,9 @@ public:
     /// \brief Method for obtaining the index of a relation.
     /// \return the index of the relation.
     int GetIndex();
+    /// \brief Method for getting a pair of connected class graphics objects
+    /// \return Pair of class graphics objects
+    std::pair<ClassGraphicsObject*, ClassGraphicsObject*> GetPair();
 
 public slots:
     /// \brief Slot for adjusting the relation line when class objects are moved.

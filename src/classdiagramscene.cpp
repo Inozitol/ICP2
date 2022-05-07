@@ -102,6 +102,9 @@ void ClassDiagramScene::DeleteClass(ClassGraphicsObject* classitem){
     _environment->GetClassDiagram()->EraseClass(classitem->GetClassName());
     emit ClassUpdate();
     _graphicsObjectMap.erase(classitem->GetClassName());
+    for(const auto &relation : classitem->GetRelations()){
+        DeleteRelation(relation);
+    }
     delete(classitem);
 }
 
@@ -112,19 +115,26 @@ void ClassDiagramScene::ClearScene(){
 void ClassDiagramScene::PlaceRelation(std::shared_ptr<Relation> relation){
     auto relationPair = std::make_pair(_graphicsObjectMap.at(relation->GetSource()->GetName()), _graphicsObjectMap.at(relation->GetDestination()->GetName()));
     auto newrelation = new RelationGraphicsObject(relation, relationPair);
-    newrelation->setData(Qt::UserRole, GraphicsItem::Relation);
-    connect(relationPair.first, &QGraphicsObject::xChanged, newrelation, &RelationGraphicsObject::updateLine);
-    connect(relationPair.first, &QGraphicsObject::yChanged, newrelation, &RelationGraphicsObject::updateLine);
-    connect(relationPair.second, &QGraphicsObject::xChanged, newrelation, &RelationGraphicsObject::updateLine);
-    connect(relationPair.second, &QGraphicsObject::yChanged, newrelation, &RelationGraphicsObject::updateLine);
-    connect(newrelation, &RelationGraphicsObject::killSelf, this, &ClassDiagramScene::DeleteRelation);
     addItem(newrelation);
+
+    newrelation->setData(Qt::UserRole, GraphicsItem::Relation);
+    relationPair.first->AddRelation(newrelation);
+    relationPair.second->AddRelation(newrelation);
+
+    connect(relationPair.first, 	&QGraphicsObject::xChanged, 		newrelation, 	&RelationGraphicsObject::updateLine);
+    connect(relationPair.first, 	&QGraphicsObject::yChanged, 		newrelation, 	&RelationGraphicsObject::updateLine);
+    connect(relationPair.second, 	&QGraphicsObject::xChanged, 		newrelation, 	&RelationGraphicsObject::updateLine);
+    connect(relationPair.second, 	&QGraphicsObject::yChanged, 		newrelation, 	&RelationGraphicsObject::updateLine);
+    connect(newrelation, 			&RelationGraphicsObject::killSelf, 	this, 			&ClassDiagramScene::DeleteRelation);
 }
 
 void ClassDiagramScene::DeleteRelation(RelationGraphicsObject* item){
     int index = item->GetIndex();
     removeItem(item);
     _environment->GetClassDiagram()->EraseRelation(index);
+    auto pair = item->GetPair();
+    pair.first->RemoveRelation(item);
+    pair.second->RemoveRelation(item);
     delete(item);
 }
 
