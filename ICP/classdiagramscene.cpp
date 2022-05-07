@@ -91,6 +91,7 @@ void ClassDiagramScene::PlaceClass(std::shared_ptr<MetaClass> metaclass){
     newclass->setData(Qt::UserRole, GraphicsItem::Class);
     connect(newclass, &ClassGraphicsObject::killSelf, this, &ClassDiagramScene::DeleteClass);
     connect(newclass, &ClassGraphicsObject::initRelation, this, &ClassDiagramScene::CreateRelation);
+    connect(newclass, &ClassGraphicsObject::changed, this, &ClassDiagramScene::ClassUpdate);
     connect(this, &ClassDiagramScene::SyncClassPos, newclass, &ClassGraphicsObject::SyncClassPos);
     addItem(newclass);
     _graphicsObjectMap.insert(std::make_pair(metaclass->GetName(), newclass));

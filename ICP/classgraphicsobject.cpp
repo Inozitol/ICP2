@@ -205,6 +205,7 @@ void ClassGraphicsObject::editSelf(){
         dialog.GetClassPtr();
         CalcHeight();
         InitStrings();
+        emit changed();
         prepareGeometryChange();
     }
 }
