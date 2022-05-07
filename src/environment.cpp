@@ -324,7 +324,9 @@ void Environment::CheckSequenceEvents(){
                             if(value->GetPermission() == '+'){
                                 event->SetStatus(true);
                                 publicFlag = true;
-                                returns.push_back(std::make_pair(value, message));
+                                if(value->GetReturnType() != "void"){
+                                    returns.push_back(std::make_pair(value, message));
+                                }
                             }
                             break;
                         }

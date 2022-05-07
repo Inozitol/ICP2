@@ -38,6 +38,7 @@ void MainWindow::InitMenuBar(){
 
     connect(ui->actionNew, 		&QAction::triggered, 	_classScene, 		&QGraphicsScene::clear);
     connect(ui->actionNew, 		&QAction::triggered,	_sequenceScene, 	&QGraphicsScene::clear);
+    connect(ui->actionNew, 		&QAction::triggered,	ui->sequenceList, 	&QListWidget::clear);
 
     connect(ui->actionOpen, 	&QAction::triggered, 	_sequenceScene,		&SequenceDiagramScene::SceneUpdate);
 }
@@ -72,7 +73,7 @@ void MainWindow::InitGraphicView(){
     ui->sequenceView->setScene(_sequenceScene);
 
     connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this, 	&MainWindow::RefreshClassList);
-    connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this,	[this](){ UpdateTimelineColors(); });
+    connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this,	[this](){ UpdateTimelineColors(); _sequenceScene->RedrawScene(); });
     connect(_sequenceScene, &SequenceDiagramScene::SceneUpdate, 	this,	&MainWindow::RefreshTimelineList);
 
     connect(this, &MainWindow::ClearScenes, _classScene, 	&ClassDiagramScene::clear);

@@ -230,10 +230,17 @@ bool EventDialog::isValid(){
                                    QMessageBox::Ok);
                 msgBox.exec();
                 return false;
-            }else if(uiRet->returnLineEdit->text().isEmpty()){
+            }else if(uiRet->valueLineEdit->text().isEmpty()){
                 QMessageBox msgBox(QMessageBox::Critical,
                                    tr("Error"),
                                    tr("Return value is not set"),
+                                   QMessageBox::Ok);
+                msgBox.exec();
+                return false;
+            }else if(uiRet->returnLineEdit->text().isEmpty()){
+                QMessageBox msgBox(QMessageBox::Critical,
+                                   tr("Error"),
+                                   tr("Return type is not set"),
                                    QMessageBox::Ok);
                 msgBox.exec();
                 return false;

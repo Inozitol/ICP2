@@ -57,7 +57,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="classTab">
        <attribute name="title">
@@ -225,7 +225,7 @@
                <enum>Qt::CustomContextMenu</enum>
               </property>
               <property name="dragDropMode">
-               <enum>QAbstractItemView::InternalMove</enum>
+               <enum>QAbstractItemView::NoDragDrop</enum>
               </property>
               <property name="defaultDropAction">
                <enum>Qt::MoveAction</enum>
