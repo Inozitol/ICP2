@@ -230,6 +230,6 @@ void ClassGraphicsObject::RemoveRelation(RelationGraphicsObject* item){
     }
 }
 
-QList<RelationGraphicsObject*> ClassGraphicsObject::GetRelations(){
+QVector<RelationGraphicsObject*> ClassGraphicsObject::GetRelations(){
     return _relations;
 }
