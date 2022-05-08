@@ -60,6 +60,9 @@ private:
     /// \brief Map, which binds lifeline x coordinates to their name.
     std::map<SequenceLifeline::Name, qreal> _actPoints;
 
+public slots:
+    /// \brief Signal for deleting lifeline safely from the scene
+    void DeleteLifelinePublic(std::shared_ptr<SequenceLifeline> lifeline);
 private slots:
     /// \brief Slot for creating a new lifeline.
     void NewLifeline();

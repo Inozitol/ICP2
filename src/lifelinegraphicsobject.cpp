@@ -105,7 +105,7 @@ void LifelineGraphicsObject::InitActions(){
 bool LifelineGraphicsObject::deleteWarn(){
     QMessageBox msgBox;
     msgBox.setIcon(QMessageBox::Warning);
-    msgBox.setText("Erasing lifeline will erase all its events!");
+    msgBox.setText("Deleting this lifeline will erase all its events!");
     msgBox.setInformativeText("Are you sure you want that?");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);

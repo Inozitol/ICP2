@@ -79,6 +79,7 @@ void MainWindow::InitGraphicView(){
     connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this, 	&MainWindow::RefreshClassList);
     connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this,	[this](){ UpdateTimelineColors(); _sequenceScene->RedrawScene(); });
     connect(_sequenceScene, &SequenceDiagramScene::SceneUpdate, 	this,	&MainWindow::RefreshTimelineList);
+    connect(_classScene,	&ClassDiagramScene::DeleteLifeline,		_sequenceScene, &SequenceDiagramScene::DeleteLifelinePublic);
 
     connect(this, &MainWindow::ClearScenes, _classScene, 	&ClassDiagramScene::clear);
     connect(this, &MainWindow::ClearScenes, _classScene, 	&ClassDiagramScene::ClearScene);

@@ -100,12 +100,18 @@ void ClassDiagramScene::PlaceClass(std::shared_ptr<MetaClass> metaclass){
 
 void ClassDiagramScene::DeleteClass(ClassGraphicsObject* classitem){
     removeItem(classitem);
-    _environment->GetClassDiagram()->EraseClass(classitem->GetClassName());
-    emit ClassUpdate();
+    auto metaclass = classitem->GetClass();
     _graphicsObjectMap.erase(classitem->GetClassName());
     for(const auto &relation : classitem->GetRelations()){
         DeleteRelation(relation);
     }
+    for(const auto &lifeline : _environment->GetSequenceDiagram()->GetLifelines()){
+        if(lifeline.second->GetClass() == metaclass){
+            emit DeleteLifeline(lifeline.second);
+        }
+    }
+    _environment->GetClassDiagram()->EraseClass(classitem->GetClassName());
+    emit ClassUpdate();
     delete(classitem);
 }
 

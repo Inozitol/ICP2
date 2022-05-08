@@ -82,6 +82,9 @@ private:
     /// \brief Method for determining whether text on the graphic object will flow over the current width.
     /// \return bool, determining overflow.
     inline bool willOverflow(QString);
+    /// \brief Method for making sure the user wants to delete this class
+    /// \return Confirmation
+    bool deleteWarn();
 
     /// \brief Font of the text in the graphic objects.
     QFont _font;

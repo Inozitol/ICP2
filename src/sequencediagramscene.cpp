@@ -254,4 +254,7 @@ void SequenceDiagramScene::EditLifeline(LifelineGraphicsObject* lifeline){
     }
 }
 
+void SequenceDiagramScene::DeleteLifelinePublic(std::shared_ptr<SequenceLifeline> lifeline){
+    DeleteLifeline(_lifelineGraphics.at(lifeline->GetName()));
+}
 
