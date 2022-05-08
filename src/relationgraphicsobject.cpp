@@ -212,6 +212,7 @@ void RelationGraphicsObject::updateLine(){
     update();
 }
 
+/// Taken from http://jeffreythompson.org/collision-detection/line-line.php
 void RelationGraphicsObject::LineLineCollision(QPointF* pointBuff, QLineF line1, QLineF line2){
     qreal x1 = line1.x1();
     qreal y1 = line1.y1();
@@ -232,6 +233,7 @@ void RelationGraphicsObject::LineLineCollision(QPointF* pointBuff, QLineF line1,
     }
 }
 
+/// Taken from http://jeffreythompson.org/collision-detection/line-rect.php
 void RelationGraphicsObject::LineRectCollision(QPointF* pointBuff, QLineF line, QRectF rect){
     QLineF leftL = 		QLineF(rect.topLeft(), 		rect.bottomLeft());
     QLineF rightL = 	QLineF(rect.topRight(), 	rect.bottomRight());
