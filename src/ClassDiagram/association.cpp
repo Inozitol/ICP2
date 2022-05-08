@@ -5,3 +5,11 @@ Association::Association(std::shared_ptr<MetaClass> class1, std::shared_ptr<Meta
 {
 
 }
+
+void Association::SetMessage(std::string msg){
+    _msg = msg;
+}
+
+std::string Association::GetMessage(){
+    return _msg;
+}
