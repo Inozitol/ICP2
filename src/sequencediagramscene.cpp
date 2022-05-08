@@ -106,15 +106,13 @@ void SequenceDiagramScene::RedrawScene(){
             qreal ll_destination_middle = _lifelineGraphics.at(destination_ll_name)->middle();
 
             if(message->GetOrigin() == message->GetDestination()){
+                auto pen = QPen();
                 if(message->GetType() == SequenceEvent::Return){
-                    addLine(ll_origin_middle, 				yPos, ll_origin_middle+(H_MARGIN/3), 	yPos, 									QPen(Qt::DashLine));
-                    addLine(ll_origin_middle+(H_MARGIN/3), 	yPos, ll_origin_middle+(H_MARGIN/3), 	yPos+(V_MARGIN/3), 						QPen(Qt::DashLine));
-                    addLine(ll_origin_middle+(H_MARGIN/3), 	yPos+(V_MARGIN/3), 						ll_origin_middle, yPos+(V_MARGIN/3), 	QPen(Qt::DashLine));
-                }else{
-                    addLine(ll_origin_middle, 				yPos, ll_origin_middle+(H_MARGIN/3), 	yPos);
-                    addLine(ll_origin_middle+(H_MARGIN/3), 	yPos, ll_origin_middle+(H_MARGIN/3), 	yPos+(V_MARGIN/3));
-                    addLine(ll_origin_middle+(H_MARGIN/3), 	yPos+(V_MARGIN/3), 						ll_origin_middle, yPos+(V_MARGIN/3));
+                    pen.setStyle(Qt::DashLine);
                 }
+                addLine(ll_origin_middle, 				yPos, ll_origin_middle+(H_MARGIN/3), 	yPos, 									pen);
+                addLine(ll_origin_middle+(H_MARGIN/3), 	yPos, ll_origin_middle+(H_MARGIN/3), 	yPos+(V_MARGIN/3), 						pen);
+                addLine(ll_origin_middle+(H_MARGIN/3), 	yPos+(V_MARGIN/3), 						ll_origin_middle, yPos+(V_MARGIN/3), 	pen);
 
                 QPainterPath arrow;
                 arrow.moveTo({ll_destination_middle+6.0, (yPos+(V_MARGIN/3))-6.0});

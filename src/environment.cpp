@@ -367,7 +367,7 @@ void Environment::CheckSequenceEvents(){
                         if(value->GetPermission() == '+'){
                             event->SetStatus(true);
                             publicFlag = true;
-                            if(value->GetReturnType() != "void"){
+                            if(value->GetReturnType() != "void" && message->GetOrigin() != message->GetDestination()){
                                 returns.push_back(std::make_pair(value, message));
                             }
                         }
@@ -396,6 +396,11 @@ void Environment::CheckSequenceEvents(){
             auto message = std::static_pointer_cast<SequenceReturn>(event);
             auto messageRecipient = message->GetDestination()->GetName();
             auto messageSender = message->GetOrigin()->GetName();
+
+            if(message->GetOrigin() == message->GetDestination()){
+                event->SetStatus(true);
+                break;
+            }
 
             if(returns.empty()){
                 event->SetErrorMsg("Unexpected return.");

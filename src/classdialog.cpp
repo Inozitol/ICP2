@@ -237,6 +237,7 @@ bool ClassDialog::isValid(){
     }
     QTableWidgetItem* q_dtype;
     QTableWidgetItem* q_name;
+    QTableWidgetItem* q_params;
     int rowCount = ui->attrTable->rowCount();
     for(int row=0; row < rowCount; row++){
         q_dtype = ui->attrTable->item(row, A_DATA_TYPE);
@@ -297,6 +298,7 @@ bool ClassDialog::isValid(){
     for(int row=0; row < rowCount; row++){
         q_dtype = 	ui->methTable->item(row, M_RETURN_TYPE);
         q_name =  	ui->methTable->item(row, M_NAME);
+        q_params =	ui->methTable->item(row, M_PARAMS);
 
         // Is name empty
         if((q_name && q_name->text().isEmpty()) || !q_name){

@@ -201,6 +201,9 @@ RelationGraphicsObject::~RelationGraphicsObject(){
     delete(_srcCircle);
     delete(_dstCircle);
     delete(_deleteRelation);
+    if(_relation->GetType() == Relation::Assoc){
+        delete(_msgItem);
+    }
 }
 
 void RelationGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*){

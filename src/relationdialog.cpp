@@ -37,7 +37,9 @@ std::shared_ptr<Relation> RelationDialog::GetRelation(){
     switch(ui->typeComboBox->currentIndex()){
         case Relation::Assoc:
         {
-            _relation = std::make_shared<Association>(srcClass, dstClass);
+            auto assoc = std::make_shared<Association>(srcClass, dstClass);
+            assoc->SetMessage(antiwhite(ui->messageText->text().toStdString()));
+            _relation = assoc;
         }
         break;
 
@@ -72,6 +74,7 @@ RelationDialog::~RelationDialog()
 
 
 void RelationDialog::comboBoxChanged(int type){
+
     if(type == Relation::Gener){
         ui->srcCrd->setDisabled(true);
         ui->dstCrd->setDisabled(true);
@@ -79,4 +82,10 @@ void RelationDialog::comboBoxChanged(int type){
         ui->srcCrd->setDisabled(false);
         ui->dstCrd->setDisabled(false);
     }
+    if(type == Relation::Assoc){
+        ui->messageText->setDisabled(false);
+    }else{
+        ui->messageText->setDisabled(true);
+    }
+
 }

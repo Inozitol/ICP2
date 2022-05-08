@@ -295,7 +295,7 @@ std::shared_ptr<SequenceEvent> EventDialog::GetEvent(){
             SequenceLifeline::Name origin_name = uiMsg->originComboBox->currentText().toStdString();
             SequenceLifeline::Name destination_name = uiMsg->destinationComboBox->currentText().toStdString();
 
-            std::string msg = uiMsg->messageLineEdit->text().toStdString();
+            std::string msg = antiwhite(uiMsg->messageLineEdit->text().toStdString());
 
             std::shared_ptr<SequenceLifeline> origin_lifeline = _environment->GetSequenceDiagram()->GetLifeline(origin_name);
             std::shared_ptr<SequenceLifeline> destination_lifeline = _environment->GetSequenceDiagram()->GetLifeline(destination_name);
@@ -317,8 +317,8 @@ std::shared_ptr<SequenceEvent> EventDialog::GetEvent(){
             SequenceLifeline::Name origin_name = uiRet->originComboBox->currentText().toStdString();
             SequenceLifeline::Name destination_name = uiRet->destinationComboBox->currentText().toStdString();
 
-            std::string msg = uiRet->valueLineEdit->text().toStdString();
-            std::string type = uiRet->returnLineEdit->text().toStdString();
+            std::string msg = antiwhite(uiRet->valueLineEdit->text().toStdString());
+            std::string type = antiwhite(uiRet->returnLineEdit->text().toStdString());
 
             std::shared_ptr<SequenceLifeline> origin_lifeline = _environment->GetSequenceDiagram()->GetLifeline(origin_name);
             std::shared_ptr<SequenceLifeline> destination_lifeline = _environment->GetSequenceDiagram()->GetLifeline(destination_name);

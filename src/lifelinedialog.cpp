@@ -45,6 +45,10 @@ void LifelineDialog::InitComboBox(){
     for(auto metaclass : _environment->GetClassDiagram()->GetClasses()){
         ui->classComboBox->addItem(QString::fromStdString(metaclass.first));
     }
+    if(_lifeline){
+        int index = ui->classComboBox->findText(QString::fromStdString(_lifeline->GetClass()->GetName()));
+        ui->classComboBox->setCurrentIndex(index);
+    }
 }
 
 void LifelineDialog::acceptCondition(){
