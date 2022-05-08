@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>NewClassForm</class>
- <widget class="QDialog" name="NewClassForm">
+ <class>ClassDialog</class>
+ <widget class="QDialog" name="ClassDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -263,10 +263,10 @@
      </layout>
     </widget>
    </item>
-   <item alignment="Qt::AlignLeft">
+   <item>
     <widget class="QDialogButtonBox" name="buttonBox">
      <property name="layoutDirection">
-      <enum>Qt::RightToLeft</enum>
+      <enum>Qt::LeftToRight</enum>
      </property>
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
@@ -284,24 +284,8 @@
  <connections>
   <connection>
    <sender>buttonBox</sender>
-   <signal>accepted()</signal>
-   <receiver>NewClassForm</receiver>
-   <slot>accept()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>248</x>
-     <y>254</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>157</x>
-     <y>274</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>NewClassForm</receiver>
+   <receiver>ClassDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

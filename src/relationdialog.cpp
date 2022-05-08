@@ -24,6 +24,7 @@ void RelationDialog::InitCombo(){
         ui->typeComboBox->insertItem(index, str);
     }
     ui->typeComboBox->setCurrentIndex(Relation::Assoc);
+    connect(ui->typeComboBox, &QComboBox::currentIndexChanged, this, &RelationDialog::comboChanged);
 }
 
 std::shared_ptr<Relation> RelationDialog::GetRelation(){
@@ -67,4 +68,15 @@ std::shared_ptr<Relation> RelationDialog::GetRelation(){
 RelationDialog::~RelationDialog()
 {
     delete(ui);
+}
+
+
+void RelationDialog::comboChanged(int type){
+    if(type == Relation::Gener){
+        ui->srcCrd->setDisabled(true);
+        ui->dstCrd->setDisabled(true);
+    }else{
+        ui->srcCrd->setDisabled(false);
+        ui->dstCrd->setDisabled(false);
+    }
 }

@@ -4,12 +4,26 @@
 LifelineDialog::LifelineDialog(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::LifelineDialog),
-    _environment(Environment::GetEnvironment())
+    _environment(Environment::GetEnvironment()),
+    _lifeline(nullptr)
 {
     ui->setupUi(this);
     InitComboBox();
     connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &LifelineDialog::acceptCondition);
     connect(this, &LifelineDialog::acceptedSafe, this, &QDialog::accept);
+}
+
+LifelineDialog::LifelineDialog(std::shared_ptr<SequenceLifeline> lifeline, QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::LifelineDialog),
+    _environment(Environment::GetEnvironment()),
+    _lifeline(lifeline)
+{
+    ui->setupUi(this);
+    InitComboBox();
+    connect(ui->buttonBox, &QDialogButtonBox::accepted, this, &LifelineDialog::acceptCondition);
+    connect(this, &LifelineDialog::acceptedSafe, this, &QDialog::accept);
+    ui->name->setText(QString::fromStdString(_lifeline->GetName()));
 }
 
 LifelineDialog::~LifelineDialog()
@@ -19,6 +33,11 @@ LifelineDialog::~LifelineDialog()
 
 std::shared_ptr<SequenceLifeline> LifelineDialog::GetLifeline(){
     auto metaclass = _environment->GetClassDiagram()->GetClass(ui->classComboBox->currentText().toStdString());
+    if(_lifeline){
+        _lifeline->ChangeName(ui->name->text().toStdString());
+        _lifeline->ChangeClass(metaclass);
+        return _lifeline;
+    }
     return std::make_shared<SequenceLifeline>(antiwhite(ui->name->text().toStdString()), metaclass);
 }
 

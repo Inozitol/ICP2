@@ -52,4 +52,8 @@ private:
         {Relation::Compo, "Composition"},
         {Relation::Gener, "Generalization"}
     };
+private slots:
+    /// \brief Slot for combo box being changed
+    /// \param ID of currently active type
+    void comboChanged(int type);
 };

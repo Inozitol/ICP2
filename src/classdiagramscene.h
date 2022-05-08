@@ -13,7 +13,7 @@
 #include <QGraphicsView>
 
 #include "environment.h"
-#include "newclassform.h"
+#include "classdialog.h"
 #include "classgraphicsobject.h"
 #include "relationgraphicsobject.h"
 #include "graphicsenum.h"
@@ -95,5 +95,6 @@ signals:
     void ClassUpdate();
     /// \brief Signal for synchronizing positions of graphic objects into backend.
     void SyncClassPos();
-    /// \brief Signal that's called when any class get's changed
+    /// \brief Signal for deleting a lifeline safely from class scene
+    void DeleteLifeline(std::shared_ptr<SequenceLifeline> lifeline);
 };

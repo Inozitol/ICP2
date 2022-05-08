@@ -25,6 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow(){
     delete(ui);
+    delete(_classScene);
+    delete(_sequenceScene);
+    delete(_deleteEvent);
+    delete(_editEvent);
 }
 
 void MainWindow::InitMenuBar(){
@@ -38,6 +42,7 @@ void MainWindow::InitMenuBar(){
 
     connect(ui->actionNew, 		&QAction::triggered, 	_classScene, 		&QGraphicsScene::clear);
     connect(ui->actionNew, 		&QAction::triggered,	_sequenceScene, 	&QGraphicsScene::clear);
+    connect(ui->actionNew, 		&QAction::triggered,	ui->sequenceList, 	&QListWidget::clear);
 
     connect(ui->actionOpen, 	&QAction::triggered, 	_sequenceScene,		&SequenceDiagramScene::SceneUpdate);
 }
@@ -72,8 +77,9 @@ void MainWindow::InitGraphicView(){
     ui->sequenceView->setScene(_sequenceScene);
 
     connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this, 	&MainWindow::RefreshClassList);
-    connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this,	[this](){ UpdateTimelineColors(); });
+    connect(_classScene, 	&ClassDiagramScene::ClassUpdate, 		this,	[this](){ UpdateTimelineColors(); _sequenceScene->RedrawScene(); });
     connect(_sequenceScene, &SequenceDiagramScene::SceneUpdate, 	this,	&MainWindow::RefreshTimelineList);
+    connect(_classScene,	&ClassDiagramScene::DeleteLifeline,		_sequenceScene, &SequenceDiagramScene::DeleteLifelinePublic);
 
     connect(this, &MainWindow::ClearScenes, _classScene, 	&ClassDiagramScene::clear);
     connect(this, &MainWindow::ClearScenes, _classScene, 	&ClassDiagramScene::ClearScene);
@@ -177,8 +183,20 @@ void MainWindow::EnvironOpen(){
         return;
     }
 
+    try{
+        _environment->ImportEnvironment(_currentFile.toStdString());
+    }catch(const invalid_file& e){
+        QString str = QString::fromStdString(e.get_msg());
+        QMessageBox msgBox(QMessageBox::Critical,
+               tr("Error"),
+               str,
+               QMessageBox::Ok);
+        msgBox.exec();
+        return;
+    }
+
     emit ClearScenes();
-    _environment->ImportEnvironment(_currentFile.toStdString());
+
     RefreshClassList();
     for(auto [name,metaclass] : _environment->GetClassDiagram()->GetClasses()){
         _classScene->PlaceClass(metaclass);

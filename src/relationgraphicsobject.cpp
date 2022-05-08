@@ -174,7 +174,9 @@ RelationGraphicsObject::~RelationGraphicsObject(){
     delete(_srcCirclePoint);
     delete(_dstCirclePoint);
     delete(_dstSymb);
+    delete(_srcCircle);
     delete(_dstCircle);
+    delete(_deleteRelation);
 }
 
 void RelationGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphicsItem*, QWidget*){

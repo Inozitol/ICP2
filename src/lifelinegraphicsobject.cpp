@@ -8,6 +8,11 @@ LifelineGraphicsObject::LifelineGraphicsObject(std::shared_ptr<SequenceLifeline>
     CalcHeight();
 }
 
+LifelineGraphicsObject::~LifelineGraphicsObject(){
+    delete(_deleteLifeline);
+    delete(_editLifeline);
+}
+
 void LifelineGraphicsObject::InitStrings(){
     auto fm = QFontMetrics(_font);
 
@@ -84,6 +89,7 @@ void LifelineGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphics
 
 void LifelineGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     QMenu menu;
+    menu.addAction(_editLifeline);
     menu.addAction(_deleteLifeline);
     menu.exec(event->screenPos());
     event->accept();
@@ -92,12 +98,14 @@ void LifelineGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *ev
 void LifelineGraphicsObject::InitActions(){
     _deleteLifeline = new QAction("Delete lifeline");
     connect(_deleteLifeline, &QAction::triggered, this, [this](){if(deleteWarn()){ emit killSelf(this); }});
+    _editLifeline = new QAction("Edit lifeline");
+    connect(_editLifeline, &QAction::triggered, this, [this](){emit edit(this);});
 }
 
 bool LifelineGraphicsObject::deleteWarn(){
     QMessageBox msgBox;
     msgBox.setIcon(QMessageBox::Warning);
-    msgBox.setText("Erasing lifeline will erase all its events!");
+    msgBox.setText("Deleting this lifeline will erase all its events!");
     msgBox.setInformativeText("Are you sure you want that?");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
@@ -120,4 +128,8 @@ qreal LifelineGraphicsObject::middle(){
 
 SequenceLifeline::Name LifelineGraphicsObject::GetName(){
     return _lifeline->GetName();
+}
+
+std::shared_ptr<SequenceLifeline> LifelineGraphicsObject::GetLifeline(){
+    return _lifeline;
 }

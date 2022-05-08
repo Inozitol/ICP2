@@ -19,7 +19,7 @@
 
 #include "ClassDiagram/metaclass.h"
 #include "relationgraphicsobject.h"
-#include "newclassform.h"
+#include "classdialog.h"
 
 class RelationGraphicsObject;
 
@@ -33,6 +33,8 @@ public:
     /// \brief Class constructor.
     /// \param metaclass shared pointer to the meta class of the graphic object.
     ClassGraphicsObject(std::shared_ptr<MetaClass> metaclass);
+    /// \brief Class destructor.
+    ~ClassGraphicsObject();
     /// \brief Redefined method for obtaining a rectangle within which the graphic object is.
     /// \return the rectangle.
     [[nodiscard]] QRectF boundingRect() const override;
@@ -80,6 +82,9 @@ private:
     /// \brief Method for determining whether text on the graphic object will flow over the current width.
     /// \return bool, determining overflow.
     inline bool willOverflow(QString);
+    /// \brief Method for making sure the user wants to delete this class
+    /// \return Confirmation
+    bool deleteWarn();
 
     /// \brief Font of the text in the graphic objects.
     QFont _font;

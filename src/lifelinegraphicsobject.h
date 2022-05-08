@@ -29,6 +29,8 @@ public:
     /// \brief Class constructor.
     /// \param lifeline shared pointer to the lifeline.
     LifelineGraphicsObject(std::shared_ptr<SequenceLifeline> lifeline);
+    /// \brief Class destructor.
+    ~LifelineGraphicsObject();
     /// \brief Redefined method for obtaining a rectangle within which the graphic object is.
     /// \return the rectangle.
     [[nodiscard]] QRectF boundingRect() const override;
@@ -40,7 +42,6 @@ public:
     /// \brief Redefined method defining context menu event behaviour.
     /// \param event event for the context menu in the graphic object.
     void contextMenuEvent(QGraphicsSceneContextMenuEvent *event) override;
-
     /// \brief Method for obtaining the x-axis middle of the object.
     /// \return x coordinate of the middle.
     qreal middle();
@@ -49,10 +50,11 @@ public:
     /// \brief Method for obtaining the name of the lifeline.
     /// \return the name of the lifeline.
     SequenceLifeline::Name GetName();
-
     /// \brief Method for obtaining the height of the graphic object.
     /// \return the height.
     static qreal height();
+    /// \brief Method for getting pointer to the lifeline
+    std::shared_ptr<SequenceLifeline> GetLifeline();
 
 private:
     /// \brief Default class graphic object width.
@@ -80,6 +82,8 @@ private:
     QFont _font;
     /// \brief Action for deleting a lifeline.
     QAction* _deleteLifeline;
+    /// \brief Action for editing a lifeline.
+    QAction* _editLifeline;
 
     /// \brief Lifeline name.
     QString _lifelineName;
@@ -94,4 +98,6 @@ signals:
     /// \brief Signal for making a graphic object delete itself.
     void killSelf(LifelineGraphicsObject*);
 
+    /// \brief Signal for starting an editing proces for lifeline.
+    void edit(LifelineGraphicsObject*);
 };

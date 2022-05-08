@@ -11,12 +11,18 @@ ClassGraphicsObject::ClassGraphicsObject(std::shared_ptr<MetaClass> metaclass)
     InitActions();
 }
 
+ClassGraphicsObject::~ClassGraphicsObject(){
+    delete(_deleteClass);
+    delete(_editClass);
+    delete(_createRelation);
+}
+
 void ClassGraphicsObject::InitActions(){
     _deleteClass 	= 	new QAction(tr("Delete class"));
     _editClass 		= 	new QAction(tr("Edit class"));
     _createRelation = 	new QAction(tr("Create relation"));
 
-    connect(_deleteClass, 		&QAction::triggered, this, [this](){emit killSelf(this);});
+    connect(_deleteClass, 		&QAction::triggered, this, [this](){if(deleteWarn()) emit killSelf(this);});
     connect(_editClass, 		&QAction::triggered, this, [this](){emit edit(this);});
     connect(_editClass, 		&QAction::triggered, this, &ClassGraphicsObject::update);
     connect(_createRelation, 	&QAction::triggered, this, [this](){emit initRelation(this);});
@@ -232,4 +238,24 @@ void ClassGraphicsObject::RemoveRelation(RelationGraphicsObject* item){
 
 QVector<RelationGraphicsObject*> ClassGraphicsObject::GetRelations(){
     return _relations;
+}
+
+bool ClassGraphicsObject::deleteWarn(){
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setText("Deleting this class will erase all its actors as well as their events!");
+    msgBox.setInformativeText("Are you sure you want that?");
+    msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    msgBox.setDefaultButton(QMessageBox::No);
+    switch(msgBox.exec()){
+        case QMessageBox::Yes:
+            return true;
+        break;
+
+        case QMessageBox::No:
+            return false;
+        break;
+    }
+
+    return false;
 }
