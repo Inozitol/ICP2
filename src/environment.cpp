@@ -1,4 +1,4 @@
-#include <fstream>
+﻿#include <fstream>
 
 #include "environment.h"
 #include "ClassDiagram/metaclassmethod.h"
@@ -88,32 +88,32 @@ void Environment::ExportEnvironment(std::string file_name){
 
     if(_sequence_diag != nullptr){
         for(const auto& lifeline : _sequence_diag->GetLifelines()){
-        file << "actor " << lifeline.first << " " << lifeline.second->GetClass()->GetName() << '\n';
+            file << "actor " << lifeline.first << " " << lifeline.second->GetClass()->GetName() << '\n';
         }
         for(const auto& event : _sequence_diag->GetTimeline()){
             switch(event->GetType()){
-                case SequenceEvent::Activation:
-                    file << "activate " << std::static_pointer_cast<SequenceActivation>(event)->GetLifeline()->GetName() << '\n';
+            case SequenceEvent::Activation:
+                file << "activate " << std::static_pointer_cast<SequenceActivation>(event)->GetLifeline()->GetName() << '\n';
                 break;
 
-                case SequenceEvent::Deactivation:
-                    file << "deactivate " << std::static_pointer_cast<SequenceDeactivation>(event)->GetLifeline()->GetName() << '\n';
+            case SequenceEvent::Deactivation:
+                file << "deactivate " << std::static_pointer_cast<SequenceDeactivation>(event)->GetLifeline()->GetName() << '\n';
                 break;
 
-                case SequenceEvent::Message:
-                {
-                    auto MessageEvent = std::static_pointer_cast<SequenceMessage>(event);
-                    file << "message " << MessageEvent->GetOrigin()->GetName() << " -> " << MessageEvent->GetDestination()->GetName() << " : " << MessageEvent->GetMessage() << '\n';
-                }
+            case SequenceEvent::Message:
+            {
+                auto MessageEvent = std::static_pointer_cast<SequenceMessage>(event);
+                file << "message " << MessageEvent->GetOrigin()->GetName() << " -> " << MessageEvent->GetDestination()->GetName() << " : " << MessageEvent->GetMessage() << '\n';
+            }
                 break;
-                case SequenceEvent::Return:
-                {
-                    auto ReturnEvent = std::static_pointer_cast<SequenceReturn>(event);
-                    file << "return " << ReturnEvent->GetOrigin()->GetName() << " -> " << ReturnEvent->GetDestination()->GetName() << " : "  << ReturnEvent->GetReturnType() << ' ' << ReturnEvent->GetMessage() << '\n';
-                }
+            case SequenceEvent::Return:
+            {
+                auto ReturnEvent = std::static_pointer_cast<SequenceReturn>(event);
+                file << "return " << ReturnEvent->GetOrigin()->GetName() << " -> " << ReturnEvent->GetDestination()->GetName() << " : "  << ReturnEvent->GetReturnType() << ' ' << ReturnEvent->GetMessage() << '\n';
+            }
                 break;
-                case SequenceEvent::Nop:
-                    file << "spacer\n";
+            case SequenceEvent::Nop:
+                file << "spacer\n";
                 break;
             }
         }
@@ -130,7 +130,7 @@ void Environment::ImportEnvironment(std::string file_name){
     std::ifstream file;
     file.open(file_name, std::ios::in);
     std::string buffer((std::istreambuf_iterator<char>(file)),
-                       std::istreambuf_iterator<char>());
+               std::istreambuf_iterator<char>());
     std::replace(buffer.begin(), buffer.end(), '\n', ' ');
     std::replace(buffer.begin(), buffer.end(), '\t', ' ');
 
@@ -170,92 +170,110 @@ void Environment::ImportEnvironment(std::string file_name){
             }
             _class_diag->InsertClass(metaclass);
         } else if(!words[i].compare("actor")){
-            for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
-                if(!words[i+2].compare(class_name)){
-                    _sequence_diag->InsertLifeline(words[i+1], metaclass);
-		break;
-                }
-                //if class not found...
+            std::shared_ptr<MetaClass> metaclass;
+            try{
+                metaclass = _class_diag->GetClass(words[i+2]);
+            } catch (const std::out_of_range& e){
+                throw(invalid_file("Error in actor " + words[i+1] + " of class " + words[i+2] + "\nCannot find class " + words[i+2]));
             }
+            MetaClass::Name classname;
+            _sequence_diag->InsertLifeline(words[i+1], metaclass);
+
         } else if(!words[i].compare("activate")){
-            for(auto lifeline : _sequence_diag->GetLifelines()){
-                if(!words[i+1].compare(lifeline.first)){
-                    _sequence_diag->EventPush(std::make_shared<SequenceActivation>(lifeline.second));
-                    break;
-                }
+            std::shared_ptr<SequenceLifeline> lifeline;
+            try{
+                lifeline = _sequence_diag->GetLifeline(words[i+1]);
+            } catch (const std::out_of_range& e){
+                throw(invalid_file("Error in activation event of actor " + words[i+1] + "\nCannot find actor " + words[i+1]));
             }
+            _sequence_diag->EventPush(std::make_shared<SequenceActivation>(lifeline));
+
         } else if(!words[i].compare("deactivate")){
-            for(auto lifeline : _sequence_diag->GetLifelines()){
-                if(!words[i+1].compare(lifeline.first)){
-                    _sequence_diag->EventPush(std::make_shared<SequenceDeactivation>(lifeline.second));
-                    break;
-                }
+            std::shared_ptr<SequenceLifeline> lifeline;
+            try{
+                lifeline = _sequence_diag->GetLifeline(words[i+1]);
+            } catch (const std::out_of_range& e){
+                throw(invalid_file("Error in deactivation event of actor " + words[i+1] + "\nCannot find actor " + words[i+1]));
             }
+            _sequence_diag->EventPush(std::make_shared<SequenceDeactivation>(lifeline));
+
         } else if(!words[i].compare("message")){
-            for(auto sender : _sequence_diag->GetLifelines()){
-                if(!words[i+1].compare(sender.first)){
-                    for(auto receiver : _sequence_diag->GetLifelines()){
-                        if(!words[i+3].compare(receiver.first)){
-                            _sequence_diag->EventPush(std::make_shared<SequenceMessage>(sender.second, receiver.second, words[i+5].data()));
-                            break;
-                        }
-                    }
-                    break;
-                }
+            std::shared_ptr<SequenceLifeline> srclifeline;
+            try{
+                srclifeline = _sequence_diag->GetLifeline(words[i+1]);
+            } catch (const std::out_of_range& e){
+                throw(invalid_file("Error in message event from actor " + words[i+1] + " to " + words[i+3] + "\nCannot find actor " + words[i+1]));
             }
+            std::shared_ptr<SequenceLifeline> dstlifeline;
+            try{
+                dstlifeline = _sequence_diag->GetLifeline(words[i+3]);
+            } catch (const std::out_of_range& e){
+                throw(invalid_file("Error in message event from actor " + words[i+1] + " to " + words[i+3] + "\nCannot find actor " + words[i+3]));
+            }
+            _sequence_diag->EventPush(std::make_shared<SequenceMessage>(srclifeline, dstlifeline, words[i+5]));
+
         } else if(!words[i].compare("return")){
-            for(auto sender : _sequence_diag->GetLifelines()){
-                if(!words[i+1].compare(sender.first)){
-                    for(auto receiver : _sequence_diag->GetLifelines()){
-                        if(!words[i+3].compare(receiver.first)){
-                            _sequence_diag->EventPush(std::make_shared<SequenceReturn>(sender.second, receiver.second, words[i+6].data(), words[i+5].data()));
-                            break;
-                        }
-                    }
-                    break;
-                }
+            std::shared_ptr<SequenceLifeline> srclifeline;
+            try{
+                srclifeline = _sequence_diag->GetLifeline(words[i+1]);
+            } catch (const std::out_of_range& e){
+                throw(invalid_file("Error in return event from actor " + words[i+1] + " to " + words[i+3] + "\nCannot find actor " + words[i+1]));
             }
+            std::shared_ptr<SequenceLifeline> dstlifeline;
+            try{
+                dstlifeline = _sequence_diag->GetLifeline(words[i+3]);
+            } catch (const std::out_of_range& e){
+                throw(invalid_file("Error in return event from actor " + words[i+1] + " to " + words[i+3] + "\nCannot find actor " + words[i+3]));
+            }
+            _sequence_diag->EventPush(std::make_shared<SequenceReturn>(srclifeline, dstlifeline, words[i+6], words[i+5]));
+
         } else if(!words[i].compare("relation")){
-            for(const auto& [class_name,metaclass] : _class_diag->GetClasses()){
-                if(!words[i+1].compare(class_name)){
-                    for(const auto& [class_name2,metaclass2] : _class_diag->GetClasses()){
-                        if(!words[i+5].compare(class_name2)){
-                            std::shared_ptr<Relation> rel;
-                            rel.reset();
-                            switch(valuesMap[words[i+3].data()]){
-                                case Value1:
-                                    rel = std::make_shared<Association>(metaclass, metaclass2);
-                                    break;
-                                case Value2:
-                                    rel = std::make_shared<Aggregation>(metaclass, metaclass2);
-                                    break;
-                                case Value3:
-                                    rel = std::make_shared<Composition>(metaclass, metaclass2);
-                                    break;
-                                case Value4:
-                                    rel = std::make_shared<Generalization>(metaclass, metaclass2);
-                                    break;
-                                default:
-                                    qDebug() << "unknown relation";
-                                    break;
-                            }
-                            if(!words[i+2].compare("_")){
-                                rel->SetSrcCardinality("");
-                            } else {
-                                rel->SetSrcCardinality(words[i+2]);
-                            }
-                            if(!words[i+4].compare("_")){
-                                rel->SetDstCardinality("");
-                            } else {
-                                rel->SetDstCardinality(words[i+4]);
-                            }
-                            _class_diag->InsertRelation(rel);
-                            break;
-                        }
-                    }
-                    break;
-                }
+            std::shared_ptr<MetaClass> srcmetaclass;
+            try{
+                srcmetaclass = _class_diag->GetClass(words[i+1]);
+            } catch (const std::out_of_range& e){
+                throw(invalid_file("Error in relation from " + words[i+1] + " to " + words[i+5] + "\nCannot find class " + words[i+1]));
             }
+            MetaClass::Name srcclassname = srcmetaclass->GetName();
+
+            std::shared_ptr<MetaClass> dstmetaclass;
+            try{
+                dstmetaclass = _class_diag->GetClass(words[i+5]);
+            } catch (const std::out_of_range& e){
+                throw(invalid_file("Error in relation from " + words[i+1] + " to " + words[i+5] + "\nCannot find class " + words[i+5]));
+            }
+            MetaClass::Name dstclassname = srcmetaclass->GetName();
+
+            std::shared_ptr<Relation> rel;
+            rel.reset();
+            switch(valuesMap[words[i+3].data()]){
+            case Value1:
+                rel = std::make_shared<Association>(srcmetaclass, dstmetaclass);
+                break;
+            case Value2:
+                rel = std::make_shared<Aggregation>(srcmetaclass, dstmetaclass);
+                break;
+            case Value3:
+                rel = std::make_shared<Composition>(srcmetaclass, dstmetaclass);
+                break;
+            case Value4:
+                rel = std::make_shared<Generalization>(srcmetaclass, dstmetaclass);
+                break;
+            default:
+                qDebug() << "unknown relation";
+                break;
+            }
+            if(words[i+2] == "_"){
+                rel->SetSrcCardinality("");
+            } else {
+                rel->SetSrcCardinality(words[i+2]);
+            }
+            if(words[i+4] == "_"){
+                rel->SetDstCardinality("");
+            } else {
+                rel->SetDstCardinality(words[i+4]);
+            }
+            _class_diag->InsertRelation(rel);
         }
     }
 
@@ -271,108 +289,108 @@ void Environment::CheckSequenceEvents(){
 
     for(auto event : _sequence_diag->GetTimeline()){
         switch(event->GetType()){
-            case SequenceEvent::Activation:{
-                auto activation = std::static_pointer_cast<SequenceActivation>(event);
-                if(activations.at(activation->GetLifeline()->GetName())){
-                    event->SetStatus(false);
-                    event->SetErrorMsg("Lifeline " + activation->GetLifeline()->GetName() + " is already active.");
-                } else {
-                    event->SetStatus(true);
-                    activations[activation->GetLifeline()->GetName()] = true;
-                }
-                break;
-            }
-            case SequenceEvent::Deactivation:{
-                auto deactivation = std::static_pointer_cast<SequenceDeactivation>(event);
-                if(!activations.at(deactivation->GetLifeline()->GetName())){
-                    event->SetStatus(false);
-                    event->SetErrorMsg("Lifeline " + deactivation->GetLifeline()->GetName() + " is inactive.");
-                } else {
-                    event->SetStatus(true);
-                    activations[deactivation->GetLifeline()->GetName()] = false;
-                }
-                break;
-            }
-            case SequenceEvent::Message:{
+        case SequenceEvent::Activation:{
+            auto activation = std::static_pointer_cast<SequenceActivation>(event);
+            if(activations.at(activation->GetLifeline()->GetName())){
                 event->SetStatus(false);
-                auto message = std::static_pointer_cast<SequenceMessage>(event);
-                auto messageContent = message->GetMessage();
+                event->SetErrorMsg("Lifeline " + activation->GetLifeline()->GetName() + " is already active.");
+            } else {
+                event->SetStatus(true);
+                activations[activation->GetLifeline()->GetName()] = true;
+            }
+            break;
+        }
+        case SequenceEvent::Deactivation:{
+            auto deactivation = std::static_pointer_cast<SequenceDeactivation>(event);
+            if(!activations.at(deactivation->GetLifeline()->GetName())){
+                event->SetStatus(false);
+                event->SetErrorMsg("Lifeline " + deactivation->GetLifeline()->GetName() + " is inactive.");
+            } else {
+                event->SetStatus(true);
+                activations[deactivation->GetLifeline()->GetName()] = false;
+            }
+            break;
+        }
+        case SequenceEvent::Message:{
+            event->SetStatus(false);
+            auto message = std::static_pointer_cast<SequenceMessage>(event);
+            auto messageContent = message->GetMessage();
 
-                std::string delimiter = "(";
-                std::string methodName = messageContent.substr(0, messageContent.find(delimiter));
-                std::string methodParams = messageContent.substr(messageContent.find(delimiter), messageContent.length());
+            std::string delimiter = "(";
+            std::string methodName = messageContent.substr(0, messageContent.find(delimiter));
+            std::string methodParams = messageContent.substr(messageContent.find(delimiter), messageContent.length());
 
-                std::replace(methodParams.begin(), methodParams.end(), ',', ' ');
+            std::replace(methodParams.begin(), methodParams.end(), ',', ' ');
 
-                std::stringstream ss(methodParams);
-                std::istream_iterator<std::string> begin(ss);
-                std::istream_iterator<std::string> end;
-                std::vector<std::string> vstrings(begin, end);
+            std::stringstream ss(methodParams);
+            std::istream_iterator<std::string> begin(ss);
+            std::istream_iterator<std::string> end;
+            std::vector<std::string> vstrings(begin, end);
 
-                std::size_t methodParamsCount = vstrings.size();
-                if(!vstrings[0].compare("()")) methodParamsCount = 0;
+            std::size_t methodParamsCount = vstrings.size();
+            if(!vstrings[0].compare("()")) methodParamsCount = 0;
 
-                bool paramCountFlag = false, methodNameFlag = false, publicFlag = false;
-                int errorInt = 0;
+            bool paramCountFlag = false, methodNameFlag = false, publicFlag = false;
+            int errorInt = 0;
 
-                for (const auto& [key, value] : message->GetDestination()->GetClass()->GetMethods()) {
-                    if(!methodName.compare(key)){
-                        methodNameFlag = true;
-                        if(methodParamsCount == value->GetParameters().size()){
-                            paramCountFlag = true;
-                            errorInt = value->GetParameters().size();
-                            if(value->GetPermission() == '+'){
-                                event->SetStatus(true);
-                                publicFlag = true;
-                                if(value->GetReturnType() != "void"){
-                                    returns.push_back(std::make_pair(value, message));
-                                }
+            for (const auto& [key, value] : message->GetDestination()->GetClass()->GetMethods()) {
+                if(!methodName.compare(key)){
+                    methodNameFlag = true;
+                    if(methodParamsCount == value->GetParameters().size()){
+                        paramCountFlag = true;
+                        errorInt = value->GetParameters().size();
+                        if(value->GetPermission() == '+'){
+                            event->SetStatus(true);
+                            publicFlag = true;
+                            if(value->GetReturnType() != "void"){
+                                returns.push_back(std::make_pair(value, message));
                             }
-                            break;
                         }
+                        break;
                     }
                 }
+            }
 
-                if(!methodNameFlag){
-                    event->SetErrorMsg("Class " + message->GetDestination()->GetClass()->GetName() +
-                    " does not have method " + methodName.data() + ".");
+            if(!methodNameFlag){
+                event->SetErrorMsg("Class " + message->GetDestination()->GetClass()->GetName() +
+                           " does not have method " + methodName.data() + ".");
+            } else {
+                if(!paramCountFlag){
+                    event->SetErrorMsg("Method " + methodName + " expects " + std::to_string(errorInt) +
+                               " parameters, but got " + std::to_string(methodParamsCount) + ".");
                 } else {
-                    if(!paramCountFlag){
-                        event->SetErrorMsg("Method " + methodName + " expects " + std::to_string(errorInt) +
-                        " parameters, but got " + std::to_string(methodParamsCount) + ".");
-                    } else {
-                        if(!publicFlag){
-                            event->SetErrorMsg("Method " + methodName + " is not public.");
-                        }
+                    if(!publicFlag){
+                        event->SetErrorMsg("Method " + methodName + " is not public.");
                     }
                 }
+            }
+            break;
+        }
+        case SequenceEvent::Return:{
+            event->SetStatus(false);
+            auto message = std::static_pointer_cast<SequenceReturn>(event);
+            auto messageRecipient = message->GetDestination()->GetName();
+            auto messageSender = message->GetOrigin()->GetName();
+
+            if(returns.empty()){
+                event->SetErrorMsg("Unexpected return.");
                 break;
             }
-            case SequenceEvent::Return:{
-                event->SetStatus(false);
-                auto message = std::static_pointer_cast<SequenceReturn>(event);
-                auto messageRecipient = message->GetDestination()->GetName();
-                auto messageSender = message->GetOrigin()->GetName();
 
-                if(returns.empty()){
-                    event->SetErrorMsg("Unexpected return.");
-                    break;
-                }
+            auto messageCall = returns.back();
+            returns.pop_back();
 
-                auto messageCall = returns.back();
-                returns.pop_back();
-
-                if(!messageSender.compare(messageCall.second->GetDestination()->GetName()) && !messageRecipient.compare(messageCall.second->GetOrigin()->GetName())){
-                    if(!message->GetReturnType().compare(messageCall.first->GetReturnType())){
-                        event->SetStatus(true);
-                    } else {
-                        event->SetErrorMsg("Invalid return type.");
-                    }
+            if(!messageSender.compare(messageCall.second->GetDestination()->GetName()) && !messageRecipient.compare(messageCall.second->GetOrigin()->GetName())){
+                if(!message->GetReturnType().compare(messageCall.first->GetReturnType())){
+                    event->SetStatus(true);
                 } else {
-                    event->SetErrorMsg("Invalid message sender/recipient.");
+                    event->SetErrorMsg("Invalid return type.");
                 }
-                break;
+            } else {
+                event->SetErrorMsg("Invalid message sender/recipient.");
             }
+            break;
+        }
         }
     }
 }

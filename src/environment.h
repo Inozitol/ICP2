@@ -14,6 +14,16 @@
 #include "ClassDiagram/composition.h"
 #include "ClassDiagram/generalization.h"
 
+class invalid_file : public std::exception{
+public:
+    invalid_file(const std::string& msg) : _msg(msg){}
+    ~invalid_file(){}
+
+    const std::string& get_msg() const {return _msg;}
+private:
+    const std::string _msg;
+};
+
 ///
 /// \brief Singleton class holding all of backend datastructures.
 ///

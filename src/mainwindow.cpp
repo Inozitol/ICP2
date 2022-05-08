@@ -178,8 +178,20 @@ void MainWindow::EnvironOpen(){
         return;
     }
 
+    try{
+        _environment->ImportEnvironment(_currentFile.toStdString());
+    }catch(const invalid_file& e){
+        QString str = QString::fromStdString(e.get_msg());
+        QMessageBox msgBox(QMessageBox::Critical,
+               tr("Error"),
+               str,
+               QMessageBox::Ok);
+        msgBox.exec();
+        return;
+    }
+
     emit ClearScenes();
-    _environment->ImportEnvironment(_currentFile.toStdString());
+
     RefreshClassList();
     for(auto [name,metaclass] : _environment->GetClassDiagram()->GetClasses()){
         _classScene->PlaceClass(metaclass);
