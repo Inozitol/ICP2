@@ -57,7 +57,6 @@ void SequenceDiagramScene::RedrawScene(){
 
     yPos += LifelineGraphicsObject::height() + V_MARGIN;
 
-    SequenceEvent::Type prev_type = SequenceEvent::Nop;
     for(auto event : _environment->GetSequenceDiagram()->GetTimeline()){
         switch(event->GetType()){
         case SequenceEvent::Activation:
@@ -180,7 +179,6 @@ void SequenceDiagramScene::RedrawScene(){
             break;
         }
         yPos += V_MARGIN;
-        prev_type = event->GetType();
     }
 
     yPos += V_MARGIN;
@@ -221,16 +219,16 @@ void SequenceDiagramScene::NewLifeline(){
     if(dialog.exec()){
         auto lifeline = dialog.GetLifeline();
         _environment->GetSequenceDiagram()->InsertLifeline(lifeline);
-        RedrawScene();
         emit SceneUpdate();
+        RedrawScene();
     }
 }
 
 void SequenceDiagramScene::DeleteLifeline(LifelineGraphicsObject* lifeline){
     removeItem(lifeline);
     _environment->GetSequenceDiagram()->EraseLifeline(lifeline->GetName());
-    RedrawScene();
     emit SceneUpdate();
+    RedrawScene();
 }
 
 void SequenceDiagramScene::NewEvent(){
@@ -238,8 +236,8 @@ void SequenceDiagramScene::NewEvent(){
     if(dialog.exec()){
         auto event = dialog.GetEvent();
         _environment->GetSequenceDiagram()->EventPush(event);
-        RedrawScene();
         emit SceneUpdate();
+        RedrawScene();
     }
 }
 
@@ -249,8 +247,8 @@ void SequenceDiagramScene::EditLifeline(LifelineGraphicsObject* lifeline){
     if(dialog.exec()){
         auto lifeline = dialog.GetLifeline();
         _environment->GetSequenceDiagram()->RenameLifeline(oldName, lifeline->GetName());
-        RedrawScene();
         emit SceneUpdate();
+        RedrawScene();
     }
 }
 

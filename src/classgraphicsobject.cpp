@@ -243,7 +243,7 @@ QVector<RelationGraphicsObject*> ClassGraphicsObject::GetRelations(){
 bool ClassGraphicsObject::deleteWarn(){
     QMessageBox msgBox;
     msgBox.setIcon(QMessageBox::Warning);
-    msgBox.setText("Deleting this class will erase all its actors as well as their events!");
+    msgBox.setText("Deleting this class will erase all its actors aswell as their events!");
     msgBox.setInformativeText("Are you sure you want that?");
     msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
     msgBox.setDefaultButton(QMessageBox::No);
