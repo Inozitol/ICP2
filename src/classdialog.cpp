@@ -346,7 +346,6 @@ bool ClassDialog::isValid(){
             msgBox.exec();
             return false;
         }
-
     }
     return true;
 }
