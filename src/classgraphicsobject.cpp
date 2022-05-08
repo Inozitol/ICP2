@@ -11,6 +11,12 @@ ClassGraphicsObject::ClassGraphicsObject(std::shared_ptr<MetaClass> metaclass)
     InitActions();
 }
 
+ClassGraphicsObject::~ClassGraphicsObject(){
+    delete(_deleteClass);
+    delete(_editClass);
+    delete(_createRelation);
+}
+
 void ClassGraphicsObject::InitActions(){
     _deleteClass 	= 	new QAction(tr("Delete class"));
     _editClass 		= 	new QAction(tr("Edit class"));

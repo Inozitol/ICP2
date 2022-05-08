@@ -33,6 +33,8 @@ public:
     /// \brief Class constructor.
     /// \param metaclass shared pointer to the meta class of the graphic object.
     ClassGraphicsObject(std::shared_ptr<MetaClass> metaclass);
+    /// \brief Class destructor.
+    ~ClassGraphicsObject();
     /// \brief Redefined method for obtaining a rectangle within which the graphic object is.
     /// \return the rectangle.
     [[nodiscard]] QRectF boundingRect() const override;

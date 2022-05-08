@@ -8,6 +8,11 @@ LifelineGraphicsObject::LifelineGraphicsObject(std::shared_ptr<SequenceLifeline>
     CalcHeight();
 }
 
+LifelineGraphicsObject::~LifelineGraphicsObject(){
+    delete(_deleteLifeline);
+    delete(_editLifeline);
+}
+
 void LifelineGraphicsObject::InitStrings(){
     auto fm = QFontMetrics(_font);
 

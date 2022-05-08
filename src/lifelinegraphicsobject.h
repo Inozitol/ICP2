@@ -29,6 +29,8 @@ public:
     /// \brief Class constructor.
     /// \param lifeline shared pointer to the lifeline.
     LifelineGraphicsObject(std::shared_ptr<SequenceLifeline> lifeline);
+    /// \brief Class destructor.
+    ~LifelineGraphicsObject();
     /// \brief Redefined method for obtaining a rectangle within which the graphic object is.
     /// \return the rectangle.
     [[nodiscard]] QRectF boundingRect() const override;

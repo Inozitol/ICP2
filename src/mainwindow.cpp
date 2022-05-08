@@ -25,6 +25,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow(){
     delete(ui);
+    delete(_classScene);
+    delete(_sequenceScene);
+    delete(_deleteEvent);
+    delete(_editEvent);
 }
 
 void MainWindow::InitMenuBar(){
