@@ -1,3 +1,6 @@
+run: ICP
+	./ICP
+
 ICP: src
 	mkdir build -p; \
 	cd build; \
