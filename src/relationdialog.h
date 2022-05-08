@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QDialog>
+#include <QComboBox>
 
 #include "classgraphicsobject.h"
 #include "ClassDiagram/relation.h"
@@ -21,7 +22,6 @@ class RelationDialog;
 class RelationDialog : public QDialog
 {
     Q_OBJECT
-
 public:
     /// \brief Class constructor.
     /// \param pair Pair of two graphic objects, which is to be linked.
@@ -55,5 +55,5 @@ private:
 private slots:
     /// \brief Slot for combo box being changed
     /// \param ID of currently active type
-    void comboChanged(int type);
+    void comboBoxChanged(int type);
 };
