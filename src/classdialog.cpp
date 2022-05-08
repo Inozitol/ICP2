@@ -242,26 +242,7 @@ bool ClassDialog::isValid(){
         q_dtype = ui->attrTable->item(row, A_DATA_TYPE);
         q_name =  ui->attrTable->item(row, A_NAME);
 
-        if(q_name && q_name->foreground().color() == Qt::red){
-            QMessageBox msgBox(QMessageBox::Critical,
-                       tr("Error"),
-                       tr("Attribute table contains duplicated names."),
-                       QMessageBox::Ok);
-            msgBox.exec();
-            return false;
-        }
-        if((q_dtype && q_dtype->text().isEmpty()) || !q_dtype){
-            QString str;
-            str.append(tr("Data type of attribute on row "));
-            str.append(QString::fromStdString(std::to_string(row+1)));
-            str.append(" is missing.");
-            QMessageBox msgBox(QMessageBox::Critical,
-                       tr("Error"),
-                       str,
-                       QMessageBox::Ok);
-            msgBox.exec();
-            return false;
-        }
+        // Is name empty
         if((q_name && q_name->text().isEmpty()) || !q_name){
             QString str;
             str.append(tr("Attribute name is missing on row "));
@@ -275,6 +256,41 @@ bool ClassDialog::isValid(){
             return false;
 
         }
+        // Is name duplicated
+        if(q_name && q_name->foreground().color() == Qt::red){
+            QMessageBox msgBox(QMessageBox::Critical,
+                       tr("Error"),
+                       tr("Attribute table contains duplicated names."),
+                       QMessageBox::Ok);
+            msgBox.exec();
+            return false;
+        }
+        // Is name alpanumeric
+        if(!std::regex_match(q_name->text().toStdString(), _nameRegex)){
+            QString str;
+            str.append(tr("Attribute name on row "));
+            str.append(QString::fromStdString(std::to_string(row+1)));
+            str.append(tr(" can only contain alphanumeric characters."));
+            QMessageBox msgBox(QMessageBox::Critical,
+                       tr("Error"),
+                       str,
+                       QMessageBox::Ok);
+            msgBox.exec();
+            return false;
+        }
+        // Is type empty
+        if((q_dtype && q_dtype->text().isEmpty()) || !q_dtype){
+            QString str;
+            str.append(tr("Data type of attribute on row "));
+            str.append(QString::fromStdString(std::to_string(row+1)));
+            str.append(" is missing.");
+            QMessageBox msgBox(QMessageBox::Critical,
+                       tr("Error"),
+                       str,
+                       QMessageBox::Ok);
+            msgBox.exec();
+            return false;
+        }
     }
 
     rowCount = ui->methTable->rowCount();
@@ -282,6 +298,20 @@ bool ClassDialog::isValid(){
         q_dtype = 	ui->methTable->item(row, M_RETURN_TYPE);
         q_name =  	ui->methTable->item(row, M_NAME);
 
+        // Is name empty
+        if((q_name && q_name->text().isEmpty()) || !q_name){
+            QString str;
+            str.append(tr("Method name is missing on row "));
+            str.append(QString::fromStdString(std::to_string(row+1)));
+            str.append('.');
+            QMessageBox msgBox(QMessageBox::Critical,
+                       tr("Error"),
+                       str,
+                       QMessageBox::Ok);
+            msgBox.exec();
+            return false;
+        }
+        // Is name duplicated
         if(q_name && q_name->foreground().color() == Qt::red){
             QMessageBox msgBox(QMessageBox::Critical,
                        tr("Error"),
@@ -290,6 +320,20 @@ bool ClassDialog::isValid(){
             msgBox.exec();
             return false;
         }
+        // Is name alphanumeric
+        if(!std::regex_match(q_name->text().toStdString(), _nameRegex)){
+            QString str;
+            str.append(tr("Method name on row "));
+            str.append(QString::fromStdString(std::to_string(row+1)));
+            str.append(tr(" can only contain alphanumeric characters."));
+            QMessageBox msgBox(QMessageBox::Critical,
+                       tr("Error"),
+                       str,
+                       QMessageBox::Ok);
+            msgBox.exec();
+            return false;
+        }
+        // Is type empty
         if((q_dtype && q_dtype->text().isEmpty()) || !q_dtype){
             QString str;
             str.append(tr("Return type of method on row "));
@@ -302,19 +346,7 @@ bool ClassDialog::isValid(){
             msgBox.exec();
             return false;
         }
-        if((q_name && q_name->text().isEmpty()) || !q_name){
-            QString str;
-            str.append(tr("Method name is missing on row "));
-            str.append(QString::fromStdString(std::to_string(row+1)));
-            str.append('.');
-            QMessageBox msgBox(QMessageBox::Critical,
-                       tr("Error"),
-                       str,
-                       QMessageBox::Ok);
-            msgBox.exec();
-            return false;
 
-        }
     }
     return true;
 }

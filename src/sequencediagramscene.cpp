@@ -105,7 +105,6 @@ void SequenceDiagramScene::RedrawScene(){
             qreal ll_origin_middle = _lifelineGraphics.at(origin_ll_name)->middle();
             qreal ll_destination_middle = _lifelineGraphics.at(destination_ll_name)->middle();
 
-
             if(message->GetOrigin() == message->GetDestination()){
                 if(message->GetType() == SequenceEvent::Return){
                     addLine(ll_origin_middle, 				yPos, ll_origin_middle+(H_MARGIN/3), 	yPos, 									QPen(Qt::DashLine));
@@ -131,7 +130,6 @@ void SequenceDiagramScene::RedrawScene(){
                 if(message->GetType() == SequenceEvent::Return)
                     msg_str.prepend(QString::fromStdString(std::static_pointer_cast<SequenceReturn>(event)->GetReturnType()) + " : ");
                 auto textitem = addText(msg_str, _font);
-                qreal linelen = ll_origin_middle - ll_destination_middle;
 #if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
                 textitem->setPos(ll_destination_middle + (H_MARGIN/5), yPos - fm.height() - 3);
 #else

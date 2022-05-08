@@ -217,6 +217,13 @@ bool EventDialog::isValid(){
                                    QMessageBox::Ok);
                 msgBox.exec();
                 return false;
+            }else if(!std::regex_match(uiMsg->messageLineEdit->text().toStdString(), _funcRegex)){
+                QMessageBox msgBox(QMessageBox::Critical,
+                                   tr("Error"),
+                                   tr("Message should resemble a function call\ne.g.: method(param1,param2)"),
+                                   QMessageBox::Ok);
+                msgBox.exec();
+                return false;
             }else{
                 return true;
             }

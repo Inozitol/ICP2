@@ -2,6 +2,8 @@
 
 #pragma once
 
+#include <regex>
+
 #include <QDialog>
 #include <QComboBox>
 #include <QHBoxLayout>
@@ -88,6 +90,9 @@ private:
     SequenceEvent::Type _currType;
     /// \brief Shared pointer to the selected event.
     std::shared_ptr<SequenceEvent> _event;
+
+    /// \brief Regex which verifies that a message is a function call.
+    const std::regex _funcRegex = std::regex(R"(^[a-zA-Z]+\([^\)]*\)$)");
 
 signals:
     /// \brief Signal for accepting dialog with valid values.

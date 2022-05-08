@@ -5,6 +5,7 @@
 #include <memory>
 #include <string>
 #include <sstream>
+#include <regex>
 
 #include <QDialog>
 #include <QComboBox>
@@ -85,6 +86,9 @@ private:
 
     /// \brief Shared pointer to the new/edited meta class.
     std::shared_ptr<MetaClass> _class;
+
+    /// \brief Regex which verifies that a message is a containing valid characters.
+    const std::regex _nameRegex = std::regex(R"(^[a-zA-Z0-9_]+$)");
 
 private slots:
     /// \brief Slot for adding an attribute row into the class creation dialog.
