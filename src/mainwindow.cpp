@@ -204,8 +204,8 @@ void MainWindow::EnvironOpen(){
     for(const auto &[index, relation] : _environment->GetClassDiagram()->GetRelations()){
         _classScene->PlaceRelation(relation);
     }
-    _sequenceScene->RedrawScene();
     _environment->CheckSequenceEvents();
+    _sequenceScene->RedrawScene();
 
     emit SeqSceneUpdate();
 }
