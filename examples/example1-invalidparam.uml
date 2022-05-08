@@ -20,7 +20,7 @@ relation Person N -- 1 School : attends
 actor Alice Person
 actor Amanda Person
 actor VUT School
-message Alice -> Amanda : GetName()
+message Alice -> Amanda : GetName(invalidparam)
 activate Amanda
 message Amanda -> VUT : GetPersonByName("Amanda")
 return VUT -> Amanda : Person person
