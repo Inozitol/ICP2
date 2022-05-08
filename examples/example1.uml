@@ -17,7 +17,7 @@ class School {
 	+ Person GetPersonByName ( string )
 }
 relation Person N -<> 1 School
-actor Alice Person
+actor Alice Perso
 actor Amanda Person
 actor VUT School
 message Alice -> Amanda : GetName()

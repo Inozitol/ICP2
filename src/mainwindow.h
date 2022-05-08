@@ -86,4 +86,6 @@ private slots:
 signals:
     /// \brief Signal for clearing all data in the class/sequence diagram scenes.
     void ClearScenes();
+    /// \brief Signal for signaling a sequence scene to update
+    void SeqSceneUpdate();
 };

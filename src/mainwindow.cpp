@@ -44,7 +44,7 @@ void MainWindow::InitMenuBar(){
     connect(ui->actionNew, 		&QAction::triggered,	_sequenceScene, 	&QGraphicsScene::clear);
     connect(ui->actionNew, 		&QAction::triggered,	ui->sequenceList, 	&QListWidget::clear);
 
-    connect(ui->actionOpen, 	&QAction::triggered, 	_sequenceScene,		&SequenceDiagramScene::SceneUpdate);
+    connect(this, 	&MainWindow::SeqSceneUpdate, 	_sequenceScene,		&SequenceDiagramScene::SceneUpdate);
 }
 
 void MainWindow::InitActions(){
@@ -206,6 +206,8 @@ void MainWindow::EnvironOpen(){
     }
     _sequenceScene->RedrawScene();
     _environment->CheckSequenceEvents();
+
+    emit SeqSceneUpdate();
 }
 
 void MainWindow::EnvironSave(){
