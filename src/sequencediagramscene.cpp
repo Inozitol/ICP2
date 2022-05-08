@@ -249,8 +249,8 @@ void SequenceDiagramScene::EditLifeline(LifelineGraphicsObject* lifeline){
     if(dialog.exec()){
         auto lifeline = dialog.GetLifeline();
         _environment->GetSequenceDiagram()->RenameLifeline(oldName, lifeline->GetName());
-        RedrawScene();
         emit SceneUpdate();
+        RedrawScene();
     }
 }
 
