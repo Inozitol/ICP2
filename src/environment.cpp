@@ -249,6 +249,11 @@ void Environment::ImportEnvironment(std::string file_name){
             switch(valuesMap[words[i+3].data()]){
             case Value1:
                 rel = std::make_shared<Association>(srcmetaclass, dstmetaclass);
+                if(words[i+7] == "_"){
+                    std::static_pointer_cast<Association>(rel)->SetMessage("");
+                } else {
+                    std::static_pointer_cast<Association>(rel)->SetMessage(words[i+7]);
+                }
                 break;
             case Value2:
                 rel = std::make_shared<Aggregation>(srcmetaclass, dstmetaclass);
