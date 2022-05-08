@@ -246,28 +246,42 @@ void Environment::ImportEnvironment(std::string file_name){
 
             std::shared_ptr<Relation> rel;
             rel.reset();
-            switch(valuesMap[words[i+3].data()]){
-            case Value1:
-                rel = std::make_shared<Association>(srcmetaclass, dstmetaclass);
-                if(words[i+7] == "_"){
-                    std::static_pointer_cast<Association>(rel)->SetMessage("");
-                } else {
-                    std::static_pointer_cast<Association>(rel)->SetMessage(words[i+7]);
+            try{
+                switch(valuesMap.at(words[i+3].data())){
+                    case Value1:
+                        rel = std::make_shared<Association>(srcmetaclass, dstmetaclass);
+                        if(words[i+7] != "_"){
+                            std::static_pointer_cast<Association>(rel)->SetMessage(words[i+7]);
+                        }
+                        break;
+                    case Value2:
+                        if(words[i+7] != "_"){
+                            throw(invalid_file("Error in relation from " + words[i+1] + " to " + words[i+5] + "\nRelation type Aggregation does not support messages."));
+                        } else {
+                            rel = std::make_shared<Aggregation>(srcmetaclass, dstmetaclass);
+                        }
+                        break;
+                    case Value3:
+                        if(words[i+7] != "_"){
+                            throw(invalid_file("Error in relation from " + words[i+1] + " to " + words[i+5] + "\nRelation type Composition does not support messages."));
+                        } else {
+                            rel = std::make_shared<Composition>(srcmetaclass, dstmetaclass);
+                        }
+                        break;
+                    case Value4:
+                        if(words[i+7] != "_"){
+                            throw(invalid_file("Error in relation from " + words[i+1] + " to " + words[i+5] + "\nRelation type Generalization does not support messages."));
+                        } else {
+                            rel = std::make_shared<Generalization>(srcmetaclass, dstmetaclass);
+                        }
+                        break;
+                    default:
+                        break;
                 }
-                break;
-            case Value2:
-                rel = std::make_shared<Aggregation>(srcmetaclass, dstmetaclass);
-                break;
-            case Value3:
-                rel = std::make_shared<Composition>(srcmetaclass, dstmetaclass);
-                break;
-            case Value4:
-                rel = std::make_shared<Generalization>(srcmetaclass, dstmetaclass);
-                break;
-            default:
-                qDebug() << "unknown relation";
-                break;
+            } catch (std::out_of_range&){
+                throw(invalid_file("Unknown relation symbol detected."));
             }
+
             if(words[i+2] == "_"){
                 rel->SetSrcCardinality("");
             } else {
