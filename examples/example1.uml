@@ -16,8 +16,8 @@ class School {
 	---
 	+ Person GetPersonByName ( string )
 }
-relation Person N -<> 1 School
-actor Alice Perso
+relation Person N -- 1 School : attends
+actor Alice Person
 actor Amanda Person
 actor VUT School
 message Alice -> Amanda : GetName()
