@@ -102,3 +102,10 @@ void SequenceDiagram::Clear(){
 void SequenceDiagram::RemoveEvent(int index){
     _timeline.erase(_timeline.begin()+index);
 }
+
+void SequenceDiagram::RenameLifeline(SequenceLifeline::Name from, SequenceLifeline::Name to){
+    if(from != to){
+        _lifelines[to] = _lifelines.at(from);
+        _lifelines.erase(from);
+    }
+}

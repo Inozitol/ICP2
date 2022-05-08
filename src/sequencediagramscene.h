@@ -45,10 +45,6 @@ private:
     const int FONT_SIZE = 9;
     /// \brief Method for initializing actions within the sequence diagram.
     void InitActions();
-    /// \brief Method for renaming lifeline correctly
-    /// \param from Old name
-    /// \param to New name
-    void RenameLifeline(SequenceLifeline::Name from, SequenceLifeline::Name to);
     /// \brief Action for creating a new lifeline.
     QAction* _newLifeline;
     /// \brief Action for creating a new event.

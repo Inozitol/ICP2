@@ -70,6 +70,10 @@ public:
     Timeline GetTimeline();
     /// \brief Method for clearing the timeline and all lifelines in the diagram.
     void Clear();
+    /// \brief Method for safely renaming a lifeline
+    /// \param from Old name
+    /// \param to New name
+    void RenameLifeline(SequenceLifeline::Name from, SequenceLifeline::Name to);
 
 private:
     /// \brief Map of all lifelines in the sequence diagram.
