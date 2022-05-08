@@ -14,4 +14,4 @@ clean:
 	rm -rf ICP build doc/*
 
 pack: clean
-	tar -czf 1-xhorac19-xmurga01.tar.gz doc src Makefile doxyconf doxygen-awesome.css
+	tar -czf 1-xhorac19-xmurga01.tar.gz doc src Makefile doxyconf doxygen-awesome.css examples
