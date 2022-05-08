@@ -1,3 +1,5 @@
+// Autor: xhorac19
+
 #pragma once
 
 #include "metaclassobject.h"

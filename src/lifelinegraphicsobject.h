@@ -1,3 +1,5 @@
+// Autor: xhorac19, xmurga01
+
 #pragma once
 
 #define WHOLEBOX_CLR "#BFBFBF"

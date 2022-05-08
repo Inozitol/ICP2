@@ -1,3 +1,5 @@
+// Autor: xhorac19, xmurga01
+
 #pragma once
 
 #include <memory>
