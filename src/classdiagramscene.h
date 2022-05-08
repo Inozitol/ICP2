@@ -13,7 +13,7 @@
 #include <QGraphicsView>
 
 #include "environment.h"
-#include "newclassform.h"
+#include "classdialog.h"
 #include "classgraphicsobject.h"
 #include "relationgraphicsobject.h"
 #include "graphicsenum.h"

@@ -45,6 +45,10 @@ private:
     const int FONT_SIZE = 9;
     /// \brief Method for initializing actions within the sequence diagram.
     void InitActions();
+    /// \brief Method for renaming lifeline correctly
+    /// \param from Old name
+    /// \param to New name
+    void RenameLifeline(SequenceLifeline::Name from, SequenceLifeline::Name to);
     /// \brief Action for creating a new lifeline.
     QAction* _newLifeline;
     /// \brief Action for creating a new event.
@@ -65,6 +69,8 @@ private slots:
     void NewLifeline();
     /// \brief Slot for deleting a lifeline.
     void DeleteLifeline(LifelineGraphicsObject*);
+    /// \brief Slot for editing a lifeline.
+    void EditLifeline(LifelineGraphicsObject*);
     /// \brief Slot for creating a new event
     void NewEvent();
 

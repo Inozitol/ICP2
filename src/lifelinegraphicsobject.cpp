@@ -84,6 +84,7 @@ void LifelineGraphicsObject::paint(QPainter* painter, const QStyleOptionGraphics
 
 void LifelineGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
     QMenu menu;
+    menu.addAction(_editLifeline);
     menu.addAction(_deleteLifeline);
     menu.exec(event->screenPos());
     event->accept();
@@ -92,6 +93,8 @@ void LifelineGraphicsObject::contextMenuEvent(QGraphicsSceneContextMenuEvent *ev
 void LifelineGraphicsObject::InitActions(){
     _deleteLifeline = new QAction("Delete lifeline");
     connect(_deleteLifeline, &QAction::triggered, this, [this](){if(deleteWarn()){ emit killSelf(this); }});
+    _editLifeline = new QAction("Edit lifeline");
+    connect(_editLifeline, &QAction::triggered, this, [this](){emit edit(this);});
 }
 
 bool LifelineGraphicsObject::deleteWarn(){
@@ -120,4 +123,8 @@ qreal LifelineGraphicsObject::middle(){
 
 SequenceLifeline::Name LifelineGraphicsObject::GetName(){
     return _lifeline->GetName();
+}
+
+std::shared_ptr<SequenceLifeline> LifelineGraphicsObject::GetLifeline(){
+    return _lifeline;
 }

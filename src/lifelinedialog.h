@@ -24,9 +24,13 @@ class LifelineDialog : public QDialog
     Q_OBJECT
 
 public:
-    /// \brief Class constructor.
+    /// \brief Class constructor for creating.
     /// \param parent pointer to the parent widget.
-    explicit LifelineDialog(QWidget *parent = nullptr);
+    LifelineDialog(QWidget *parent = nullptr);
+    /// \brief Class constructor for editing.
+    /// \param sequence Pointer to lifeline to edit.
+    /// \param parent Pointer to the parent widget.
+    LifelineDialog(std::shared_ptr<SequenceLifeline> lifeline,QWidget *parent = nullptr);
     /// \brief Class destructor.
     ~LifelineDialog();
 
@@ -41,6 +45,8 @@ private:
     Ui::LifelineDialog *ui;
     /// \brief Singleton environment variable.
     Environment* _environment;
+    /// \brief Lifeline to be edited/created
+    std::shared_ptr<SequenceLifeline> _lifeline;
 
 private slots:
     /// \brief Checks if the contents of the dialog are valid and emits acceptedSafe if yes.

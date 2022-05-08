@@ -19,7 +19,7 @@
 
 #include "ClassDiagram/metaclass.h"
 #include "relationgraphicsobject.h"
-#include "newclassform.h"
+#include "classdialog.h"
 
 class RelationGraphicsObject;
 

@@ -39,6 +39,7 @@ void SequenceDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *even
 
 void SequenceDiagramScene::RedrawScene(){
     emit clear();
+    _lifelineGraphics.clear();
 
     qreal xPos = H_MARGIN;
     qreal yPos = V_MARGIN;
@@ -46,6 +47,7 @@ void SequenceDiagramScene::RedrawScene(){
         auto lifelinegraphics = new LifelineGraphicsObject(lifeline.second);
         lifelinegraphics->setData(Qt::UserRole, GraphicsItem::Lifeline);
         connect(lifelinegraphics, &LifelineGraphicsObject::killSelf, this, &SequenceDiagramScene::DeleteLifeline);
+        connect(lifelinegraphics, &LifelineGraphicsObject::edit, this, &SequenceDiagramScene::EditLifeline);
         lifelinegraphics->setPos({xPos, yPos});
         addItem(lifelinegraphics);
         _lifelineGraphics[lifeline.first] = lifelinegraphics;
@@ -240,3 +242,22 @@ void SequenceDiagramScene::NewEvent(){
         emit SceneUpdate();
     }
 }
+
+void SequenceDiagramScene::EditLifeline(LifelineGraphicsObject* lifeline){
+    SequenceLifeline::Name oldName = lifeline->GetName();
+    LifelineDialog dialog(lifeline->GetLifeline(), _parent);
+    if(dialog.exec()){
+        auto lifeline = dialog.GetLifeline();
+        RenameLifeline(oldName, lifeline->GetName());
+        RedrawScene();
+        emit SceneUpdate();
+    }
+}
+
+void SequenceDiagramScene::RenameLifeline(SequenceLifeline::Name from, SequenceLifeline::Name to){
+    if(from != to){
+        _lifelineGraphics[to] = _lifelineGraphics.at(from);
+        _lifelineGraphics.erase(from);
+    }
+}
+

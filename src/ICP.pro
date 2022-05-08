@@ -23,6 +23,7 @@ include(SequenceDiagram/sequencediagram.pri)
 
 SOURCES += \
     classdiagramscene.cpp \
+    classdialog.cpp \
     classgraphicsobject.cpp \
     environment.cpp \
     eventdialog.cpp \
@@ -30,7 +31,6 @@ SOURCES += \
     lifelinegraphicsobject.cpp \
     main.cpp \
     mainwindow.cpp \
-    newclassform.cpp \
     relationdialog.cpp \
     relationgraphicsobject.cpp \
     sequencediagramscene.cpp \
@@ -38,6 +38,7 @@ SOURCES += \
 
 HEADERS += \
     classdiagramscene.h \
+    classdialog.h \
     classgraphicsobject.h \
     environment.h \
     eventdialog.h \
@@ -45,13 +46,13 @@ HEADERS += \
     lifelinedialog.h \
     lifelinegraphicsobject.h \
     mainwindow.h \
-    newclassform.h \
     relationdialog.h \
     relationgraphicsobject.h \
     sequencediagramscene.h \
     utils.h
 
 FORMS += \
+    classdialog.ui \
     event_activation.ui \
     event_deactivation.ui \
     event_message.ui \
@@ -60,7 +61,6 @@ FORMS += \
     eventdialog.ui \
     lifelinedialog.ui \
     mainwindow.ui \
-    newclassform.ui \
     relationdialog.ui
 
 # Default rules for deployment.

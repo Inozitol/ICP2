@@ -76,7 +76,7 @@ void ClassDiagramScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *event){
 }
 
 void ClassDiagramScene::CreateClass(){
-    ClassEditDialog diagram(_parent);
+    ClassDialog diagram(_parent);
     if(diagram.exec()){
         auto metaclass = diagram.GetClassPtr();
         _environment->GetClassDiagram()->InsertClass(diagram.GetClassPtr());
@@ -152,6 +152,18 @@ void ClassDiagramScene::CreateRelation(ClassGraphicsObject* item){
             ResetRelation();
         }else{
             _relationPair.second = item;
+            for(auto const& [index, relation] : _environment->GetClassDiagram()->GetRelations()){
+                if((_relationPair.first->GetClass() == relation->GetSource() && _relationPair.second->GetClass() == relation->GetDestination()) ||
+                   (_relationPair.first->GetClass() == relation->GetDestination() && _relationPair.second->GetClass() == relation->GetSource())){
+                    QMessageBox msgBox(QMessageBox::Critical,
+                               tr("Error"),
+                               tr("Support for multiple relations between the same two classes is unsupported."),
+                               QMessageBox::Ok);
+                    msgBox.exec();
+                    ResetRelation();
+                    return;
+                }
+            }
             RelationDialog dialog(_relationPair, _parent);
             if(dialog.exec()){
                 std::shared_ptr<Relation> relation = dialog.GetRelation();
@@ -194,7 +206,7 @@ void ClassDiagramScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent* event){
 
 void ClassDiagramScene::EditClass(ClassGraphicsObject* classitem){
     MetaClass::Name oldName = classitem->GetClassName();
-    ClassEditDialog dialog(classitem->GetClass());
+    ClassDialog dialog(classitem->GetClass());
     if(dialog.exec()){
         auto metaclass = dialog.GetClassPtr();
         RenameClass(oldName, metaclass->GetName());

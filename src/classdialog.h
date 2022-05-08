@@ -10,6 +10,7 @@
 #include <QToolButton>
 #include <QAction>
 #include <QDebug>
+#include <QMessageBox>
 
 #include "environment.h"
 #include "ClassDiagram/metaclass.h"
@@ -19,26 +20,26 @@
 #include "utils.h"
 
 QT_BEGIN_NAMESPACE
-namespace Ui { class NewClassForm; }
+namespace Ui { class ClassDialog; }
 QT_END_NAMESPACE
 
 ///
 /// \brief Class representing dialogs for creating/editing classes.
 ///
-class ClassEditDialog : public QDialog
+class ClassDialog : public QDialog
 {
     Q_OBJECT
 
 public:
     /// \brief Class constructor.
     /// \param parent pointer to the parent widget.
-    ClassEditDialog(QWidget* parent = nullptr);
+    ClassDialog(QWidget* parent = nullptr);
     /// \brief Class constructor.
     /// \param metaclass shared pointer to the class, which will be edited.
     /// \param parent pointer to the parent widget.
-    ClassEditDialog(std::shared_ptr<MetaClass> metaclass, QWidget* parent = nullptr);
+    ClassDialog(std::shared_ptr<MetaClass> metaclass, QWidget* parent = nullptr);
     /// \brief Class destructor.
-    ~ClassEditDialog();
+    ~ClassDialog();
     /// \brief Method for obtaining the shared pointer to the meta class.
     /// \return shared pointer to the meta class.
     std::shared_ptr<MetaClass> GetClassPtr();
@@ -48,15 +49,20 @@ private:
     void InitButtons();
     /// \brief Method for filling in existing data when editing a class.
     void InitContent();
+    /// \brief Method for connecting accept signals.
+    void InitConnections();
     /// \brief Method for adding an existing attribute into the class creation dialog.
     /// \param attr shared pointer to the attribute.
     void _AddAttrRow(std::shared_ptr<MetaClassAttribute> attr);
     /// \brief Method for adding an existing method into the class creation dialog.
     /// \param meth shared pointer to the method.
     void _AddMethRow(std::shared_ptr<MetaClassMethod> meth);
+    /// \brief Method for checking validity of entered data
+    /// \return Whether or not the entered data is valid
+    bool isValid();
 
     /// \brief UI of the new class dialog.
-    Ui::NewClassForm* ui;
+    Ui::ClassDialog* ui;
     /// \brief Singleton environment variable.
     Environment* _environment;
 
@@ -87,10 +93,17 @@ private slots:
     void AddMethRow();
     /// \brief Slot for removing a method row from the class creation dialog.
     void RemoveMethRow();
+    /// \brief Slot called whenever a cell in attribute table changes
+    void AttrCellChanged(int row, int column);
+    /// \brief Slot called whenever a cell in method table changes
+    void MethCellChanged(int row, int column);
+
 
 signals:
     /// \brief Signal for removing an attribute row from the class creation dialog.
     void SigRemoveAttrRow(int);
     /// \brief Signal for removing a method row from the class creation dialog.
     void SigRemoveMethRow(int);
+    /// \brief Signal for accepting dialog with valid values.
+    void acceptedSafe();
 };
