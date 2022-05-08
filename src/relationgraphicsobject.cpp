@@ -13,6 +13,9 @@ RelationGraphicsObject::RelationGraphicsObject(std::shared_ptr<Relation> relatio
     _dstCollisionPoint = new QPointF;
     InitSymbol();
     InitCircles();
+    if(relation->GetType() == Relation::Assoc){
+        InitMessage();
+    }
     InitActions();
 }
 
@@ -106,6 +109,27 @@ void RelationGraphicsObject::InitCircles(){
     if(_relation->GetDstCardinality().empty()){
         _dstCircle->setVisible(false);
     }
+}
+
+void RelationGraphicsObject::InitMessage(){
+    auto assoc = std::static_pointer_cast<Association>(_relation);
+    _msgItem = new QGraphicsTextItem(this);
+    _msgItem->setFont(_font);
+    _msgItem->setPlainText(QString::fromStdString(assoc->GetMessage()));
+    UpdateMessage();
+}
+
+void RelationGraphicsObject::UpdateMessage(){
+    QLineF line = QLineF(*_srcCollisionPoint, *_dstCollisionPoint);
+    auto fm = QFontMetrics(_font);
+    QPointF center = line.center();
+#if QT_VERSION < QT_VERSION_CHECK(5, 11, 0)
+    qreal xPos = center.x() - (fm.width(_msgItem->toPlainText())) / 2;
+#else
+    qreal xPos = center.x() - (fm.horizontalAdvance(_msgItem->toPlainText())) / 2;
+#endif
+    center.setX(xPos);
+    _msgItem->setPos(center);
 }
 
 void RelationGraphicsObject::InitActions(){
@@ -208,6 +232,9 @@ void RelationGraphicsObject::updateLine(){
 
     UpdateSymbol();
     UpdateCircles();
+    if(_relation->GetType() == Relation::Assoc){
+        UpdateMessage();
+    }
 
     update();
 }

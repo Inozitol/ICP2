@@ -60,10 +60,14 @@ private:
     void InitCircles();
     /// \brief Method for initializing relation related actions.
     void InitActions();
+    /// \brief Method for initializing relation message box.
+    void InitMessage();
     /// \brief Method for updating relation symbols when class graphic objects are moved.
     void UpdateSymbol();
     /// \brief Method for updating cardinality circles when class graphic objects are moved.
     void UpdateCircles();
+    /// \brief Method for updating message box.
+    void UpdateMessage();
     /// \brief Method for determining point of contact of two lines.
     /// \param pointBuffer buffer for the point of contact.
     /// \param line1 first line.
@@ -102,6 +106,8 @@ private:
     QAction* _deleteRelation;
     /// \brief Font of the text in the graphic objects.
     QFont _font;
+    /// \brief Graphic item for message text.
+    QGraphicsTextItem* _msgItem;
 
     /// \brief Predefined length of polygon side.
     const qreal POLYGON_SIDE = 15.0;

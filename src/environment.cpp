@@ -83,7 +83,13 @@ void Environment::ExportEnvironment(std::string file_name){
              << dstCrd
              << ' '
              << dstName
-             << '\n';
+             << " : ";
+        if(relation->GetType() == Relation::Assoc){
+            file << std::static_pointer_cast<Association>(relation)->GetMessage();
+        }else{
+            file << '_';
+        }
+        file << '\n';
     }
 
     if(_sequence_diag != nullptr){

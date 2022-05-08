@@ -84,7 +84,6 @@ void ClassGraphicsObject::InitStrings(){
         str.append(name.data());
         str.append('(');
 
-
         auto params = meth->GetParameters();
         std::set<MetaClassMethod::DataType>::iterator it;
         for(it = params.begin(); it != params.end(); it++){
