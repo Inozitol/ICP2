@@ -16,13 +16,19 @@
 #include "ClassDiagram/composition.h"
 #include "ClassDiagram/generalization.h"
 
+/// \brief Custom exception for catching file inconsistency
 class invalid_file : public std::exception{
 public:
+    /// \brief Exception constructor
+    /// \param msg Message to be displayed
     invalid_file(const std::string& msg) : _msg(msg){}
     ~invalid_file(){}
 
+    /// \brief Returns error message
+    /// \return Error message
     const std::string& get_msg() const {return _msg;}
 private:
+    /// \brief Error message
     const std::string _msg;
 };
 
